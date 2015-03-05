@@ -148,40 +148,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		fiber->load_field();
 	}
 
-	//! code maker test
-	{
-		{
-			MNFunction* func = new MNFunction();
-			MNCodeMaker code;
-			code << cmd_push_int << (tint32)1;
-			code << cmd_push_int << (tint32)1;
-			code << cmd_add;
-			code << cmd_call_void << (tbyte)1;
-			code << cmd_return_void;
-
-			func->m_codes = code.bytes;
-			func->m_ncode = code.size;
-
-			MNClosure* closure = new MNClosure(MNObject(TObjectType::Function, func->getReferrer()));
-			closure->link(fiber->global());
-			fiber->push(MNObject(TObjectType::Closure, closure->getReferrer()));
-		}
-
-		{
-			MNFunction* func = new MNFunction();
-			MNCodeMaker code;
-			code << cmd_return_void;
-
-			func->m_codes = code.bytes;
-			func->m_ncode = code.size;
-
-			MNClosure* closure = new MNClosure(MNObject(TObjectType::Function, func->getReferrer()));
-			closure->link(fiber->global());
-			fiber->push(MNObject(TObjectType::Closure, closure->getReferrer()));
-		}
-		
-		fiber->call(1, 0);
-	}
 	holder = MNObject::Null();
 	return 0;
 }

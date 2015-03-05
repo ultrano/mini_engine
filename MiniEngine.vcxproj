@@ -106,6 +106,7 @@
     <ClCompile Include="files\MNClosure.cpp" />
     <ClCompile Include="files\MNCollectable.cpp" />
     <ClCompile Include="files\MNCommand.cpp" />
+    <ClCompile Include="files\MNCompiler.cpp" />
     <ClCompile Include="files\MNCountable.cpp" />
     <ClCompile Include="files\MNFunction.cpp" />
     <ClCompile Include="files\MNGlobal.cpp" />

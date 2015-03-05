@@ -7,6 +7,7 @@ class MNObject;
 class MNFunction : public MNCountable
 {
 	MN_RTTI(MNFunction, MNCountable);
+	friend class MNFuncBuilder;
 public:
 
 	MNFunction();

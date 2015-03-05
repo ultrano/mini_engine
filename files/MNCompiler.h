@@ -4,15 +4,22 @@
 #include "MNMemory.h"
 #include "MNPrimaryType.h"
 
+class MNFunction;
+class MNObject;
+
 class MNCodeMaker : public MNMemory
 {
 public:
 
 	tsize  cursor;
-	tsize  size;
-	tbyte* bytes;
+	tsize&  size;
+	tbyte*& bytes;
 
-	MNCodeMaker(): cursor(0), size(1), bytes((tbyte*)MNMemory::malloc(size)) {};
+	MNCodeMaker(tbyte*& b, tsize& s): cursor(0), size(s), bytes(b)
+	{
+		size = 1;
+		bytes = (tbyte*)MNMemory::malloc(size);
+	};
 
 	template<typename T>
 	MNCodeMaker& operator <<(const T& t)
@@ -37,6 +44,17 @@ public:
 	{
 		if (pos + sizeof(T) < size) memcpy(&bytes[pos], &t, sizeof(T));
 	}
+};
+
+class MNFuncBuilder
+{
+public:
+	MNFuncBuilder* upFunc;
+	MNFunction* func;
+	MNCodeMaker codeMaker;
+	
+	MNFuncBuilder(MNFuncBuilder* up);
+	tsize addConst(const MNObject& val);
 };
 
 #endif
