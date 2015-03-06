@@ -11,7 +11,7 @@ class MNCodeMaker : public MNMemory
 {
 public:
 
-	tsize  cursor;
+	tsize   cursor;
 	tsize&  size;
 	tbyte*& bytes;
 
