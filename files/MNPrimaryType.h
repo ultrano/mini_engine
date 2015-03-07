@@ -143,26 +143,32 @@ inline const tchar* meta2Str(tsize meta)
 
 enum TCommand : tbyte
 {
+	cmd_none,
 	cmd_push_null,
-	cmd_push_int, //! >> 4bytes
-	cmd_push_float, //! >> 4bytes
+	cmd_push_int, //! >> tint
+	cmd_push_float, //! >> tfloat
 	cmd_push_true,
 	cmd_push_false,
 	cmd_push_closure,
 	cmd_push_table,
 	cmd_push_array,
 	cmd_pop1,
-	cmd_popn,//! >> 1bytes
-	cmd_load_upval, //! >> 2bytes
-	cmd_load_stack, //! >> 2bytes
-	cmd_store_stack, //! >> 2bytes
+	cmd_pop2,
+	cmd_popn,//! >> tbyte
+	cmd_load_const, //! >> tuint16
+	cmd_load_upval, //! >> tuint16
+	cmd_store_upval, //! >> tuint16
+	cmd_load_stack, //! >> tuint16
+	cmd_store_stack, //! >> tuint16
 	cmd_load_field,
 	cmd_store_field,
-	cmd_load_global, //! >> 2bytes
-	cmd_store_global, //! >> 2bytes
+	cmd_load_global, //! >> tuint16
+	cmd_store_global, //! >> tuint16
 	cmd_set_meta,
 	cmd_get_meta,
-	cmd_up,//! >> 1byte, 1byte
+	cmd_up,//! >> tbyte, tbyte
+	cmd_up1_x1,
+	cmd_up1_x2,
 	cmd_swap,
 	cmd_equals,
 	cmd_tostring,

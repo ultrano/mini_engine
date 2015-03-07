@@ -96,12 +96,15 @@ void MNLexer::scan(Token& tok)
 	}
 	else if (isdigit(m_char))
 	{
-		tok.type = tok_number;
+		tok.type = tok_integer;
 		const tsize bufSize = 256;
 		tchar buf[bufSize] = { 0 };
 		tsize index = 0;
-		while (isdigit(m_char))
+		while (true)
 		{
+			if (m_char == '.') tok.type = tok_float;
+			else if (!isdigit(m_char)) break;
+
 			if (index == bufSize)
 			{
 				tok.type = tok_error;

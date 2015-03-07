@@ -6,6 +6,12 @@ MNString::MNString(const tstring& str)
 
 }
 
+MNString::MNString(const thashstring& str)
+	: m_ss(str)
+{
+
+}
+
 MNString::~MNString()
 {
 

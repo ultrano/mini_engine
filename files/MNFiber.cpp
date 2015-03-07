@@ -640,6 +640,12 @@ MNFiber::CallInfo* MNFiber::enterCall(tuint nargs, bool ret)
 	m_info->end   = clsIndex;
 	m_info        = info;
 
+	if (func)
+	{
+		tsize sz = m_info->end - m_info->begin;
+		while (sz++ < func->getVarCount()) push_null();
+	}
+
 	return m_info;
 }
 
@@ -751,14 +757,14 @@ void MNFiber::call(tsize nargs, bool ret)
 			break;
 			case cmd_load_stack:
 			{
-				tint16 index;
+				tuint16 index;
 				code >> index;
 				load_stack(index);
 			}
 			break;
 			case cmd_store_stack:
 			{
-				tint16 index;
+				tuint16 index;
 				code >> index;
 				store_stack(index);
 			}

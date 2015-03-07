@@ -9,6 +9,7 @@ class MNString : public MNCountable
 public:
 
 	MNString(const tstring& str);
+	MNString(const thashstring& str);
 	~MNString();
 
 	const thashstring& ss() const { return m_ss; }

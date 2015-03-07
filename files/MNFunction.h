@@ -13,13 +13,12 @@ public:
 	MNFunction();
 	~MNFunction();
 
+	tsize    getVarCount() const;
 	tbyte*   getCode() const;
 	const MNObject& getConst(tsize idx);
-
 //private:
 	tbyte* m_codes;
 	tsize  m_ncode;
-	tsize  m_nargs;
 	tsize  m_nvars;
 	tarray<MNObject> m_consts;
 };

@@ -10,6 +10,7 @@
 #include "files\MNFunction.h"
 #include "files\MNClosure.h"
 #include "files\MNLexer.h"
+#include "files\MNCompiler.h"
 
 bool cfunction(MNFiber* fiber)
 {
@@ -37,15 +38,19 @@ int _tmain(int argc, _TCHAR* argv[])
 	MNFiber* fiber = new MNFiber();
 	MNObject holder(TObjectType::Fiber, fiber->getReferrer());
 
-	//! lexer test
+	//! compile test
 	{
-		MNLexer::Token tok;
-		MNLexer lexer;
-		lexer.openFile("D:/documents/workspace/mini_engine/script.txt");
-		do 
-		{
-			lexer.scan(tok);
-		} while (tok.type != tok_eos);
+		MNCompiler compiler;
+		compiler.m_lexer.openFile("D:/documents/workspace/mini_engine/test1.txt");
+		compiler.build();
+
+		MNObject func(TObjectType::Function, compiler.m_func->func->getReferrer());
+		MNClosure* closure = new MNClosure(func);
+		closure->link(fiber->global());
+
+		MNObject cls(TObjectType::Closure, closure->getReferrer());
+		fiber->push(cls);
+		fiber->call(0, false);
 	}
 
 	//! garbage collect test

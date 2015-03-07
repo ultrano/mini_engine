@@ -15,6 +15,12 @@ MNObject MNObject::String(const tstring& str)
 	return MNObject(TObjectType::String, strval->getReferrer());
 }
 
+MNObject MNObject::String(const thashstring& str)
+{
+	MNString* strval = new MNString(str);
+	return MNObject(TObjectType::String, strval->getReferrer());
+}
+
 MNObject MNObject::Format(const tstring& format, ...)
 {
 	static const tuint bufSize = 256;

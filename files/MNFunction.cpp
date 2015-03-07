@@ -4,7 +4,6 @@
 MNFunction::MNFunction()
 	: m_codes(NULL)
 	, m_ncode(0)
-	, m_nargs(0)
 	, m_nvars(0)
 {
 
@@ -13,6 +12,11 @@ MNFunction::MNFunction()
 MNFunction::~MNFunction()
 {
 	if (m_codes != NULL) MNMemory::free(m_codes);
+}
+
+tsize    MNFunction::getVarCount() const
+{
+	return m_nvars;
 }
 
 tbyte*   MNFunction::getCode() const

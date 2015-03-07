@@ -69,8 +69,8 @@ class MNFuncBuilder
 {
 public:
 	MNFuncBuilder* upFunc;
-	MNFunction* func;
-	MNCodeMaker codeMaker;
+	MNFunction*    func;
+	MNCodeMaker    codeMaker;
 
 	tarray<thashstring>	locals;
 	tarray<MNExp>	    links;
@@ -98,12 +98,18 @@ public:
 	tboolean check(tint type) const;
 	tboolean peek(tint type) const;
 
+	tboolean build();
 
+	void     _statements();
 	tboolean _statement();
 	void _var();
 
-	void _exp(tboolean leftVal = false);
 	void _load(MNExp& e);
+	void _assign(MNExp& e, tboolean leftVal);
+	tboolean _exp(tboolean leftVal = true);
+	void     _exp_add_sub(MNExp& e);
+	void     _exp_mul_div(MNExp& e);
+	void     _primary(MNExp& e);
 };
 
 #endif
