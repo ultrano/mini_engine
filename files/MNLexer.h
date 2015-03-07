@@ -12,7 +12,7 @@ public:
 	{
 	public:
 		tbyte type;
-		tstring str;
+		thashstring str;
 		tuint col, row;
 	};
 public:
@@ -78,21 +78,37 @@ inline void reservedWords(MNLexer::Token& tok)
 	if (tok.type != tok_identify) return;
 	if (tok.str.size() == 0) return;
 
-	if (tok.str == "var")           tok.type = tok_var;
-	else if (tok.str == "func")     tok.type = tok_func;
-	else if (tok.str == "return")   tok.type = tok_return;
-	else if (tok.str == "this")     tok.type = tok_this;
-	else if (tok.str == "null")     tok.type = tok_null;
-	else if (tok.str == "if")       tok.type = tok_if;
-	else if (tok.str == "else")     tok.type = tok_else;
-	else if (tok.str == "for")      tok.type = tok_for;
-	else if (tok.str == "while")    tok.type = tok_while;
-	else if (tok.str == "true")     tok.type = tok_true;
-	else if (tok.str == "false")    tok.type = tok_false;
-	else if (tok.str == "switch")   tok.type = tok_switch;
-	else if (tok.str == "case")     tok.type = tok_case;
-	else if (tok.str == "break")    tok.type = tok_break;
-	else if (tok.str == "continue") tok.type = tok_continue;
+	static const thashstring _if("if");
+	static const thashstring _else("else");
+	static const thashstring _for("for");
+	static const thashstring _while("while");
+	static const thashstring _switch("switch");
+	static const thashstring _case("case");
+	static const thashstring _break("break");
+	static const thashstring _continue("continue");
+	static const thashstring _func("func");
+	static const thashstring _var("var");
+	static const thashstring _this("this");
+	static const thashstring _null("null");
+	static const thashstring _true("true");
+	static const thashstring _false("false");
+	static const thashstring _return("return");
+
+	if (tok.str == _var)           tok.type = tok_var;
+	else if (tok.str == _func)     tok.type = tok_func;
+	else if (tok.str == _return)   tok.type = tok_return;
+	else if (tok.str == _this)     tok.type = tok_this;
+	else if (tok.str == _null)     tok.type = tok_null;
+	else if (tok.str == _if)       tok.type = tok_if;
+	else if (tok.str == _else)     tok.type = tok_else;
+	else if (tok.str == _for)      tok.type = tok_for;
+	else if (tok.str == _while)    tok.type = tok_while;
+	else if (tok.str == _true)     tok.type = tok_true;
+	else if (tok.str == _false)    tok.type = tok_false;
+	else if (tok.str == _switch)   tok.type = tok_switch;
+	else if (tok.str == _case)     tok.type = tok_case;
+	else if (tok.str == _break)    tok.type = tok_break;
+	else if (tok.str == _continue) tok.type = tok_continue;
 }
 
 #endif

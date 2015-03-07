@@ -50,23 +50,26 @@ typedef tuint64        thash64;
 #define tpair  std::pair
 #define ttable std::map
 
-class TSolidString
+class THashString
 {
 public:
-	TSolidString(const tstring& str);
+	THashString();
+	THashString(const tstring& str);
 	static thash32 makeHash(const tstring& str);
 	static thash32 makeHash(const char* str, tsize len);
 
+	inline tsize size() { return m_str.size(); }
 	inline thash32 hash() const { return m_hash; }
 	inline const tstring& str() const { return m_str; }
-	inline bool	operator ==(const TSolidString& sstr) const { return (m_hash == sstr.m_hash && m_str == sstr.m_str); };
-	inline bool	operator !=(const TSolidString& sstr) const { return (m_hash != sstr.m_hash); };
+	inline THashString& operator =(const tstring& str) { m_str = str; m_hash = makeHash(str); return *this; }
+	inline bool	operator ==(const THashString& sstr) const { return (m_hash == sstr.m_hash && m_str == sstr.m_str); };
+	inline bool	operator !=(const THashString& sstr) const { return (m_hash != sstr.m_hash); };
 private:
 	thash32 m_hash;
 	tstring m_str;
 };
 
-typedef TSolidString tsolidstring;
+typedef THashString thashstring;
 
 template<typename T>
 class TFlag
@@ -150,6 +153,7 @@ enum TCommand : tbyte
 	cmd_push_array,
 	cmd_pop1,
 	cmd_popn,//! >> 1bytes
+	cmd_load_upval, //! >> 2bytes
 	cmd_load_stack, //! >> 2bytes
 	cmd_store_stack, //! >> 2bytes
 	cmd_load_field,

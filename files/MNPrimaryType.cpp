@@ -1,18 +1,22 @@
 #include "MNPrimaryType.h"
 
+THashString::THashString()
+	: m_hash(0)
+{
+}
 
-TSolidString::TSolidString(const tstring& str)
+THashString::THashString(const tstring& str)
 	: m_str(str)
 {
 	m_hash = makeHash(m_str);
 }
 
-thash32 TSolidString::makeHash(const tstring& str)
+thash32 THashString::makeHash(const tstring& str)
 {
 	return makeHash(&str[0], str.length());
 }
 
-thash32 TSolidString::makeHash(const char* str, tsize len)
+thash32 THashString::makeHash(const char* str, tsize len)
 {
 	thash32 b = 378551;
 	thash32 a = 63689;

@@ -3,6 +3,7 @@
 
 #include "MNMemory.h"
 #include "MNPrimaryType.h"
+#include "MNLexer.h"
 
 class MNFunction;
 class MNObject;
@@ -46,15 +47,63 @@ public:
 	}
 };
 
+
+struct MNExp
+{
+	enum
+	{
+		exp_none,		
+		exp_loaded,
+		exp_local,
+		exp_upval,
+		exp_global,
+		exp_field,
+	};
+	tbyte type;
+	tuint16 index;
+	MNExp() : type(exp_none) {};
+	tboolean operator ==(const MNExp& e) { return (e.type == type && e.index == index); }
+};
+
 class MNFuncBuilder
 {
 public:
 	MNFuncBuilder* upFunc;
 	MNFunction* func;
 	MNCodeMaker codeMaker;
+
+	tarray<thashstring>	locals;
+	tarray<MNExp>	    links;
+	tarray<tsize>		blocks;
+	tarray<tsize>		breakouts;
+	tarray<tsize>		playbacks;
 	
 	MNFuncBuilder(MNFuncBuilder* up);
 	tsize addConst(const MNObject& val);
+	void  addLocal( const thashstring& name);
+	void  findLocal( const thashstring& name, MNExp& e );
+};
+
+class MNCompiler : public MNMemory
+{
+public:
+
+	MNFuncBuilder* m_func;
+	MNLexer m_lexer;
+	MNLexer::Token m_current;
+	MNLexer::Token m_peeking;
+
+	MNCodeMaker& code();
+	void     advance();
+	tboolean check(tint type) const;
+	tboolean peek(tint type) const;
+
+
+	tboolean _statement();
+	void _var();
+
+	void _exp(tboolean leftVal = false);
+	void _load(MNExp& e);
 };
 
 #endif

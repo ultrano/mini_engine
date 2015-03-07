@@ -11,10 +11,10 @@ public:
 	MNString(const tstring& str);
 	~MNString();
 
-	const tsolidstring& ss() const { return m_ss; }
+	const thashstring& ss() const { return m_ss; }
 
 private:
-	const tsolidstring m_ss;
+	const thashstring m_ss;
 };
 
 #endif
