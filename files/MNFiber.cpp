@@ -704,17 +704,19 @@ void MNFiber::call(tsize nargs, bool ret)
 {
 	CallInfo* info = enterCall(nargs, ret);
 
+	//! native
+	if (info->closure && info->closure->isNative())
+	{
+		TCFunction func = info->closure->getFunc().toCFunction();
+		info = returnCall(func(this));
+		return;
+	}
+
+	//! script
 	while (info != NULL)
 	{
-		MNClosure* closure = info->closure;
-		if (!closure) break;
-
-		if (closure->isNative())
-		{
-			TCFunction func = closure->getFunc().toCFunction();
-			info = returnCall(func(this));
-			continue;
-		}
+		if (!info->closure) break;
+		if (info->closure->isNative()) break;
 
 		CodeIterator code(info);
 		while (code.info == info)
