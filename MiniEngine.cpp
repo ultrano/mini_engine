@@ -9,6 +9,7 @@
 #include "files\MNString.h"
 #include "files\MNFunction.h"
 #include "files\MNClosure.h"
+#include "files\MNLexer.h"
 
 bool cfunction(MNFiber* fiber)
 {
@@ -36,6 +37,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	MNFiber* fiber = new MNFiber();
 	MNObject holder(TObjectType::Fiber, fiber->getReferrer());
 
+	//! lexer test
+	{
+		MNLexer::Token tok;
+		MNLexer lexer;
+		lexer.openFile("D:/documents/workspace/mini_engine/script.txt");
+		do 
+		{
+			lexer.scan(tok);
+		} while (tok.type != tok_eos);
+	}
 
 	//! garbage collect test
 	{

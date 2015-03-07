@@ -1,17 +1,48 @@
 #include "MNLexer.h"
 
-class MNLexer::Scanner
+class MNLexer::Scanner : public MNMemory
 {
 public:
+	virtual ~Scanner() {};
 	/* return : 읽은 바이트 수. 읽을게 없다면 -1 */
 	virtual tint read(tbyte* b, unsigned len) = 0;
 };
 
+class FileScanner : public MNLexer::Scanner
+{
+public:
+
+	FILE* m_file;
+	FileScanner(const tstring& filePath)
+		: m_file(NULL)
+	{
+		fopen_s(&m_file, filePath.c_str(), "rb");
+	}
+	~FileScanner()
+	{
+		if (m_file)
+		{
+			fclose(m_file);
+			m_file = NULL;
+		}
+	}
+	virtual tint read(tbyte* b, unsigned len)
+	{
+		if ( m_file )
+		{
+			fpos_t pos0 = 0, pos1 = 0;
+			fgetpos( m_file, &pos0 );
+			fread( b, len, 1, m_file );
+			fgetpos( m_file, &pos1 );
+			return (tint)((pos1-pos0)? (pos1-pos0):-1);
+		}
+		return -1;
+	}
+};
 
 MNLexer::MNLexer()
 	: m_scan(NULL)
 	, m_index(sizeof(m_buf))
-	, m_char(0)
 	, m_col(1)
 	, m_row(1)
 {
@@ -20,104 +51,135 @@ MNLexer::MNLexer()
 
 MNLexer::~MNLexer()
 {
-
+	if (m_scan) delete m_scan;
 }
 
-tint MNLexer::readChar()
+void MNLexer::openFile(const tstring& filePath)
 {
-	if (!m_scan) return -1;
+	m_scan = new FileScanner(filePath);
+	nextChar();
+}
+
+void MNLexer::nextChar()
+{
+	if (!m_scan)
+	{
+		m_char = -1;
+		return;
+	}
 	if (m_index == sizeof(m_buf))
 	{
 		int ret = m_scan->read((tbyte*)&m_buf[0], sizeof(m_buf));
-		if (ret == 0 || ret == -1) return -1;
+		if (ret == 0 || ret == -1)
+		{
+			m_char = -1;
+			return;
+		}
 		else
 		{
 			if (ret < sizeof(m_buf)) m_buf[ret] = -1;
 			m_index = 0;
 		}
 	}
-	return m_buf[m_index++];
+	m_char = m_buf[m_index++];
 }
 
 void MNLexer::scan(Token& tok)
 {
-	int _char = 0;
-	while (isspace(_char = readChar()));
+	while (isspace(m_char)) nextChar();
 
 	tok.col = m_col;
 	tok.row = m_row;
-	if (_char == -1)
+	if (m_char == -1)
 	{
 		tok.type = tok_eos;
 	}
-	else if (isdigit(_char))
+	else if (isdigit(m_char))
 	{
 		tok.type = tok_number;
-		tchar buf[256] = { 0 };
-		tchar* d = &buf[0];
-		while (isdigit(_char)) { *d++ = _char; _char = readChar(); }
+		const tsize bufSize = 256;
+		tchar buf[bufSize] = { 0 };
+		tsize index = 0;
+		while (isdigit(m_char))
+		{
+			if (index == bufSize)
+			{
+				tok.type = tok_error;
+				return;
+			}
+			buf[index++] = m_char;
+			nextChar();
+		}
 		tok.str = &buf[0];
 	}
 	else if (m_char == '"')
 	{
-		_char = readChar();
+		nextChar();
 		tok.type = tok_string;
 		char buf[1024] = { 0 };
 		char* d = &buf[0];
-		while (_char != '"')
+		while (m_char != '"')
 		{
 			if (m_char == -1 || m_char == '\n') tok.type = tok_eos;
-			*d++ = _char;
-			_char = readChar();
+			*d++ = m_char;
+			nextChar();
 		}
-		_char = readChar();
+		nextChar();
 		tok.str = &buf[0];
 	}
-	else if (isalpha(_char) || m_char == '_')
+	else if (isalpha(m_char) || m_char == '_')
 	{
-		static char buf[256] = { 0 };
-		memset(&buf[0], 0, sizeof(buf));
-		char* d = &buf[0];
-		while ((isalnum(_char) || m_char == '_')) { *d++ = _char; _char = readChar(); }
+		const tsize bufSize = 256;
+		char buf[bufSize] = { 0 };
+		tsize index = 0;
+		while ((isalnum(m_char) || m_char == '_'))
+		{
+			if (index == bufSize)
+			{
+				tok.type = tok_error;
+				return;
+			}
+			buf[index++] = m_char;
+			nextChar();
+		}
 		tok.str = &buf[0];
 		tok.type = tok_identify;
+		reservedWords(tok);
 	}
 	else
 	{
-		tok.type = _char;
-		_char = readChar();
+		tok.type = m_char;
+		nextChar();
 		if (m_char == '=')
 		{
 			switch (tok.type)
 			{
-			case '=': tok.text = keyword(kw_eq); getChar(); break;
-			case '!': tok.text = keyword(kw_neq); getChar(); break;
-			case '>': tok.text = keyword(kw_geq); getChar(); break;
-			case '<': tok.text = keyword(kw_leq); getChar(); break;
-			case '+': tok.text = keyword(kw_addeq); getChar(); break;
-			case '-': tok.text = keyword(kw_subeq); getChar(); break;
-			case '/': tok.text = keyword(kw_diveq); getChar(); break;
-			case '*': tok.text = keyword(kw_muleq); getChar(); break;
+			case '=': tok.type = tok_eq;    break;
+			case '!': tok.type = tok_neq;   break;
+			case '>': tok.type = tok_geq;   break;
+			case '<': tok.type = tok_leq;   break;
+			case '+': tok.type = tok_addeq; break;
+			case '-': tok.type = tok_subeq; break;
+			case '/': tok.type = tok_diveq; break;
+			case '*': tok.type = tok_muleq; break;
+			default:  tok.type = tok_error; return;
 			}
-			tok.type = tok_identify;
+			nextChar();
 		}
 		else if ((m_char == '-' || m_char == '+') && m_char == tok.type)
 		{
-			tok.text = (m_char == '+') ? keyword(kw_inc) : keyword(kw_dec);
-			tok.type = tok_identify;
-			getChar();
+			tok.type = (m_char == '+') ? tok_inc : tok_dec;
+			nextChar();
 		}
 		else if ((m_char == '<' || m_char == '>') && m_char == tok.type)
 		{
-			tok.text = (m_char == '<') ? keyword(kw_push) : keyword(kw_pull);
-			tok.type = tok_identify;
-			getChar();
+			tok.type = (m_char == '<') ? tok_push : tok_pull;
+			nextChar();
 		}
 		else if ((m_char == '&' || m_char == '|') && m_char == tok.type)
 		{
-			tok.text = (m_char == '&') ? keyword(kw_and) : keyword(kw_or);
-			tok.type = tok_identify;
-			getChar();
+			tok.type = (m_char == '&') ? tok_and : tok_or;
+			nextChar();
 		}
 	}
 }
