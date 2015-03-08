@@ -1,6 +1,7 @@
 #include "MNCompiler.h"
 #include "MNFunction.h"
 #include "MNObject.h"
+#include "MNString.h"
 
 class MNCompileException : public MNMemory
 {
@@ -20,6 +21,18 @@ MNFuncBuilder::MNFuncBuilder(MNFuncBuilder* up)
 
 tsize MNFuncBuilder::addConst(const MNObject& val)
 {
+	tsize index = func->m_consts.size();
+	while (index--)
+	{
+		const MNObject& obj = func->m_consts[index];
+		if (obj.isString() && val.isString())
+		{
+			if (obj.toString()->ss() == val.toString()->ss())
+			{
+				return index;
+			}
+		}
+	}
 	func->m_consts.push_back(val);
 	return func->m_consts.size() - 1;
 }

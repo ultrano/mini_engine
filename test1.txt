@@ -1,14 +1,14 @@
 
 var i=0;
 
-while (i < 9999)
+while (i < 99)
 {
   foo(""+i);
   i = i + 1;
   if (i == 5)
   {
     i = 8
+    foo("continue");
     continue;
   }
-  else if (i == 5000) break;
 }
