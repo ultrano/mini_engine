@@ -1,5 +1,14 @@
 
+var i=0;
 
-var a = 1;
-var b = 2;
-var c = a+b;
+while (i < 9999)
+{
+  foo(""+i);
+  i = i + 1;
+  if (i == 5)
+  {
+    i = 8
+    continue;
+  }
+  else if (i == 5000) break;
+}

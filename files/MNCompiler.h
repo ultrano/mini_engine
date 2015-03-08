@@ -103,13 +103,20 @@ public:
 	void     _statements();
 	tboolean _statement();
 	void _var();
+	void _block();
+	void _if();
+	void _while();
+	void _break();
+	void _continue();
 
 	void _load(MNExp& e);
 	void _assign(MNExp& e, tboolean leftVal);
 	tboolean _exp(tboolean leftVal = true);
+	void     _exp_logical(MNExp& e);
 	void     _exp_add_sub(MNExp& e);
 	void     _exp_mul_div(MNExp& e);
-	void     _primary(MNExp& e);
+	void     _exp_postfix(MNExp& e);
+	void     _exp_primary(MNExp& e);
 };
 
 #endif

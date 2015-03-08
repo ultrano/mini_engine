@@ -75,6 +75,8 @@ public:
 	void swap();
 		
 	void equals();
+	void less_than();
+
 	void tostring();
 		
 	void add();

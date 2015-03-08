@@ -16,7 +16,7 @@ void MNCountable::finalize()
 {
 	if (!m_ref) return;
 
-	printf("%s is filnalized\n", queryRtti()->name);
+	//printf("%s is filnalized\n", queryRtti()->name);
 
 	MNReferrer* ref = m_ref;
 	m_ref = NULL;

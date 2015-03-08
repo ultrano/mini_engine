@@ -281,7 +281,7 @@ void MNFiber::load_field()
 	}
 
 	MNCollectable* collectable = obj.toCollectable();
-	if (!succeed)
+	if (!succeed && collectable)
 	{
 		MNObject meta = collectable->getMeta();
 		MNObject op = MNObject::String("->");
@@ -336,7 +336,7 @@ void MNFiber::store_field()
 	}
 
 	MNCollectable* collectable = obj.toCollectable();
-	if (!succeed)
+	if (!succeed && collectable)
 	{
 		MNObject meta = collectable->getMeta();
 		MNObject op = MNObject::String("-<");
@@ -379,6 +379,7 @@ void MNFiber::store_global()
 {
 	push(getAt(0));
 	up(1, 2);
+	pop(1);
 	store_raw_field();
 }
 
@@ -423,8 +424,8 @@ void MNFiber::swap()
 
 void MNFiber::equals()
 {
-	MNObject left  = get(-1);
-	MNObject right = get(-2);
+	MNObject left  = get(-2);
+	MNObject right = get(-1);
 	pop(2);
 
 	MNObject ret;
@@ -451,6 +452,31 @@ void MNFiber::equals()
 	push(ret);
 }
 
+void MNFiber::less_than()
+{
+	MNObject left  = get(-2);
+	MNObject right = get(-1);
+	pop(2);
+
+	MNObject ret;
+	switch (left.getType())
+	{
+	case TObjectType::Int:
+	case TObjectType::Float:
+		{
+			if (right.isInt()) ret = MNObject::Bool(left.toInt() < right.toInt());
+			else if (right.isFloat()) ret = MNObject::Bool(left.toFloat() < right.toFloat());
+		}
+		break;
+	case  TObjectType::Table:
+		{
+			binomalOp(this, "<", left, right, ret);
+		}
+		break;
+	}
+	push(ret);
+}
+
 void MNFiber::tostring()
 {
 	MNObject object = get(-1);
@@ -472,8 +498,8 @@ void MNFiber::tostring()
 
 void MNFiber::add()
 {
-	MNObject left  = get(-1);
-	MNObject right = get(-2);
+	MNObject left  = get(-2);
+	MNObject right = get(-1);
 	pop(2);
 
 	MNObject ret;
@@ -490,7 +516,7 @@ void MNFiber::add()
 
 		MNString* str1 = left.toString();
 		MNString* str2 = strObj1.toString();
-		ret = MNObject::Format("%s%s", str1->ss().str(), str2->ss().str());
+		ret = MNObject::Format("%s%s", str1->ss().str().c_str(), str2->ss().str().c_str());
 	}
 	break;
 	case  TObjectType::Table:
@@ -505,8 +531,8 @@ void MNFiber::add()
 
 void MNFiber::sub()
 {
-	MNObject left  = get(-1);
-	MNObject right = get(-2);
+	MNObject left  = get(-2);
+	MNObject right = get(-1);
 	pop(2);
 
 	MNObject ret;
@@ -526,8 +552,8 @@ void MNFiber::sub()
 
 void MNFiber::mul()
 {
-	MNObject left  = get(-1);
-	MNObject right = get(-2);
+	MNObject left  = get(-2);
+	MNObject right = get(-1);
 	pop(2);
 
 	MNObject ret;
@@ -547,8 +573,8 @@ void MNFiber::mul()
 
 void MNFiber::div()
 {
-	MNObject left  = get(-1);
-	MNObject right = get(-2);
+	MNObject left  = get(-2);
+	MNObject right = get(-1);
 	pop(2);
 
 	MNObject ret;
@@ -582,8 +608,8 @@ void MNFiber::div()
 
 void MNFiber::mod()
 {
-	MNObject left  = get(-1);
-	MNObject right = get(-2);
+	MNObject left  = get(-2);
+	MNObject right = get(-1);
 	pop(2);
 
 	MNObject ret;
@@ -704,19 +730,19 @@ void MNFiber::call(tsize nargs, bool ret)
 {
 	CallInfo* info = enterCall(nargs, ret);
 
-	//! native
-	if (info->closure && info->closure->isNative())
-	{
-		TCFunction func = info->closure->getFunc().toCFunction();
-		info = returnCall(func(this));
-		return;
-	}
-
 	//! script
 	while (info != NULL)
 	{
-		if (!info->closure) break;
-		if (info->closure->isNative()) break;
+		MNClosure* closure = info->closure;
+		if (!closure) break;
+
+		if (closure->isNative())
+		{
+			TCFunction func = closure->getFunc().toCFunction();
+			info = returnCall(func(this));
+			if (info->closure && info->closure->isNative()) return;
+			else continue;
+		}
 
 		CodeIterator code(info);
 		while (code.info == info)
@@ -750,11 +776,19 @@ void MNFiber::call(tsize nargs, bool ret)
 			break;
 
 			case cmd_pop1: pop(1); break;
+			case cmd_pop2: pop(2); break;
 			case cmd_popn:
 			{
 				tbyte count;
 				code >> count;
 				pop(count);
+			}
+			break;
+			case cmd_load_const:
+			{
+				tuint16 index;
+				code >> index;
+				push_const(index);
 			}
 			break;
 			case cmd_load_stack:
@@ -785,6 +819,9 @@ void MNFiber::call(tsize nargs, bool ret)
 			break;
 			case cmd_set_meta    : set_meta(); break;
 			case cmd_get_meta    : get_meta(); break;
+			case cmd_up1:    up(1, 0); break;
+			case cmd_up1_x2: up(1, 2); break;
+			case cmd_up2:    up(2, 0); break;
 			case cmd_up:
 			{
 				tbyte n, x;
@@ -793,7 +830,76 @@ void MNFiber::call(tsize nargs, bool ret)
 			}
 			break;
 			case cmd_swap    : swap(); break;
-			case cmd_equals  : equals(); break;
+			case cmd_eq  : equals(); break;
+			case cmd_neq :
+				{
+					equals();
+					MNObject ret = get(-1);
+					if (ret.isBool())
+					{
+						pop(1);
+						push(MNObject::Bool(!ret.toBool()));
+					}
+				}
+				break;
+			case cmd_lt  : less_than(); break;
+			case cmd_gt:
+			{
+				up(2, 0);    //! [left right left right]
+				less_than(); //! [left right bool]
+
+				if (get(-1).toBool())
+				{
+					pop(3); //! []
+					push(MNObject::Bool(false)); //! [bool]
+				}
+				else
+				{
+					pop(1); //!   [left right]
+					equals(); //! [bool]
+					bool ret = get(-1).toBool();
+					pop(1); //! []
+					push(MNObject::Bool(!ret)); //! [bool]
+				}
+			}
+			break;
+			case cmd_leq:
+			{
+				up(2, 0);    //! [left right left right]
+				less_than(); //! [left right bool]
+
+				if (!get(-1).toBool())
+				{
+					pop(1);   //! [left right]
+					equals(); //! [bool]
+				}
+				else
+				{
+					up(1, 2); //! [bool left right bool]
+					pop(3);   //! [bool]
+				}
+			}
+			break;
+			case cmd_geq:
+			{
+				up(2, 0); //! [left right left right]
+				equals(); //! [left right bool]
+
+				if (get(-1).toBool())
+				{
+					pop(3); //! []
+					push(MNObject::Bool(true)); //! [bool]
+				}
+				else
+				{
+					pop(1); //! [left right]
+					less_than(); //! [bool]
+					tboolean ret = get(-1).toBool();
+					pop(1); //! []
+					push(MNObject::Bool(!ret)); //! [bool]
+				}
+			}
+			break;
 			case cmd_tostring: tostring(); break;
 			case cmd_add     : add(); break;
 			case cmd_sub     : sub(); break;
@@ -801,14 +907,14 @@ void MNFiber::call(tsize nargs, bool ret)
 			case cmd_div     : div(); break;
 			case cmd_mod     : mod(); break;
 
-			case cmd_jump:
+			case cmd_jmp:
 			{
 				tint16 len;
 				code >> len;
 				code.jump(len);
 			}
 			break;
-			case cmd_jump_false:
+			case cmd_fjp:
 			{
 				tint16 len;
 				code >> len;
@@ -828,6 +934,13 @@ void MNFiber::call(tsize nargs, bool ret)
 			case cmd_return_void:
 			{
 				info = returnCall(cmd_return == cmd);
+				if (info->closure && info->closure->isNative()) return;
+			}
+			break;
+			case cmd_close_links:
+			{
+				tuint level = 0;
+				code >> level;
 			}
 			break;
 			}

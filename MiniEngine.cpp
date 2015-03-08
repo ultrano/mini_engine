@@ -33,10 +33,29 @@ bool __equals(MNFiber* fiber)
 	return true;
 }
 
+bool __test(MNFiber* fiber)
+{
+	fiber->tostring();
+	thashstring msg = fiber->get(-1).toString()->ss();
+	printf("msg: %s\n", msg.str().c_str());
+	return false;
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	MNFiber* fiber = new MNFiber();
 	MNObject holder(TObjectType::Fiber, fiber->getReferrer());
+
+	//! set global field
+	{
+		fiber->push_string("foo");
+		fiber->push_closure(__test);
+		fiber->store_global();
+
+		fiber->push_string("test");
+		fiber->push_string("test");
+		fiber->store_global();
+	}
 
 	//! compile test
 	{
@@ -50,7 +69,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		MNObject cls(TObjectType::Closure, closure->getReferrer());
 		fiber->push(cls);
-		fiber->call(0, false);
+		fiber->load_stack(0);
+		fiber->call(1, false);
 	}
 
 	//! garbage collect test

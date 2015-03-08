@@ -27,7 +27,10 @@ tsize MNFuncBuilder::addConst(const MNObject& val)
 void MNFuncBuilder::addLocal( const thashstring& name)
 {
 	tsize index = locals.size();
-	while(index--) if (locals[index] == name) compile_error("overalpped variable declaration");
+	while(index--) if (locals[index] == name)
+	{
+		compile_error(tstring("overalpped variable declaration -> ") + name.str());
+	}
 
 	locals.push_back(name);
 	if (locals.size() > func->m_nvars) func->m_nvars = locals.size();
@@ -96,7 +99,7 @@ tboolean MNCompiler::build()
 	}
 	catch (MNCompileException* e)
 	{
-		printf(e->msg.c_str());
+		printf("compiling failed: %s\n", e->msg.c_str());
 	}
 	return false;
 }
@@ -110,16 +113,19 @@ tboolean MNCompiler::_statement()
 {
 	tboolean ret = false;
 	if (ret = check(tok_var)) _var();
-	else if (ret = check(tok_if));
-	else if (ret = check(tok_else));
+	else if (ret = check(tok_if)) _if();
 	else if (ret = check(tok_for));
-	else if (ret = check(tok_while));
+	else if (ret = check(tok_while)) _while();
 	else if (ret = check(tok_switch));
 	else if (ret = check(tok_func));
 	else if (ret = check(tok_return));
+	else if (ret = check(tok_break)) _break();
+	else if (ret = check(tok_continue)) _continue();
+	else if (ret = check('{')) _block();
 	else if (ret = check(';')) advance();
 	else ret = _exp(false);
 
+	while (check(';')) advance();
 	return ret;
 }
 
@@ -135,6 +141,111 @@ void MNCompiler::_var()
 		if (peek('=')) _exp(false);
 		if (check(',')) continue; else break;
 	}
+}
+
+void MNCompiler::_block()
+{
+	if (!check('{')) return;
+
+	tsize nlocals = m_func->locals.size();
+
+	advance();
+	_statements();
+	if (!check('}')) compile_error("there is no block ending");
+	advance();
+
+	if (nlocals > m_func->locals.size())
+	{
+		m_func->locals.resize(nlocals);
+		code() << cmd_close_links << nlocals;
+	}
+}
+
+void MNCompiler::_if()
+{
+	if (!check(tok_if)) return;
+	advance();
+
+	if (!check('(')) compile_error("'if' statement needs conditional expression");
+	advance();
+	_exp();
+	if (!check(')')) compile_error("it's wrong conditional expression for 'if' statement");
+	advance();
+
+	tsize fjp = (code() << cmd_fjp).cursor;
+	tsize begin = (code() << tint16(0)).cursor;
+	_statement();
+	tsize end = code().cursor;
+	if (check(tok_else))
+	{
+		advance();
+		tsize jmp = (code() << cmd_jmp).cursor;
+		end = (code() << tint16(0)).cursor;
+		_statement();
+		code().modify(jmp, tint16(code().cursor - end));
+	}
+	code().modify(fjp, tint16(end - begin));
+}
+
+void MNCompiler::_while()
+{
+	if (!check(tok_while)) return;
+	advance();
+
+	code() << cmd_jmp << tint16(sizeof(cmd_jmp) + sizeof(tint16));
+	m_func->breakouts.push_back(code().cursor);
+
+	tsize out = (code() << cmd_jmp).cursor;
+	code() << tint16(0);
+	tsize out_a = code().cursor;
+
+	m_func->playbacks.push_back(out_a);
+
+	if (!check('(')) compile_error("it's wrong condition for 'while'");
+	advance();
+	_exp();
+	if (!check(')')) compile_error("there is no terminal for condition for 'while'");
+	advance();
+
+	tsize fjp = (code() << cmd_fjp).cursor;
+	code() << tint16(0);
+	tsize fjp_a = code().cursor;
+	
+	_statement();
+	
+	tsize jmp = (code() << cmd_jmp).cursor;
+	code() << tint16(0);
+	tsize jmp_a = code().cursor;
+
+	m_func->breakouts.pop_back();
+	m_func->playbacks.pop_back();
+	code().modify(out, tint16(jmp_a - out_a));
+	code().modify(fjp, tint16(jmp_a - fjp_a));
+	code().modify(jmp, tint16(out_a - jmp_a));
+}
+
+void MNCompiler::_break()
+{
+	if (!m_func->breakouts.size()) compile_error("wrong 'break' using");
+	if (!check(tok_break)) return;
+	advance();
+
+	tsize jmp = (code() << cmd_jmp).cursor;
+	code() << tint16(0);
+	tint16 step = m_func->breakouts.back() - code().cursor;
+	code().modify(jmp, step);
+}
+
+void MNCompiler::_continue()
+{
+	if (!m_func->playbacks.size()) compile_error("wrong 'continue' using");
+	if (!check(tok_continue)) return;
+	advance();
+
+	tsize jmp = (code() << cmd_jmp).cursor;
+	code() << tint16(0);
+	tint16 step = m_func->playbacks.back() - code().cursor;
+	code().modify(jmp, step);
 }
 
 void MNCompiler::_load(MNExp& e)
@@ -157,7 +268,7 @@ void MNCompiler::_assign(MNExp& e, tboolean leftVal)
 	{
 	case MNExp::exp_local :
 	case MNExp::exp_upval :
-	case MNExp::exp_global: code() << cmd_up1_x1; break;
+	case MNExp::exp_global: code() << cmd_up1; break;
 	case MNExp::exp_field : code() << cmd_up1_x2; break;
 	default: compile_error("can't assign to unknown l-expression"); break;
 	}
@@ -176,7 +287,7 @@ void MNCompiler::_assign(MNExp& e, tboolean leftVal)
 tboolean MNCompiler::_exp(tboolean leftVal)
 {
 	MNExp e;
-	_exp_add_sub(e);
+	_exp_logical(e);
 	if (check('='))
 	{
 		advance();
@@ -190,6 +301,26 @@ tboolean MNCompiler::_exp(tboolean leftVal)
 	else compile_error("expression wasn't completed");
 
 	return true;
+}
+
+void MNCompiler::_exp_logical(MNExp& e)
+{
+	_exp_add_sub(e);
+	while (e.type != MNExp::exp_none)
+	{
+		tbyte cmd = check(tok_eq)? cmd_eq:
+			        check(tok_neq)? cmd_neq:
+			        check(tok_leq)? cmd_leq:
+			        check(tok_geq)? cmd_geq:
+			        check('<')? cmd_lt:
+			        check('>')? cmd_gt:cmd_none;
+		if (cmd == cmd_none) break;
+		advance();
+		_load(e);
+		_exp_add_sub(e);
+		_load(e);
+		code() << cmd;
+	}
 }
 
 void MNCompiler::_exp_add_sub(MNExp& e)
@@ -209,20 +340,79 @@ void MNCompiler::_exp_add_sub(MNExp& e)
 
 void MNCompiler::_exp_mul_div(MNExp& e)
 {
-	_primary(e);
+	_exp_postfix(e);
 	while (e.type != MNExp::exp_none)
 	{
 		tbyte cmd = check('*')? cmd_mul:check('/')?cmd_div:cmd_none;
 		if (cmd == cmd_none) break;
 		advance();
 		_load(e);
-		_primary(e);
+		_exp_postfix(e);
 		_load(e);
 		code() << cmd;
 	}
 }
+void MNCompiler::_exp_postfix(MNExp& e)
+{
+	_exp_primary(e);
+	while (e.type != MNExp::exp_none)
+	{
+		if (check('('))
+		{
+			advance();
+			if (e.type == MNExp::exp_field)
+			{
+				//! origin: obj key
+				code() << cmd_up2;     //! obj key obj key
+				code() << cmd_load_field; //! obj key closure
+				code() << cmd_up1_x2;     //! closure obj key closure
+				code() << cmd_pop2;       //! closure obj
+			}
+			else if (e.type != MNExp::exp_loaded)
+			{
+				_load(e);
+				code() << cmd_load_stack << tuint16(0);
+			}
+			else compile_error("postfix compile is failed");
 
-void MNCompiler::_primary(MNExp& e)
+			tbyte nargs = 1;
+			if (!check(')')) while (true)
+			{
+				_exp();
+				nargs += 1;
+				if (check(')')) break;
+				else if (check(',')) advance();
+				else compile_error("function call arguments error");
+			}
+			advance();
+
+			code() << cmd_call << nargs;
+			e.type = MNExp::exp_loaded;
+		}
+		else if (check('['))
+		{
+			advance();
+			_load(e);
+			_exp();
+			e.type = MNExp::exp_field;
+			if (!check(']')) compile_error("accessing field needs terminal token -> ']'");
+			advance();
+		}
+		else if (check('.'))
+		{
+			advance();
+			_load(e);
+			if (!check(tok_identify)) compile_error("accessing field needs field name");
+			e.index = m_func->addConst(MNObject::String(m_current.str));
+			code() << cmd_load_const << e.index;
+			e.type = MNExp::exp_field;
+			advance();
+		}
+		else break;
+	}
+}
+
+void MNCompiler::_exp_primary(MNExp& e)
 {
 	//*
 	if (check(tok_identify) || check(tok_this))
@@ -316,7 +506,7 @@ void MNCompiler::_primary(MNExp& e)
 		tint index = 0;
 		while (!check(']'))
 		{
-			code() << cmd_up1_x1;
+			code() << cmd_up1;
 			code() << cmd_push_int << index++;
 			_exp();
 			code() << cmd_store_field;

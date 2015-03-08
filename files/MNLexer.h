@@ -94,6 +94,10 @@ inline void reservedWords(MNLexer::Token& tok)
 	static const thashstring _true("true");
 	static const thashstring _false("false");
 	static const thashstring _return("return");
+	static const thashstring _eq("==");
+	static const thashstring _neq("!=");
+	static const thashstring _leq("<=");
+	static const thashstring _geq(">=");
 
 	if (tok.str == _var)           tok.type = tok_var;
 	else if (tok.str == _func)     tok.type = tok_func;
@@ -110,6 +114,10 @@ inline void reservedWords(MNLexer::Token& tok)
 	else if (tok.str == _case)     tok.type = tok_case;
 	else if (tok.str == _break)    tok.type = tok_break;
 	else if (tok.str == _continue) tok.type = tok_continue;
+	else if (tok.str == _eq)       tok.type = tok_eq;
+	else if (tok.str == _neq)      tok.type = tok_neq;
+	else if (tok.str == _leq)      tok.type = tok_leq;
+	else if (tok.str == _geq)      tok.type = tok_geq;
 }
 
 #endif

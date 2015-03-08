@@ -167,22 +167,29 @@ enum TCommand : tbyte
 	cmd_set_meta,
 	cmd_get_meta,
 	cmd_up,//! >> tbyte, tbyte
-	cmd_up1_x1,
+	cmd_up1,
 	cmd_up1_x2,
+	cmd_up2,
 	cmd_swap,
-	cmd_equals,
+	cmd_eq,
+	cmd_neq,
+	cmd_lt,
+	cmd_gt,
+	cmd_leq,
+	cmd_geq,
 	cmd_tostring,
 	cmd_add,
 	cmd_sub,
 	cmd_mul,
 	cmd_div,
 	cmd_mod,
-	cmd_jump,
-	cmd_jump_false,
+	cmd_jmp, //! >> tint16
+	cmd_fjp, //! >> tint16
 	cmd_call,//! >> 1byte
 	cmd_call_void,//! >> 1byte
 	cmd_return,
 	cmd_return_void,
+	cmd_close_links, //! >> tuint16
 };
 
 class MNFiber;

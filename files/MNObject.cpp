@@ -21,13 +21,13 @@ MNObject MNObject::String(const thashstring& str)
 	return MNObject(TObjectType::String, strval->getReferrer());
 }
 
-MNObject MNObject::Format(const tstring& format, ...)
+MNObject MNObject::Format(const tchar* format, ...)
 {
 	static const tuint bufSize = 256;
 	tchar buf[bufSize] = { 0 };
 	va_list args;
 	va_start(args, format);
-	vsprintf(&buf[0], format.c_str(), args);
+	vsprintf(&buf[0], format, args);
 	va_end(args);
 	return String(&buf[0]);
 }

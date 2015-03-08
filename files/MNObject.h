@@ -24,7 +24,7 @@ public:
 	static MNObject CFunction(TCFunction cfunc)  { MNObject obj(TObjectType::CFunction); obj.val._func = cfunc; return obj; }
 	static MNObject String(const tstring& str);
 	static MNObject String(const thashstring& str);
-	static MNObject Format(const tstring& format, ...);
+	static MNObject Format(const tchar* format, ...);
 public:
 
 	MNObject();
