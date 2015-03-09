@@ -4,18 +4,49 @@
 #include "MNFiber.h"
 #include "MNArray.h"
 #include "MNClosure.h"
+#include "MNString.h"
 
 #include <stdlib.h>
+#include <math.h>
 
-tboolean array_add(MNFiber* fiber)
+tboolean common_print(MNFiber* fiber)
 {
-	const MNObject& obj = fiber->get(0);
-	MNArray* arr = obj.toArray();
-	if (!arr) return false;
+	tsize sz = fiber->stackSize();
+	for (tsize i = 1; i < sz; ++i)
+	{
+		fiber->tostring();
+		fiber->load_stack(i);
+		fiber->tostring();
+		MNObject obj = fiber->get(-1);
+		fiber->pop(1);
+		MNString* str = obj.toString();
+		printf(str->ss().c_str());
+	}
+	printf("\n");
+	return false;
+}
 
-	const MNObject& arg1 = fiber->get(1);
-	arr->add(arg1);
+tboolean object_setmeta(MNFiber* fiber)
+{
+	MNCollectable* obj = fiber->get(1).toCollectable();
+	if (!obj) return false;
+	obj->setMeta(fiber->get(2));
+	return false;
+}
 
+tboolean math_sqrt(MNFiber* fiber)
+{
+	float a = sqrtf(fiber->get(1).toFloat());
+	fiber->push_float(a);
+	return true;
+}
+
+tboolean common_bind(MNFiber* fiber)
+{
+	MNObject cls = fiber->get(1);
+	MNObject obj = fiber->get(2);
+	MNClosure* closure = cls.toClosure();
+	if (closure) closure->bindThis(obj);
 	return false;
 }
 
@@ -52,29 +83,60 @@ MNGlobal::MNGlobal(MNFiber* rootState)
 	, m_root(rootState)
 	, m_stringTable(new MNTable())
 {
+	m_root->m_global = this;
 	m_stringTable->link(this);
 
-	MNTable* globalTable = new MNTable();
-	globalTable->link(this);
-	rootState->push(MNObject(TObjectType::Table, globalTable->getReferrer()));
+	//! global table
+	m_root->push_table();
+
+	//! common function
+	{
+		m_root->up(1, 0);
+		m_root->push_string("print");
+		m_root->push_closure(common_print);
+		m_root->store_field();
+
+		m_root->up(1, 0);
+		m_root->push_string("bind");
+		m_root->push_closure(common_bind);
+		m_root->store_field();
+	}
+
+	//! math function
+	{
+		m_root->up(1, 0);
+		m_root->push_string("sqrt");
+		m_root->push_closure(math_sqrt);
+		m_root->store_field();
+	}
+
+	//! object function
+	{
+		m_root->up(1, 0);
+		m_root->push_string("setmeta");
+		m_root->push_closure(object_setmeta);
+		m_root->store_field();
+	}
 
 	//! array meta table
 	{
-		MNClosure* closure = NULL;
+		m_root->up(1, 0);
+		m_root->push_string("array");
+		m_root->push_table();
 
-		MNTable* meta = new MNTable();
-		meta->link(this);
+		{
+			m_root->up(1, 0);
+			m_root->push_string("-<");
+			m_root->push_closure(array_set_field);
+			m_root->store_field();
 
-		closure = new MNClosure(MNObject::CFunction(array_add));
-		meta->insert(MNObject::String("add"), MNObject(TObjectType::Closure, closure->link(this)->getReferrer()));
+			m_root->up(1, 0);
+			m_root->push_string("->");
+			m_root->push_closure(array_get_field);
+			m_root->store_field();
+		}
 
-		closure = new MNClosure(MNObject::CFunction(array_get_field));
-		meta->insert(MNObject::String("->"), MNObject(TObjectType::Closure, closure->link(this)->getReferrer()));
-
-		closure = new MNClosure(MNObject::CFunction(array_set_field));
-		meta->insert(MNObject::String("-<"), MNObject(TObjectType::Closure, closure->link(this)->getReferrer()));
-
-		globalTable->insert(MNObject::String("array"), MNObject(TObjectType::Table, meta->getReferrer()));
+		m_root->store_field();
 	}
 }
 

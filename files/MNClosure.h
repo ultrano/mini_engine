@@ -72,7 +72,7 @@ public:
 
 	bool    isNative() const;
 
-	void bindThis(MNObject _this);
+	void bindThis(const MNObject& _this);
 	const MNObject& getThis();
 
 	const MNObject& getFunc() const;

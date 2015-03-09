@@ -9,7 +9,7 @@ class MNArray : public MNCollectable
 	MN_RTTI(MNArray, MNCollectable);
 public:
 	
-	MNArray();
+	MNArray(tsize size = 0);
 	~MNArray();
 
 	tboolean add(const MNObject& val);

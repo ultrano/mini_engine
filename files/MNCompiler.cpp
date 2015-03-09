@@ -134,6 +134,7 @@ tboolean MNCompiler::build(MNObject& func)
 		advance();
 		m_func = new MNFuncBuilder(NULL);
 		_statements();
+		code() << cmd_close_links << tuint16(0);
 		code() << cmd_return_void;
 
 		func = MNObject(TObjectType::Function, m_func->func->getReferrer());
@@ -165,8 +166,8 @@ tboolean MNCompiler::_statement()
 	if (ret = check(tok_var)) _var();
 	else if (ret = check(tok_if)) _if();
 	else if (ret = check(tok_for));
-	else if (ret = check(tok_while)) _while();
 	else if (ret = check(tok_switch));
+	else if (ret = check(tok_while)) _while();
 	else if (ret = check(tok_func)) _func();
 	else if (ret = check('{')) _block();
 	else if (ret = check(';')) while (check(';')) advance();
@@ -344,7 +345,8 @@ void MNCompiler::_func()
 	}
 
 	//! function body
-	_statement();
+	_block();
+	code() << cmd_close_links << tuint16(0);
 	code() << cmd_return_void;
 
 	m_func = func->upFunc;
@@ -409,7 +411,7 @@ void MNCompiler::_assign(MNExp& e, tboolean leftVal)
 tboolean MNCompiler::_exp(tboolean leftVal)
 {
 	MNExp e;
-	_exp_logical(e);
+	_exp_or(e);
 	if (check('='))
 	{
 		advance();
@@ -423,6 +425,36 @@ tboolean MNCompiler::_exp(tboolean leftVal)
 	else compile_error("expression wasn't completed");
 
 	return true;
+}
+
+void MNCompiler::_exp_or(MNExp& e)
+{
+	_exp_and(e);
+	while (e.type != MNExp::exp_none)
+	{
+		tbyte cmd = check(tok_or) ? cmd_or : cmd_none;
+		if (cmd == cmd_none) break;
+		advance();
+		_load(e);
+		_exp_and(e);
+		_load(e);
+		code() << cmd;
+	}
+}
+
+void MNCompiler::_exp_and(MNExp& e)
+{
+	_exp_logical(e);
+	while (e.type != MNExp::exp_none)
+	{
+		tbyte cmd = check(tok_and) ? cmd_and : cmd_none;
+		if (cmd == cmd_none) break;
+		advance();
+		_load(e);
+		_exp_logical(e);
+		_load(e);
+		code() << cmd;
+	}
 }
 
 void MNCompiler::_exp_logical(MNExp& e)

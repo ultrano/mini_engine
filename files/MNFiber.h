@@ -57,7 +57,7 @@ public:
 	void push_bool(tboolean val);
 	void push_closure(TCFunction val);
 	void push_table();
-	void push_array();
+	void push_array(tsize size = 0);
 	void push_const(tsize idx);
 	void push(const MNObject& val);
 	void pop(tuint32 count);
@@ -82,6 +82,8 @@ public:
 		
 	void equals();
 	void less_than();
+	void and();
+	void or();
 
 	void tostring();
 		
@@ -97,7 +99,7 @@ private:
 	virtual void travelMark();
 
 private:
-
+	friend class MNGlobal;
 	MNGlobal* m_global;
 	tarray<MNObject> m_stack;
 	tlist<UpLink*> m_openLinks;

@@ -182,7 +182,7 @@ bool MNClosure::isNative() const
 	return m_func.getType() == TObjectType::CFunction;
 }
 
-void MNClosure::bindThis(MNObject _this)
+void MNClosure::bindThis(const MNObject& _this)
 {
 	m_this = _this;
 }

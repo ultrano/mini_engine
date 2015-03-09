@@ -178,6 +178,8 @@ enum TCommand : tbyte
 	cmd_gt,
 	cmd_leq,
 	cmd_geq,
+	cmd_and,
+	cmd_or,
 	cmd_tostring,
 	cmd_add,
 	cmd_sub,

@@ -1,8 +1,8 @@
 #include "MNArray.h"
 
-MNArray::MNArray()
+MNArray::MNArray(tsize size)
 {
-
+	m_arr.resize(size);
 }
 
 MNArray::~MNArray()

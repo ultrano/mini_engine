@@ -186,12 +186,12 @@ void MNFiber::push_table()
 	push(obj);
 }
 
-void MNFiber::push_array()
+void MNFiber::push_array(tsize size)
 {
 	push_string("array");
 	load_global();
 
-	MNArray* array = new MNArray();
+	MNArray* array = new MNArray(size);
 	array->link(global());
 	array->setMeta(get(-1));
 	pop(1);
@@ -477,6 +477,24 @@ void MNFiber::less_than()
 	push(ret);
 }
 
+void MNFiber::and()
+{
+	MNObject left = get(-2);
+	MNObject right = get(-1);
+	pop(2);
+
+	push(MNObject::Bool((left.toBool() && right.toBool())));
+}
+
+void MNFiber::or()
+{
+	MNObject left = get(-2);
+	MNObject right = get(-1);
+	pop(2);
+
+	push(MNObject::Bool(left.toBool() || right.toBool()));
+}
+
 void MNFiber::tostring()
 {
 	MNObject object = get(-1);
@@ -485,9 +503,12 @@ void MNFiber::tostring()
 	MNObject str = MNObject::String("[null:null]");
 	switch (object.getType())
 	{
+	case TObjectType::Array    : str = MNObject::Format("[array: %p]", object.toArray()); break;
+	case TObjectType::Table    : str = MNObject::Format("[table: %p]", object.toTable()); break;
 	case TObjectType::Pointer  : str = MNObject::Format("[pointer: %p]", object.toPointer()); break;
 	case TObjectType::Boolean  : str = MNObject::Format("[boolean: %s]", object.toBool() ? "true" : "false"); break;
 	case TObjectType::CFunction: str = MNObject::Format("[cfunction: %p]", object.toCFunction()); break;
+	case TObjectType::Closure  : str = MNObject::Format("[closure: %p]", object.toClosure()); break;
 	case TObjectType::String   : str = object; break;
 	case TObjectType::Int      : str = MNObject::Format("%d", object.toInt()); break;
 	case TObjectType::Float    : str = MNObject::Format("%f", object.toFloat()); break;
@@ -666,13 +687,22 @@ MNFiber::CallInfo* MNFiber::enterCall(tuint nargs, bool ret)
 	m_info->end   = clsIndex;
 	m_info        = info;
 
+	if (!cls->getThis().isNull()) setAt(m_info->begin, cls->getThis());
+
+	//! if it's c-function, call directly
 	if (func)
 	{
 		tsize sz = m_info->end - m_info->begin;
 		while (sz++ < func->getVarCount()) push_null();
+		return m_info;
 	}
-
-	return m_info;
+	else
+	{
+		TCFunction func = cls->getFunc().toCFunction();
+		bool ret = (func) ? func(this) : false;
+		returnCall(ret);
+		return NULL;
+	}
 }
 
 MNFiber::CallInfo* MNFiber::returnCall(bool retOnTop)
@@ -774,6 +804,7 @@ public:
 void MNFiber::call(tsize nargs, bool ret)
 {
 	CallInfo* info = enterCall(nargs, ret);
+	if (!info) return;
 
 	//! script
 	while (info != NULL)
@@ -781,14 +812,6 @@ void MNFiber::call(tsize nargs, bool ret)
 		MNClosure* closure = info->closure;
 		if (!closure) break;
 		if (closure->getFunc().isNull()) break;
-
-		if (closure->isNative())
-		{
-			TCFunction func = closure->getFunc().toCFunction();
-			info = returnCall(func(this));
-			if (info->closure && info->closure->isNative()) return;
-			else continue;
-		}
 
 		CodeIterator code(info);
 		while (code.info == info)
@@ -815,7 +838,13 @@ void MNFiber::call(tsize nargs, bool ret)
 			}
 			break;
 			case cmd_push_table: push_table(); break;
-			case cmd_push_array: push_array(); break;
+			case cmd_push_array:
+			{
+				tuint16 size = 0;
+				code >> size;
+				push_array(size);
+			}
+			break;
 			case cmd_push_closure:
 			{
 				tuint16 funcIndex, upLinkSize;
@@ -924,11 +953,8 @@ void MNFiber::call(tsize nargs, bool ret)
 				{
 					equals();
 					MNObject ret = get(-1);
-					if (ret.isBool())
-					{
-						pop(1);
-						push(MNObject::Bool(!ret.toBool()));
-					}
+					pop(1);
+					push(MNObject::Bool(!ret.toBool()));
 				}
 				break;
 			case cmd_lt : less_than(); break;
@@ -968,6 +994,8 @@ void MNFiber::call(tsize nargs, bool ret)
 				}
 			}
 			break;
+			case cmd_and: and(); break;
+			case cmd_or : or();  break;
 			case cmd_tostring: tostring(); break;
 			case cmd_add     : add(); break;
 			case cmd_sub     : sub(); break;
@@ -1007,7 +1035,7 @@ void MNFiber::call(tsize nargs, bool ret)
 			break;
 			case cmd_close_links:
 			{
-				tuint level = 0;
+				tuint16 level = 0;
 				code >> level;
 				closeLinks(level);
 			}

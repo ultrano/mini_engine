@@ -1,10 +1,16 @@
 
-var t = { a:10
-        , foo2:func()
-          {
-			if ((a = a - 1) < 0) return;
-            ::foo("test "+a);
-			foo2();
-          }
-        };
-t.foo2();
+var vector2 = {};
+vector2.constructor = func(x, y) { var v = {x:x, y:y}; ::setmeta(v, vector2); return v; };
+vector2.length      = func() { return ::sqrt(x*x + y*y); };
+vector2.dot         = func() { return constructor(x*x, y*y); };
+
+var v = vector2.constructor(0, 0);
+
+v.x = 4;
+v.y = 3;
+print("len: " + v.length());
+
+var d = v.dot();
+print("dot x: " + d.x);
+print("dot y: " + d.y);
+print("dot len: " + d.length());
