@@ -62,7 +62,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		MNObject func;
 		MNCompiler compiler;
-		compiler.m_lexer.openFile("C:/workspace/mini_engine/test1.txt");
+		compiler.m_lexer.openFile("D:/documents/workspace/mini_engine/test1.txt");
 		compiler.build(func);
 
 		MNClosure* closure = new MNClosure(func);

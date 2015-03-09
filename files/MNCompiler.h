@@ -81,7 +81,7 @@ public:
 	MNFuncBuilder(MNFuncBuilder* up);
 	~MNFuncBuilder();
 	tsize addConst(const MNObject& val);
-	void  addLocal( const thashstring& name);
+	bool  addLocal( const thashstring& name);
 	void  findLocal( const thashstring& name, MNExp& e );
 };
 

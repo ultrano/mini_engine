@@ -79,6 +79,15 @@ tboolean array_get_field(MNFiber* fiber)
 	return true;
 }
 
+tboolean array_count(MNFiber* fiber)
+{
+	const MNObject& obj = fiber->get(0);
+	MNArray* arr = obj.toArray();
+	if (!arr) return false;
+	fiber->push_int(arr->count());
+	return true;
+}
+
 tboolean array_set_field(MNFiber* fiber)
 {
 	const MNObject& obj = fiber->get(0);
@@ -158,6 +167,11 @@ MNGlobal::MNGlobal(MNFiber* rootState)
 			m_root->push_string("->");
 			m_root->push_closure(array_get_field);
 			m_root->store_field();
+
+			m_root->up(1, 0);
+			m_root->push_string("count");
+			m_root->push_closure(array_count);
+			m_root->store_field();
 		}
 
 		m_root->store_field();
@@ -216,7 +230,11 @@ tsize MNGlobal::GC()
 	tsize count = 0;
 	//! delete unmarked objects and fold link
 	{
-		while (m_heap != NULL && !m_heap->isMarked()) m_heap->finalize();
+		while (m_heap != NULL && !m_heap->isMarked())
+		{
+			count += 1;
+			m_heap->finalize();
+		}
 
 		MNCollectable* marked = m_heap;
 		while (marked != NULL)
@@ -224,7 +242,6 @@ tsize MNGlobal::GC()
 			MNCollectable* unknown = marked->m_next;
 			if (unknown != NULL && !unknown->isMarked())
 			{
-				printf("garbage collected: '%s'\n", unknown->queryRtti()->name);
 				count += 1;
 				unknown->finalize();
 				continue;

@@ -178,9 +178,9 @@ void MNFiber::push_closure(TCFunction val)
 	push(obj);
 }
 
-void MNFiber::push_table()
+void MNFiber::push_table(tsize size)
 {
-	MNTable* table = new MNTable();
+	MNTable* table = new MNTable(size);
 	MNReferrer* ref = table->link(global())->getReferrer();
 	MNObject obj(TObjectType::Table, ref);
 	push(obj);
@@ -517,6 +517,15 @@ void MNFiber::tostring()
 	push(str);
 }
 
+void MNFiber::inc()
+{
+
+}
+
+void MNFiber::dec()
+{
+}
+
 void MNFiber::add()
 {
 	MNObject left  = get(-2);
@@ -837,7 +846,13 @@ void MNFiber::call(tsize nargs, bool ret)
 				push_int(_int);
 			}
 			break;
-			case cmd_push_table: push_table(); break;
+			case cmd_push_table:
+			{
+				tuint16 size = 0;
+				code >> size;
+				push_table(size); 
+			}
+			break;
 			case cmd_push_array:
 			{
 				tuint16 size = 0;

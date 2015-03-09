@@ -56,7 +56,7 @@ public:
 	void push_pointer(void* val);
 	void push_bool(tboolean val);
 	void push_closure(TCFunction val);
-	void push_table();
+	void push_table(tsize size = 0);
 	void push_array(tsize size = 0);
 	void push_const(tsize idx);
 	void push(const MNObject& val);
@@ -86,7 +86,9 @@ public:
 	void or();
 
 	void tostring();
-		
+
+	void inc();
+	void dec();
 	void add();
 	void sub();
 	void mul();

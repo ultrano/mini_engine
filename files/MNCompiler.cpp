@@ -12,18 +12,22 @@ public:
 	tstring msg;
 };
 
-void compile_error(const tchar* format, ...)
+#define compile_error(format, ...) compile_error_print(m_current.row, m_current.col, (format), __VA_ARGS__)
+void compile_error_print(tsize row, tsize col, const tchar* format, ...)
 {
 	static const tuint bufSize = 512;
-	tchar buf[bufSize] = { 0 };
+	tchar buf1[bufSize] = { 0 };
+	tchar buf2[bufSize] = { 0 };
 	va_list args;
 	va_start(args, format);
-	vsprintf(&buf[0], format, args);
+	vsprintf(&buf1[0], format, args);
 	va_end(args);
-	throw new MNCompileException(&buf[0]);
+	sprintf(&buf2[0], "compile error(%d, %d): ", row, col, &buf1[0]);
+	throw new MNCompileException(&buf2[0]);
 }
 
-void compile_warning(const tchar* format, ...)
+#define compile_warning(format, ...) compile_warning_print(m_current.row, m_current.col, (format), __VA_ARGS__)
+void compile_warning_print(tsize row, tsize col, const tchar* format, ...)
 {
 	static const tuint bufSize = 256;
 	tchar buf[bufSize] = { 0 };
@@ -31,7 +35,7 @@ void compile_warning(const tchar* format, ...)
 	va_start(args, format);
 	vsprintf(&buf[0], format, args);
 	va_end(args);
-	printf("compile warning: %s\n", &buf[0]);
+	printf("compile warning(%d, %d): %s\n", row, col, &buf[0]);
 }
 
 MNFuncBuilder::MNFuncBuilder(MNFuncBuilder* up)
@@ -64,16 +68,14 @@ tsize MNFuncBuilder::addConst(const MNObject& val)
 	return func->m_consts.size() - 1;
 }
 
-void MNFuncBuilder::addLocal( const thashstring& name)
+bool MNFuncBuilder::addLocal(const thashstring& name)
 {
 	tsize index = locals.size();
-	while(index--) if (locals[index] == name)
-	{
-		compile_error("overalpped variable declaration '%s'", name.str());
-	}
+	while(index--) if (locals[index] == name) return false;
 
 	locals.push_back(name);
 	if (locals.size() > func->m_nvars) func->m_nvars = locals.size();
+	return true;
 }
 
 void MNFuncBuilder::findLocal( const thashstring& name, MNExp& e )
@@ -205,7 +207,7 @@ void MNCompiler::_var()
 		advance(); //! skip 'var' or ','
 
 		if (!check(tok_identify)) compile_error("worong variable");
-		m_func->addLocal(m_current.str);
+		if (!m_func->addLocal(m_current.str)) compile_error("overalpped variable declaration '%s'", m_current.str.c_str());
 
 		if (peek('=')) _exp(false);
 		if (check(',')) continue; else break;
@@ -334,7 +336,7 @@ void MNCompiler::_func()
 		{
 			if (check(tok_identify))
 			{
-				m_func->addLocal(m_current.str);
+				if (!m_func->addLocal(m_current.str)) compile_error("overalpped parameter declaration '%s'", m_current.str.c_str());
 				advance();
 			}
 			else if (check(',')) advance();
@@ -574,7 +576,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 		m_func->findLocal(m_current.str, e);
 		if (e.type == MNExp::exp_none)
 		{
-			compile_warning("there isn't local variable called '%s', trying to find in field", m_current.str.c_str());
+			compile_warning("no var named '%s', trying to find in field", m_current.str.c_str());
 			e.index = m_func->addConst(MNObject::String(m_current.str));
 			code() << cmd_load_stack << tuint16(0);
 			code() << cmd_load_const << e.index;
@@ -635,7 +637,8 @@ void MNCompiler::_exp_primary(MNExp& e)
 	else if (check('{'))
 	{
 		advance();
-		code() << cmd_push_table;
+		tsize pos = (code() << cmd_push_table).cursor;
+		code() << (e.index = 0);
 		while (!check('}'))
 		{
 			if (!check(tok_string) && !check(tok_identify)) compile_error("wrong table field");
@@ -648,9 +651,11 @@ void MNCompiler::_exp_primary(MNExp& e)
 			advance();
 			_exp();
 			code() << cmd_store_field;
+			e.index += 1;
 			if (check(',')) advance();
 		}
 		advance();
+		code().modify(pos, e.index);
 		e.type = MNExp::exp_loaded;
 	}
 	else if (check('['))

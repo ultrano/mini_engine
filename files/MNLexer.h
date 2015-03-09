@@ -19,14 +19,16 @@ public:
 	Scanner* m_scan;
 	tchar m_buf[512];
 	tchar m_char;
+	tchar m_next;
 	tuint m_index;
 	tuint m_col, m_row;
 
 	MNLexer();
 	~MNLexer();
-	void openFile(const tstring& filePath);
-	void nextChar();
-	void scan(Token& tok);
+	void  openFile(const tstring& filePath);
+	tchar read();
+	void  advance();
+	void  scan(Token& tok);
 };
 
 
@@ -55,10 +57,11 @@ enum tok_type
 	tok_false    = 146,
 	tok_return   = 147,
 
-	tok_addeq    = 148,
-	tok_subeq    = 149,
-	tok_diveq    = 150,
-	tok_muleq    = 151,
+	tok_add_assign = 148,
+	tok_sub_assign = 149,
+	tok_div_assign = 150,
+	tok_mul_assign = 151,
+
 	tok_eq       = 152,
 	tok_neq      = 153,
 	tok_geq      = 154,

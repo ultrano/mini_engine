@@ -24,13 +24,13 @@ tboolean isEqulas(const MNObject& left, const MNObject& right)
 	return (left.getType() == right.getType() && objectHash(left) == objectHash(right));
 }
 
-MNTable::MNTable()
+MNTable::MNTable(tsize size)
 	: m_nodes(NULL)
 	, m_frees(NULL)
 	, m_size(0)
 	, m_used(0)
 {
-
+	allocNodes(size);
 }
 
 MNTable::~MNTable()
@@ -132,6 +132,7 @@ tboolean MNTable::hasKey(const MNObject& key)
 
 void  MNTable::allocNodes(tsize size)
 {
+	if (size == 0) return;
 	Node* nodes = (Node*)MNMemory::malloc(sizeof(Node)*size);
 	for (tsize i = 0; i < size; ++i)
 	{

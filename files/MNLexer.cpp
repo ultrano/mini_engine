@@ -57,23 +57,22 @@ MNLexer::~MNLexer()
 void MNLexer::openFile(const tstring& filePath)
 {
 	m_scan = new FileScanner(filePath);
-	nextChar();
+	m_char = read();
+	m_next = read();
 }
 
-void MNLexer::nextChar()
+tchar MNLexer::read()
 {
 	if (!m_scan)
 	{
-		m_char = -1;
-		return;
+		return -1;
 	}
 	if (m_index == sizeof(m_buf))
 	{
 		int ret = m_scan->read((tbyte*)&m_buf[0], sizeof(m_buf));
 		if (ret == 0 || ret == -1)
 		{
-			m_char = -1;
-			return;
+			return -1;
 		}
 		else
 		{
@@ -81,12 +80,40 @@ void MNLexer::nextChar()
 			m_index = 0;
 		}
 	}
-	m_char = m_buf[m_index++];
+	return m_buf[m_index++];
+}
+
+void MNLexer::advance()
+{
+	m_char = m_next;
+	m_next = read();
+	if (m_char == '\n')
+	{
+		++m_row;
+		m_col = 0;
+	}
+	else ++m_col;
 }
 
 void MNLexer::scan(Token& tok)
 {
-	while (isspace(m_char)) nextChar();
+	while (true)
+	{
+		if (isspace(m_char)) advance();
+		else if (m_char == '/' && m_next == '/')
+		{
+			while (m_char != '\n') advance();
+		}
+		else if (m_char == '/' && m_next == '*')
+		{
+			advance();
+			advance();
+			while (m_char != '*' || m_next != '/') advance();
+			advance();
+			advance();
+		}
+		else break;
+	}
 
 	tok.col = m_col;
 	tok.row = m_row;
@@ -111,13 +138,13 @@ void MNLexer::scan(Token& tok)
 				return;
 			}
 			buf[index++] = m_char;
-			nextChar();
+			advance();
 		}
 		tok.str = &buf[0];
 	}
 	else if (m_char == '"')
 	{
-		nextChar();
+		advance();
 		tok.type = tok_string;
 		char buf[1024] = { 0 };
 		char* d = &buf[0];
@@ -125,9 +152,9 @@ void MNLexer::scan(Token& tok)
 		{
 			if (m_char == -1 || m_char == '\n') tok.type = tok_eos;
 			*d++ = m_char;
-			nextChar();
+			advance();
 		}
-		nextChar();
+		advance();
 		tok.str = &buf[0];
 	}
 	else if (isalpha(m_char) || m_char == '_')
@@ -143,7 +170,7 @@ void MNLexer::scan(Token& tok)
 				return;
 			}
 			buf[index++] = m_char;
-			nextChar();
+			advance();
 		}
 		tok.str = &buf[0];
 		tok.type = tok_identify;
@@ -152,7 +179,7 @@ void MNLexer::scan(Token& tok)
 	else
 	{
 		tok.type = m_char;
-		nextChar();
+		advance();
 		if (m_char == '=')
 		{
 			switch (tok.type)
@@ -161,48 +188,33 @@ void MNLexer::scan(Token& tok)
 			case '!': tok.type = tok_neq;   break;
 			case '>': tok.type = tok_geq;   break;
 			case '<': tok.type = tok_leq;   break;
-			case '+': tok.type = tok_addeq; break;
-			case '-': tok.type = tok_subeq; break;
-			case '/': tok.type = tok_diveq; break;
-			case '*': tok.type = tok_muleq; break;
+			case '+': tok.type = tok_add_assign; break;
+			case '-': tok.type = tok_sub_assign; break;
+			case '/': tok.type = tok_div_assign; break;
+			case '*': tok.type = tok_mul_assign; break;
 			default:  tok.type = tok_error; return;
 			}
-			nextChar();
+			advance();
 		}
 		else if ((m_char == '-' || m_char == '+') && m_char == tok.type)
 		{
 			tok.type = (m_char == '+') ? tok_inc : tok_dec;
-			nextChar();
+			advance();
 		}
 		else if ((m_char == '<' || m_char == '>') && m_char == tok.type)
 		{
 			tok.type = (m_char == '<') ? tok_push : tok_pull;
-			nextChar();
+			advance();
 		}
 		else if ((m_char == '&' || m_char == '|') && m_char == tok.type)
 		{
 			tok.type = (m_char == '&') ? tok_and : tok_or;
-			nextChar();
+			advance();
 		}
 		else if ((m_char == ':') && m_char == tok.type)
 		{
 			tok.type = tok_global;
-			nextChar();
-		}
-		else if ((m_char == '/') && m_char == tok.type)
-		{
-			while (m_char != '\n' || m_char != '\r') nextChar();
-		}
-		else if ((m_char == '*') && tok.type == '/')
-		{
-			nextChar();
-			tchar last = m_char;
-			nextChar();
-			while (last != '*' && m_char != '/')
-			{
-				last = m_char;
-				nextChar();
-			} 
+			advance();
 		}
 	}
 }

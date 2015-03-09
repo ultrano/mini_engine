@@ -9,7 +9,7 @@ class MNTable : public MNCollectable
 	MN_RTTI(MNTable, MNCollectable);
 public:
 	
-	MNTable();
+	MNTable(tsize size = 0);
 	~MNTable();
 
 	tboolean insert(const MNObject& key, const MNObject& val);
