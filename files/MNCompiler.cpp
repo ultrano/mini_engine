@@ -646,6 +646,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 		_exp();
 		if (!check(')')) compile_error("primary term error");
 		advance();
+		e.type = MNExp::exp_loaded;
 	}
 	//*/
 }

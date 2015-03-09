@@ -1,6 +1,10 @@
 
 var t = { a:10
-        , foo2:func() ::foo("test "+a);
-        , foo3:func()return this; 
+        , foo2:func()
+          {
+			if ((a = a - 1) < 0) return;
+            ::foo("test "+a);
+			foo2();
+          }
         };
-t.foo3().foo2();
+t.foo2();
