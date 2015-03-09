@@ -120,6 +120,7 @@ public:
 	void     _exp_logical(MNExp& e);
 	void     _exp_add_sub(MNExp& e);
 	void     _exp_mul_div(MNExp& e);
+	void     _exp_term(MNExp& e);
 	void     _exp_postfix(MNExp& e);
 	void     _exp_primary(MNExp& e);
 };

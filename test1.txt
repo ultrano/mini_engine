@@ -13,8 +13,9 @@ print("len: " + v.length());
 var a = [1,2,3,4];
 print("count: " + a.count());
 var count = a.count();
-while (count >= 0)
+var i = {index:0};
+while (i.index < count)
 {
-  count = count - 1;
-  print("" + a[count]);
+  print("" + a[i.index]);
+  i.index += 1;
 }

@@ -414,7 +414,21 @@ tboolean MNCompiler::_exp(tboolean leftVal)
 {
 	MNExp e;
 	_exp_or(e);
-	if (check('='))
+	tbyte cmd = check(tok_add_assign)? cmd_add:
+		        check(tok_sub_assign)? cmd_sub:
+		        check(tok_mul_assign)? cmd_mul:
+		        check(tok_div_assign)? cmd_div: cmd_none;
+	if (cmd != cmd_none)
+	{
+		advance();
+		MNExp e1 = e;
+		if (e1.type == MNExp::exp_field) code() << cmd_up2;
+		_load(e1);
+		_exp();
+		code() << cmd;
+		_assign(e, leftVal);
+	}
+	else if (check('='))
 	{
 		advance();
 		_exp();
@@ -496,18 +510,24 @@ void MNCompiler::_exp_add_sub(MNExp& e)
 
 void MNCompiler::_exp_mul_div(MNExp& e)
 {
-	_exp_postfix(e);
+	_exp_term(e);
 	while (e.type != MNExp::exp_none)
 	{
 		tbyte cmd = check('*')? cmd_mul:check('/')?cmd_div:cmd_none;
 		if (cmd == cmd_none) break;
 		advance();
 		_load(e);
-		_exp_postfix(e);
+		_exp_term(e);
 		_load(e);
 		code() << cmd;
 	}
 }
+
+void MNCompiler::_exp_term(MNExp& e)
+{
+	_exp_postfix(e);
+}
+
 void MNCompiler::_exp_postfix(MNExp& e)
 {
 	_exp_primary(e);
