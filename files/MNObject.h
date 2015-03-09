@@ -25,6 +25,7 @@ public:
 	static MNObject String(const tstring& str);
 	static MNObject String(const thashstring& str);
 	static MNObject Format(const tchar* format, ...);
+	static MNObject Referrer(MNReferrer* ref);
 public:
 
 	MNObject();

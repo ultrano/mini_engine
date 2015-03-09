@@ -3,6 +3,7 @@ var vector2 = {};
 vector2.new    = func(x, y) { var v = {x:x, y:y}; ::setmeta(v, vector2); return v; };
 vector2.length = func() { return ::sqrt(x*x + y*y); };
 vector2.dot    = func() { return new(x*x, y*y); };
+vector2.finalize = func() { ::print("vector2 finalized"); };
 
 var v = vector2.new(0, 0);
 

@@ -101,80 +101,107 @@ tboolean array_set_field(MNFiber* fiber)
 	return false;
 }
 
-MNGlobal::MNGlobal(MNFiber* rootState)
-	: m_heap(NULL)
-	, m_root(rootState)
-	, m_stringTable(new MNTable())
+tboolean table_count(MNFiber* fiber)
 {
-	m_root->m_global = this;
+	const MNObject& obj = fiber->get(0);
+	MNTable* tbl = obj.toTable();
+	if (!tbl) return false;
+	fiber->push_int(tbl->count());
+	return true;
+}
+
+MNGlobal::MNGlobal(MNFiber* root)
+	: m_heap(NULL)
+	, m_root(root)
+	, m_stringTable(new MNTable())
+	, m_shared(NULL)
+{
+	root->m_global = this;
 	m_stringTable->link(this);
 
 	//! global table
-	m_root->push_table();
+	root->push_table();
+	m_shared = root->get(-1).toTable();
 
 	//! common function
 	{
-		m_root->up(1, 0);
-		m_root->push_string("print");
-		m_root->push_closure(common_print);
-		m_root->store_field();
+		root->up(1, 0);
+		root->push_string("print");
+		root->push_closure(common_print);
+		root->store_field();
 
-		m_root->up(1, 0);
-		m_root->push_string("bind");
-		m_root->push_closure(common_bind);
-		m_root->store_field();
+		root->up(1, 0);
+		root->push_string("bind");
+		root->push_closure(common_bind);
+		root->store_field();
 	}
 
 	//! math function
 	{
-		m_root->up(1, 0);
-		m_root->push_string("sqrt");
-		m_root->push_closure(math_sqrt);
-		m_root->store_field();
+		root->up(1, 0);
+		root->push_string("sqrt");
+		root->push_closure(math_sqrt);
+		root->store_field();
 	}
 
 	//! object function
 	{
-		m_root->up(1, 0);
-		m_root->push_string("setmeta");
-		m_root->push_closure(object_setmeta);
-		m_root->store_field();
+		root->up(1, 0);
+		root->push_string("setmeta");
+		root->push_closure(object_setmeta);
+		root->store_field();
 
-		m_root->up(1, 0);
-		m_root->push_string("delegator");
-		m_root->push_closure(object_delegator);
-		m_root->store_field();
+		root->up(1, 0);
+		root->push_string("delegator");
+		root->push_closure(object_delegator);
+		root->store_field();
 
-		m_root->up(1, 0);
-		m_root->push_string("GC");
-		m_root->push_closure(object_garbage_collect);
-		m_root->store_field();
+		root->up(1, 0);
+		root->push_string("GC");
+		root->push_closure(object_garbage_collect);
+		root->store_field();
 	}
 
 	//! array meta table
 	{
-		m_root->up(1, 0);
-		m_root->push_string("array");
-		m_root->push_table();
+		root->up(1, 0);
+		root->push_string("array");
+		root->push_table();
 
 		{
-			m_root->up(1, 0);
-			m_root->push_string("-<");
-			m_root->push_closure(array_set_field);
-			m_root->store_field();
+			root->up(1, 0);
+			root->push_string("-<");
+			root->push_closure(array_set_field);
+			root->store_field();
 
-			m_root->up(1, 0);
-			m_root->push_string("->");
-			m_root->push_closure(array_get_field);
-			m_root->store_field();
+			root->up(1, 0);
+			root->push_string("->");
+			root->push_closure(array_get_field);
+			root->store_field();
 
-			m_root->up(1, 0);
-			m_root->push_string("count");
-			m_root->push_closure(array_count);
-			m_root->store_field();
+			root->up(1, 0);
+			root->push_string("count");
+			root->push_closure(array_count);
+			root->store_field();
 		}
 
-		m_root->store_field();
+		root->store_field();
+	}
+
+	//! table meta table
+	{
+		root->up(1, 0);
+		root->push_string("table");
+		root->push_table();
+
+		{
+			root->up(1, 0);
+			root->push_string("count");
+			root->push_closure(table_count);
+			root->store_field();
+		}
+
+		root->store_field();
 	}
 }
 

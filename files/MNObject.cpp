@@ -6,6 +6,7 @@
 #include "MNTable.h"
 #include "MNArray.h"
 #include "MNFunction.h"
+#include "MNFiber.h"
 
 #include <stdarg.h>
 
@@ -31,7 +32,22 @@ MNObject MNObject::Format(const tchar* format, ...)
 	va_end(args);
 	return String(&buf[0]);
 }
+MNObject MNObject::Referrer(MNReferrer* ref)
+{
+	if (!ref) return MNObject::Null();
 
+	MNCountable* obj = ref->getObject();
+	const MNRtti* rtti = obj->queryRtti();
+	TObjectType type = TObjectType::Null;
+	if (rtti == MNArray::getRtti()) type = TObjectType::Array;
+	else if (rtti == MNTable::getRtti()) type = TObjectType::Table;
+	else if (rtti == MNClosure::getRtti()) type = TObjectType::Closure;
+	else if (rtti == MNFunction::getRtti()) type = TObjectType::Function;
+	else if (rtti == MNString::getRtti()) type = TObjectType::String;
+	else if (rtti == MNFiber::getRtti()) type = TObjectType::Fiber;
+
+	return MNObject(type, ref);
+}
 MNObject::MNObject()
 	: valType(TObjectType::Null)
 {

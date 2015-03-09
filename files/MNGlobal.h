@@ -11,7 +11,7 @@ class MNGlobal
 {
 public:
 	
-	MNGlobal(MNFiber* rootState);
+	MNGlobal(MNFiber* root);
 	~MNGlobal();
 
 	//MNGCObject* generateString(const tstring& str);
@@ -21,6 +21,7 @@ public:
 	MNTable* m_stringTable;
 	MNCollectable* m_heap;
 	MNFiber* m_root;
+	MNTable* m_shared;
 };
 
 #endif

@@ -1,5 +1,6 @@
 #include "MNCollectable.h"
 #include "MNGlobal.h"
+#include "MNFiber.h"
 
 enum { Unmarked, Marked, Finalized };
 
@@ -77,6 +78,18 @@ void MNCollectable::finalize()
 		MNValue __finalizer = getMeta().get((MNGCObject*)m_state->newString("__finalizer"));
 		if (__finalizer.to<MNClosure>()) __finalizer.call(this);
 	}*/
+	if (m_meta.isTable())
+	{
+		MNFiber* fiber = global()->m_root;
+		if (this != fiber)
+		{
+			fiber->push(m_meta);
+			fiber->push_string("finalize");
+			fiber->load_field();
+			fiber->push(MNObject::Referrer(getReferrer()));
+			fiber->call(1, 0);
+		}
+	}
 
 	__super::finalize();
 }

@@ -47,13 +47,10 @@ MNFiber::MNFiber(MNGlobal* global)
 	m_info->end = 0;
 	m_info->ret = false;
 
-	if (global == NULL)
-	{
-		global = new MNGlobal(this);
-	}
-	m_global = global;
+	if (global == NULL) global = new MNGlobal(this);
 
-	link(global);
+	link(m_global = global);
+	setAt(0, MNObject::Referrer(global->m_shared->getReferrer()));
 }
 
 MNFiber::~MNFiber()
@@ -180,9 +177,14 @@ void MNFiber::push_closure(TCFunction val)
 
 void MNFiber::push_table(tsize size)
 {
+	push_string("table");
+	load_global();
+
 	MNTable* table = new MNTable(size);
-	MNReferrer* ref = table->link(global())->getReferrer();
-	MNObject obj(TObjectType::Table, ref);
+	table->setMeta(get(-1));
+	pop(1);
+
+	MNObject obj(TObjectType::Table, table->link(global())->getReferrer());
 	push(obj);
 }
 
@@ -192,11 +194,10 @@ void MNFiber::push_array(tsize size)
 	load_global();
 
 	MNArray* array = new MNArray(size);
-	array->link(global());
 	array->setMeta(get(-1));
 	pop(1);
 
-	MNObject obj(TObjectType::Array, array->getReferrer());
+	MNObject obj(TObjectType::Array, array->link(global())->getReferrer());
 	push(obj);
 }
 
@@ -812,11 +813,12 @@ public:
 
 void MNFiber::call(tsize nargs, bool ret)
 {
+	CallInfo* lastInfo = m_info;
 	CallInfo* info = enterCall(nargs, ret);
 	if (!info) return;
 
 	//! script
-	while (info != NULL)
+	while (info != lastInfo)
 	{
 		MNClosure* closure = info->closure;
 		if (!closure) break;
