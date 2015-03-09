@@ -1,7 +1,6 @@
 
-var a = 1;
-
-var f1 = func () {foo("ss"+a); a = a+1;}
-var f2 = func () {foo("ss"+a); a = a+1;}
-f2();
-f1();
+var t = { a:10
+        , foo2:func() ::foo("test "+a);
+        , foo3:func()return this; 
+        };
+t.foo3().foo2();

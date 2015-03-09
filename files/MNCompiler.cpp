@@ -168,9 +168,14 @@ tboolean MNCompiler::_statement()
 	else if (ret = check(tok_while)) _while();
 	else if (ret = check(tok_switch));
 	else if (ret = check(tok_func)) _func();
-	else if (ret = check(tok_return));
 	else if (ret = check('{')) _block();
 	else if (ret = check(';')) while (check(';')) advance();
+	else if (ret = check(tok_return))
+	{
+		_return();
+		if (check(';')) while (check(';')) advance();
+		else compile_error("expected ';' is gone after 'return'");
+	}
 	else if (ret = check(tok_break))
 	{
 		_break();
@@ -355,6 +360,16 @@ void MNCompiler::_func()
 	delete func;
 }
 
+void MNCompiler::_return()
+{
+	if (!check(tok_return)) return;
+	advance();
+
+	bool hasRet = true;
+	if (hasRet = !check(';')) _exp(); 
+	code() << (hasRet ? cmd_return : cmd_return_void);
+}
+
 void MNCompiler::_load(MNExp& e)
 {
 	switch ( e.type )
@@ -527,12 +542,21 @@ void MNCompiler::_exp_primary(MNExp& e)
 		m_func->findLocal(m_current.str, e);
 		if (e.type == MNExp::exp_none)
 		{
-			compile_warning("there isn't variable called '%s', trying to find in global", m_current.str.c_str());
+			compile_warning("there isn't local variable called '%s', trying to find in field", m_current.str.c_str());
 			e.index = m_func->addConst(MNObject::String(m_current.str));
 			code() << cmd_load_stack << tuint16(0);
 			code() << cmd_load_const << e.index;
 			e.type = MNExp::exp_field;
 		}
+		advance();
+	}
+	else if (check(tok_global))
+	{
+		advance();
+		if (!check(tok_identify)) compile_error("invalid global field");
+
+		e.index = m_func->addConst(MNObject::String(m_current.str));
+		e.type  = MNExp::exp_global;
 		advance();
 	}
 	else if (check(tok_func))

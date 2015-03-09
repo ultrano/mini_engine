@@ -184,5 +184,10 @@ void MNLexer::scan(Token& tok)
 			tok.type = (m_char == '&') ? tok_and : tok_or;
 			nextChar();
 		}
+		else if ((m_char == ':') && m_char == tok.type)
+		{
+			tok.type = tok_global;
+			nextChar();
+		}
 	}
 }

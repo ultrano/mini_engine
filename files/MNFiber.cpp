@@ -884,11 +884,25 @@ void MNFiber::call(tsize nargs, bool ret)
 			case cmd_store_field : store_field(); break;
 			case cmd_load_global:
 			{
-				load_global();
+				tuint16 index;
+				code >> index;
+
+				push(getAt(0));
+				push_const(index);
+				load_raw_field();
 			}
 			break;
 			case cmd_store_global:
 			{
+				tuint16 index;
+				code >> index;
+
+				MNObject val = get(-1);
+				pop(1);
+
+				push(getAt(0));
+				push_const(index);
+				push(val);
 				store_global();
 			}
 			break;

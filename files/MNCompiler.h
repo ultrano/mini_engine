@@ -110,6 +110,7 @@ public:
 	void _break();
 	void _continue();
 	void _func();
+	void _return();
 
 	void _load(MNExp& e);
 	void _assign(MNExp& e, tboolean leftVal);
