@@ -720,6 +720,7 @@ MNFiber::CallInfo* MNFiber::returnCall(bool retOnTop)
 	bool needRet = m_info->ret;
 	MNObject obj;
 	if (needRet && retOnTop) obj = get(-1);
+	closeLinks(0);
 
 	tsize count = (m_info->end - m_info->prev->end);
 	while (count--) setAt(--(m_info->end), MNObject::Null());
@@ -771,6 +772,7 @@ void  MNFiber::closeLinks(tint32 level)
 		}
 		++itor;
 	}
+	pop(m_info->end - index);
 }
 
 tsize MNFiber::stackSize() const

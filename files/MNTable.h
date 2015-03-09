@@ -17,7 +17,8 @@ public:
 	tboolean tryGet(const MNObject& key, MNObject& val) const;
 	tboolean hasKey(const MNObject& key);
 	tsize    count() const;
-
+	tsize    total() const;
+	tboolean traverse(tsize index, MNObject& key, MNObject& val) const;
 private:
 	struct Node;
 

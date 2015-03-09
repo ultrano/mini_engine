@@ -43,7 +43,7 @@ public:
 	template<typename T>
 	void modify(tsize pos, const T& t)
 	{
-		if (pos + sizeof(T) < size) memcpy(&bytes[pos], &t, sizeof(T));
+		if (pos + sizeof(T) <= size) memcpy(&bytes[pos], &t, sizeof(T));
 	}
 };
 

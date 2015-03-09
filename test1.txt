@@ -1,22 +1,52 @@
 
-var vector2 = {};
-vector2.new    = func(x, y) { var v = {x:x, y:y}; ::setmeta(v, vector2); return v; };
-vector2.length = func() { return ::sqrt(x*x + y*y); };
-vector2.dot    = func() { return new(x*x, y*y); };
-vector2.finalize = func() { ::print("vector2 finalized"); };
-
-var v = vector2.new(0, 0);
-
-v.x = 4;
-v.y = 3;
-print("len: " + v.length());
-
-var a = [1,2,3,4];
-print("count: " + a.count());
-var count = a.count();
-var i = {index:0};
-while (i.index < count)
 {
-  print("" + a[i.index]);
-  i.index += 1;
+  var vector2 = {};
+  vector2.new    = func(x, y) { var v = {x:x, y:y}; ::setmeta(v, vector2); return v; };
+  vector2.length = func() { return ::sqrt(x*x + y*y); };
+  vector2.dot    = func() { return new(x*x, y*y); };
+  vector2.finalize = func() { ::print("vector2 finalized"); };
+  vector2["=="]  = func(val) { return (x == val.x && y == val.y); };
+  
+  table.iterate = func(functor)
+  {
+    var pair = {key:null, val:null};
+    var index = 0;
+    while (this.traverse(index, pair))
+    {
+  	if (pair.key != null)
+  	{
+  	  if (functor(pair.key, pair.val) == false) break;
+  	}
+      index += 1;
+    }
+  };
+  
+  var v1 = vector2.new(0, 0);
+  var v2 = vector2.new(0, 1);
+  print("v1==v2: " + (v1==v2));
+  
+  v1.iterate(func(key, val){::print("key: " + key + " val: " + val); });
+  
+}
+
+{
+  print(""+vector2);
+  
+  var foo = func()
+  {
+    var i=0;
+    var arr = [];
+    arr.add(func() {::print("foo1 i: " + (i+=1));});
+    arr.add(func() {::print("foo2 i: " + (i+=1));});
+    return arr;
+  };
+  
+  var arr = foo();
+  arr[0]();
+  arr[1]();
+}
+
+{
+  var index = 0;
+  while (true) ::print(""+(index += 1));
 }

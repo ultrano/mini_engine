@@ -208,3 +208,17 @@ tsize MNTable::count() const
 {
 	return m_used;
 }
+
+tsize MNTable::total() const
+{
+	return m_size;
+}
+
+tboolean MNTable::traverse(tsize index, MNObject& key, MNObject& val) const
+{
+	if (index >= m_size) return false;
+	Node& node = m_nodes[index];
+	key = node.key;
+	val = node.val;
+	return true;
+}

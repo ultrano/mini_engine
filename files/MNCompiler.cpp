@@ -136,7 +136,6 @@ tboolean MNCompiler::build(MNObject& func)
 		advance();
 		m_func = new MNFuncBuilder(NULL);
 		_statements();
-		code() << cmd_close_links << tuint16(0);
 		code() << cmd_return_void;
 
 		func = MNObject(TObjectType::Function, m_func->func->getReferrer());
@@ -225,10 +224,10 @@ void MNCompiler::_block()
 	if (!check('}')) compile_error("there is no block ending");
 	advance();
 
-	if (nlocals > m_func->locals.size())
+	if (nlocals < m_func->locals.size())
 	{
 		m_func->locals.resize(nlocals);
-		code() << cmd_close_links << nlocals;
+		code() << cmd_close_links << tuint16(nlocals+1);
 	}
 }
 
@@ -266,9 +265,8 @@ void MNCompiler::_while()
 	code() << cmd_jmp << tint16(sizeof(cmd_jmp) + sizeof(tint16));
 	m_func->breakouts.push_back(code().cursor);
 
-	tsize out = (code() << cmd_jmp).cursor;
-	code() << tint16(0);
-	tsize out_a = code().cursor;
+	tsize out   = (code() << cmd_jmp).cursor;
+	tsize out_a = (code() << tint16(0)).cursor;
 
 	m_func->playbacks.push_back(out_a);
 
@@ -278,15 +276,13 @@ void MNCompiler::_while()
 	if (!check(')')) compile_error("there is no terminal for condition for 'while'");
 	advance();
 
-	tsize fjp = (code() << cmd_fjp).cursor;
-	code() << tint16(0);
-	tsize fjp_a = code().cursor;
+	tsize fjp   = (code() << cmd_fjp).cursor;
+	tsize fjp_a = (code() << tint16(0)).cursor;
 	
 	_statement();
 	
-	tsize jmp = (code() << cmd_jmp).cursor;
-	code() << tint16(0);
-	tsize jmp_a = code().cursor;
+	tsize jmp   = (code() << cmd_jmp).cursor;
+	tsize jmp_a = (code() << tint16(0)).cursor;
 
 	m_func->breakouts.pop_back();
 	m_func->playbacks.pop_back();
@@ -348,7 +344,6 @@ void MNCompiler::_func()
 
 	//! function body
 	_block();
-	code() << cmd_close_links << tuint16(0);
 	code() << cmd_return_void;
 
 	m_func = func->upFunc;
