@@ -4,6 +4,7 @@
 #include "MNCollectable.h"
 
 class MNClosure;
+class UpLink;
 class MNFiber : public MNCollectable
 {
 	MN_RTTI(MNFiber, MNCollectable);
@@ -41,6 +42,11 @@ public:
 
 	CallInfo*       enterCall(tuint nargs, bool ret);
 	CallInfo*       returnCall(bool retOnTop);
+
+	UpLink*         openLink(tint32 index);
+	void            closeLinks(tint32 level);
+
+	tsize           stackSize() const;
 
 	//! command methods.
 	void push_null();
@@ -94,6 +100,7 @@ private:
 
 	MNGlobal* m_global;
 	tarray<MNObject> m_stack;
+	tlist<UpLink*> m_openLinks;
 	CallInfo* m_info;
 };
 

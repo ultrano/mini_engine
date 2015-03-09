@@ -3,13 +3,36 @@
 #include "MNObject.h"
 #include "MNString.h"
 
+#include <stdarg.h>
+
 class MNCompileException : public MNMemory
 {
 public:
 	MNCompileException(const tstring& str) : msg(str) {}
 	tstring msg;
 };
-#define compile_error(msg) throw new MNCompileException((msg))
+
+void compile_error(const tchar* format, ...)
+{
+	static const tuint bufSize = 512;
+	tchar buf[bufSize] = { 0 };
+	va_list args;
+	va_start(args, format);
+	vsprintf(&buf[0], format, args);
+	va_end(args);
+	throw new MNCompileException(&buf[0]);
+}
+
+void compile_warning(const tchar* format, ...)
+{
+	static const tuint bufSize = 256;
+	tchar buf[bufSize] = { 0 };
+	va_list args;
+	va_start(args, format);
+	vsprintf(&buf[0], format, args);
+	va_end(args);
+	printf("compile warning: %s\n", &buf[0]);
+}
 
 MNFuncBuilder::MNFuncBuilder(MNFuncBuilder* up)
 	: upFunc(up)
@@ -17,6 +40,10 @@ MNFuncBuilder::MNFuncBuilder(MNFuncBuilder* up)
 	, codeMaker(func->m_codes, func->m_ncode)
 {
 	addLocal(thashstring("this"));
+}
+
+MNFuncBuilder::~MNFuncBuilder()
+{
 }
 
 tsize MNFuncBuilder::addConst(const MNObject& val)
@@ -42,7 +69,7 @@ void MNFuncBuilder::addLocal( const thashstring& name)
 	tsize index = locals.size();
 	while(index--) if (locals[index] == name)
 	{
-		compile_error(tstring("overalpped variable declaration -> ") + name.str());
+		compile_error("overalpped variable declaration '%s'", name.str());
 	}
 
 	locals.push_back(name);
@@ -99,7 +126,7 @@ tboolean MNCompiler::peek(tint type) const
 	return (m_peeking.type == type);
 }
 
-tboolean MNCompiler::build()
+tboolean MNCompiler::build(MNObject& func)
 {
 	try
 	{
@@ -108,12 +135,22 @@ tboolean MNCompiler::build()
 		m_func = new MNFuncBuilder(NULL);
 		_statements();
 		code() << cmd_return_void;
+
+		func = MNObject(TObjectType::Function, m_func->func->getReferrer());
 		return true;
 	}
 	catch (MNCompileException* e)
 	{
-		printf("compiling failed: %s\n", e->msg.c_str());
+		printf("compile error: %s\n", e->msg.c_str());
 	}
+	while (m_func)
+	{
+		MNFuncBuilder* upFunc = m_func->upFunc;
+		delete m_func->func;
+		delete m_func;
+		m_func = upFunc;
+	}
+	func = MNObject::Null();
 	return false;
 }
 
@@ -130,15 +167,28 @@ tboolean MNCompiler::_statement()
 	else if (ret = check(tok_for));
 	else if (ret = check(tok_while)) _while();
 	else if (ret = check(tok_switch));
-	else if (ret = check(tok_func));
+	else if (ret = check(tok_func)) _func();
 	else if (ret = check(tok_return));
-	else if (ret = check(tok_break)) _break();
-	else if (ret = check(tok_continue)) _continue();
 	else if (ret = check('{')) _block();
-	else if (ret = check(';')) advance();
-	else ret = _exp(false);
+	else if (ret = check(';')) while (check(';')) advance();
+	else if (ret = check(tok_break))
+	{
+		_break();
+		if (check(';')) while (check(';')) advance();
+		else compile_error("expected ';' is gone after 'break'");
+	}
+	else if (ret = check(tok_continue))
+	{
+		_continue();
+		if (check(';')) while (check(';')) advance();
+		else compile_error("expected ';' is gone after 'continue'");
+	}
+	else if (ret = _exp(false))
+	{
+		if (check(';')) while (check(';')) advance();
+		else compile_error("expected ';' is gone after expression");
+	}
 
-	while (check(';')) advance();
 	return ret;
 }
 
@@ -259,6 +309,50 @@ void MNCompiler::_continue()
 	code() << tint16(0);
 	tint16 step = m_func->playbacks.back() - code().cursor;
 	code().modify(jmp, step);
+}
+
+void MNCompiler::_func()
+{
+	if (!check(tok_func)) return;
+	advance();
+
+	MNFuncBuilder* func = new MNFuncBuilder(m_func);
+	m_func = func;
+
+	//! function parameter
+	{
+		if (!check('(')) compile_error("function needs arguments statement");
+		advance();
+
+		if (!check(')')) while (true)
+		{
+			if (check(tok_identify))
+			{
+				m_func->addLocal(m_current.str);
+				advance();
+			}
+			else if (check(',')) advance();
+			else if (check(')')) break;
+			else compile_error("it's wrong function parameter");
+		}
+		advance();
+	}
+
+	//! function body
+	_statement();
+	code() << cmd_return_void;
+
+	m_func = func->upFunc;
+	tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, func->func->getReferrer()));
+	tuint16 linkIndex = tuint16(func->links.size());
+	code() << cmd_push_closure << funcIndex << linkIndex;
+	while (linkIndex--)
+	{
+		const MNExp& e = func->links[linkIndex];
+		tbyte cmd = (e.type == MNExp::exp_local) ? cmd_load_stack : cmd_load_upval;
+		code() << cmd << e.index;
+	}
+	delete func;
 }
 
 void MNCompiler::_load(MNExp& e)
@@ -433,6 +527,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 		m_func->findLocal(m_current.str, e);
 		if (e.type == MNExp::exp_none)
 		{
+			compile_warning("there isn't variable called '%s', trying to find in global", m_current.str.c_str());
 			e.index = m_func->addConst(MNObject::String(m_current.str));
 			code() << cmd_load_stack << tuint16(0);
 			code() << cmd_load_const << e.index;
@@ -442,8 +537,8 @@ void MNCompiler::_exp_primary(MNExp& e)
 	}
 	else if (check(tok_func))
 	{
-		//_func(true);
-		//e.type = expr_ontop;
+		_func();
+		e.type = MNExp::exp_loaded;
 	}
 	else if (check(tok_null))
 	{
@@ -485,28 +580,20 @@ void MNCompiler::_exp_primary(MNExp& e)
 	{
 		advance();
 		code() << cmd_push_table;
-		while ( !check('}') )
+		while (!check('}'))
 		{
-			/*
-			if ( peek(0).type != tok_identify ) error_compile("테이블 초기화 에러");
-			JSValue name = JSValueString(peek(0).text);
+			if (!check(tok_string) && !check(tok_identify)) compile_error("wrong table field");
+
+			code() << cmd_up1;
+			e.index = m_func->addConst(MNObject::String(m_current.str));
+			code() << cmd_load_const << e.index;
 			advance();
-			if ( peek(0).type == ':' )
-			{
-				advance();
-
-				e.ui8  = funcinfo->func()->addConst( name );
-
-				emit() << cmd_up;
-				emit() << cmd_load_const << e.ui8;
-				syntax_expr();
-				emit() << cmd_store_indexed;
-			}
-
-			if ( peek(0).type == ',' ) advance();
-			//*/
+			if (!check(':')) compile_error("delimiter ':' is missing ");
+			advance();
+			_exp();
+			code() << cmd_store_field;
+			if (check(',')) advance();
 		}
-
 		advance();
 		e.type = MNExp::exp_loaded;
 	}

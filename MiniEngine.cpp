@@ -48,6 +48,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	//! set global field
 	{
+		int i = 0;
 		fiber->push_string("foo");
 		fiber->push_closure(__test);
 		fiber->store_global();
@@ -59,11 +60,11 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	//! compile test
 	{
+		MNObject func;
 		MNCompiler compiler;
-		compiler.m_lexer.openFile("D:/documents/workspace/mini_engine/test1.txt");
-		compiler.build();
+		compiler.m_lexer.openFile("C:/workspace/mini_engine/test1.txt");
+		compiler.build(func);
 
-		MNObject func(TObjectType::Function, compiler.m_func->func->getReferrer());
 		MNClosure* closure = new MNClosure(func);
 		closure->link(fiber->global());
 

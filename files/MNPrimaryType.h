@@ -61,6 +61,7 @@ public:
 	inline tsize size() { return m_str.size(); }
 	inline thash32 hash() const { return m_hash; }
 	inline const tstring& str() const { return m_str; }
+	inline const tchar* c_str() const { return m_str.c_str(); }
 	inline THashString& operator =(const tstring& str) { m_str = str; m_hash = makeHash(str); return *this; }
 	inline bool	operator ==(const THashString& sstr) const { return (m_hash == sstr.m_hash && m_str == sstr.m_str); };
 	inline bool	operator !=(const THashString& sstr) const { return (m_hash != sstr.m_hash); };

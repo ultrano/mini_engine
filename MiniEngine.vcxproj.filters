@@ -24,10 +24,43 @@
     <ClInclude Include="targetver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="files\MNArray.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="files\MNClassBond.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="files\MNClosure.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="files\MNCollectable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="files\MNCommand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="files\MNCompiler.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="files\MNCountable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="files\MNFiber.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="files\MNFunction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="files\MNGlobal.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="files\MNLexer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="files\MNMemory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="files\MNObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="files\MNPrimaryType.h">
@@ -39,40 +72,10 @@
     <ClInclude Include="files\MNRtti.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="files\MNClassBond.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="files\MNObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="files\MNCountable.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="files\MNCollectable.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="files\MNString.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="files\MNFiber.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="files\MNCommand.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="files\MNClosure.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="files\MNArray.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="files\MNTable.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="files\MNFunction.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="files\MNCompiler.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,52 +83,55 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MiniEngine.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNGlobal.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNMemory.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNReferrer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNPrimaryType.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNCountable.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNCollectable.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNString.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNFiber.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="files\MNCommand.cpp">
+    <ClCompile Include="files\MNArray.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="files\MNClosure.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="files\MNTable.cpp">
+    <ClCompile Include="files\MNCollectable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="files\MNArray.cpp">
+    <ClCompile Include="files\MNCommand.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNCompiler.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNCountable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNFiber.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="files\MNFunction.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="files\MNCompiler.cpp">
+    <ClCompile Include="files\MNGlobal.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNLexer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNMemory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNPrimaryType.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNReferrer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNString.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="files\MNTable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniEngine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

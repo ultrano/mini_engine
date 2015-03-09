@@ -1,14 +1,7 @@
 
-var i=0;
+var a = 1;
 
-while (i < 99)
-{
-  foo(""+i);
-  i = i + 1;
-  if (i == 5)
-  {
-    i = 8
-    foo("continue");
-    continue;
-  }
-}
+var f1 = func () {foo("ss"+a); a = a+1;}
+var f2 = func () {foo("ss"+a); a = a+1;}
+f2();
+f1();

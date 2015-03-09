@@ -86,6 +86,16 @@ void UpLink::close()
 	}
 }
 
+void UpLink::inc()
+{
+	nref += 1;
+}
+
+void UpLink::dec()
+{
+	if (--nref == 0) delete this;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////
 
 Closed::Closed()
@@ -136,8 +146,7 @@ MNClosure::~MNClosure()
 	{
 		if (UpLink* link = m_uplinks[i])
 		{
-			link->nref -= 1;
-			if (link->nref == 0) delete link;
+			link->dec();
 		}
 	}
 }
@@ -150,7 +159,7 @@ UpLink*	MNClosure::getLink(tuint idx)
 void	MNClosure::addLink(UpLink* link)
 {
 	if (!link) return;
-	link->nref += 1;
+	link->inc();
 	m_uplinks.push_back(link);
 }
 

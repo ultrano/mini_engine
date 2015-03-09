@@ -79,6 +79,7 @@ public:
 	tarray<tsize>		playbacks;
 	
 	MNFuncBuilder(MNFuncBuilder* up);
+	~MNFuncBuilder();
 	tsize addConst(const MNObject& val);
 	void  addLocal( const thashstring& name);
 	void  findLocal( const thashstring& name, MNExp& e );
@@ -98,7 +99,7 @@ public:
 	tboolean check(tint type) const;
 	tboolean peek(tint type) const;
 
-	tboolean build();
+	tboolean build(MNObject& func);
 
 	void     _statements();
 	tboolean _statement();
@@ -108,6 +109,7 @@ public:
 	void _while();
 	void _break();
 	void _continue();
+	void _func();
 
 	void _load(MNExp& e);
 	void _assign(MNExp& e, tboolean leftVal);

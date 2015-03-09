@@ -36,7 +36,7 @@ struct Closed : UpValue
 	void	set(const MNObject& v) override;;
 };
 
-struct UpLink : public MNMemory
+class UpLink : public MNMemory
 {
 public:
 
@@ -50,6 +50,8 @@ public:
 	const MNObject& get();
 	void	set(const MNObject& v);
 	void	close();
+	void    inc();
+	void    dec();
 };
 
 class MNClosure : public MNCollectable

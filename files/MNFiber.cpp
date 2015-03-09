@@ -693,6 +693,51 @@ MNFiber::CallInfo* MNFiber::returnCall(bool retOnTop)
 	return m_info;
 }
 
+UpLink*  MNFiber::openLink(tint32 index)
+{
+	tlist<UpLink*>::iterator itor = m_openLinks.begin();
+	for (; itor != m_openLinks.end(); ++itor)
+	{
+		UpLink* ul = *itor;
+		Opened* ov = (Opened*)ul->link;
+		if (ov->index == (index + m_info->begin)) return ul;
+	}
+
+	//! add new up link
+	{
+		UpLink* ul = new UpLink;
+		ul->link = new Opened(this, index + m_info->begin);
+		ul->inc();
+		m_openLinks.push_back(ul);
+		return ul;
+	}
+	return NULL;
+}
+
+void  MNFiber::closeLinks(tint32 level)
+{
+	tsize index = (level + m_info->begin);
+	tlist<UpLink*>::iterator itor = m_openLinks.begin();
+	while (itor != m_openLinks.end())
+	{
+		UpLink* ul = *itor;
+		Opened* ov = (Opened*)ul->link;
+		if (ov->index >= index)
+		{
+			ul->close();
+			ul->dec();
+			itor = m_openLinks.erase(itor);
+			continue;
+		}
+		++itor;
+	}
+}
+
+tsize MNFiber::stackSize() const
+{
+	return m_info->end - m_info->begin;
+}
+
 void MNFiber::travelMark()
 {
 	for (tsize i = 0; i < m_stack.size(); ++i)
@@ -735,6 +780,7 @@ void MNFiber::call(tsize nargs, bool ret)
 	{
 		MNClosure* closure = info->closure;
 		if (!closure) break;
+		if (closure->getFunc().isNull()) break;
 
 		if (closure->isNative())
 		{
@@ -772,6 +818,20 @@ void MNFiber::call(tsize nargs, bool ret)
 			case cmd_push_array: push_array(); break;
 			case cmd_push_closure:
 			{
+				tuint16 funcIndex, upLinkSize;
+				code >> funcIndex >> upLinkSize;
+				MNClosure* cls = new MNClosure();
+				cls->setFunc(getConst(funcIndex));
+				cls->link(global());
+				while (upLinkSize--)
+				{
+					tbyte loc;
+					tuint16 index;
+					code >> loc >> index;
+					UpLink* ul = (loc == cmd_load_stack) ? openLink(index) : closure->getLink(index);
+					cls->addLink(ul);
+				}
+				push(MNObject(TObjectType::Closure, cls->getReferrer()));
 			}
 			break;
 
@@ -782,6 +842,21 @@ void MNFiber::call(tsize nargs, bool ret)
 				tbyte count;
 				code >> count;
 				pop(count);
+			}
+			break;
+			case cmd_load_upval:
+			{
+				tuint16 index;
+				code >> index;
+				push(closure->getUpval(index));
+			}
+			break;
+			case cmd_store_upval:
+			{
+				tuint16 index;
+				code >> index;
+				closure->setUpval(index, get(-1));
+				pop(1);
 			}
 			break;
 			case cmd_load_const:
@@ -842,27 +917,8 @@ void MNFiber::call(tsize nargs, bool ret)
 					}
 				}
 				break;
-			case cmd_lt  : less_than(); break;
-			case cmd_gt:
-			{
-				up(2, 0);    //! [left right left right]
-				less_than(); //! [left right bool]
-
-				if (get(-1).toBool())
-				{
-					pop(3); //! []
-					push(MNObject::Bool(false)); //! [bool]
-				}
-				else
-				{
-					pop(1); //!   [left right]
-					equals(); //! [bool]
-					bool ret = get(-1).toBool();
-					pop(1); //! []
-					push(MNObject::Bool(!ret)); //! [bool]
-				}
-			}
-			break;
+			case cmd_lt : less_than(); break;
+			case cmd_gt : swap(); less_than(); break;
 			case cmd_leq:
 			{
 				up(2, 0);    //! [left right left right]
@@ -882,21 +938,19 @@ void MNFiber::call(tsize nargs, bool ret)
 			break;
 			case cmd_geq:
 			{
-				up(2, 0); //! [left right left right]
-				equals(); //! [left right bool]
+				swap();
+				up(2, 0);    //! [right left left right]
+				less_than(); //! [right left bool]
 
-				if (get(-1).toBool())
+				if (!get(-1).toBool())
 				{
-					pop(3); //! []
-					push(MNObject::Bool(true)); //! [bool]
+					pop(1);   //! [right left]
+					equals(); //! [bool]
 				}
 				else
 				{
-					pop(1); //! [left right]
-					less_than(); //! [bool]
-					tboolean ret = get(-1).toBool();
-					pop(1); //! []
-					push(MNObject::Bool(!ret)); //! [bool]
+					up(1, 2); //! [bool right left bool]
+					pop(3);   //! [bool]
 				}
 			}
 			break;
@@ -941,6 +995,7 @@ void MNFiber::call(tsize nargs, bool ret)
 			{
 				tuint level = 0;
 				code >> level;
+				closeLinks(level);
 			}
 			break;
 			}
