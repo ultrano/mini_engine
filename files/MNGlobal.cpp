@@ -25,13 +25,27 @@ tboolean common_print(MNFiber* fiber)
 	printf("\n");
 	return false;
 }
-
+tboolean object_garbage_collect(MNFiber* fiber)
+{
+	fiber->push_int(fiber->global()->GC());
+	return true;
+}
 tboolean object_setmeta(MNFiber* fiber)
 {
 	MNCollectable* obj = fiber->get(1).toCollectable();
 	if (!obj) return false;
 	obj->setMeta(fiber->get(2));
 	return false;
+}
+
+tboolean object_delegator(MNFiber* fiber)
+{
+	MNClosure* closure = fiber->get(1).toClosure();
+	MNObject delegator;
+	closure->clone(delegator);
+	delegator.toClosure()->bindThis(fiber->get(2));
+	fiber->push(delegator);
+	return true;
 }
 
 tboolean math_sqrt(MNFiber* fiber)
@@ -116,6 +130,16 @@ MNGlobal::MNGlobal(MNFiber* rootState)
 		m_root->push_string("setmeta");
 		m_root->push_closure(object_setmeta);
 		m_root->store_field();
+
+		m_root->up(1, 0);
+		m_root->push_string("delegator");
+		m_root->push_closure(object_delegator);
+		m_root->store_field();
+
+		m_root->up(1, 0);
+		m_root->push_string("GC");
+		m_root->push_closure(object_garbage_collect);
+		m_root->store_field();
 	}
 
 	//! array meta table
@@ -175,7 +199,7 @@ void MNGlobal::getString(MNObject& ret, const tstring& str)
 //	return strVal.toObject();
 //}
 
-void MNGlobal::GC()
+tsize MNGlobal::GC()
 {
 	//! clear marks in heap
 	{
@@ -189,6 +213,7 @@ void MNGlobal::GC()
 		m_stringTable->mark();
 	}
 
+	tsize count = 0;
 	//! delete unmarked objects and fold link
 	{
 		while (m_heap != NULL && !m_heap->isMarked()) m_heap->finalize();
@@ -199,10 +224,13 @@ void MNGlobal::GC()
 			MNCollectable* unknown = marked->m_next;
 			if (unknown != NULL && !unknown->isMarked())
 			{
+				printf("garbage collected: '%s'\n", unknown->queryRtti()->name);
+				count += 1;
 				unknown->finalize();
 				continue;
 			}
 			marked = unknown;
 		}
 	}
+	return count;
 }

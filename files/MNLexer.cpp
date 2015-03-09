@@ -189,5 +189,20 @@ void MNLexer::scan(Token& tok)
 			tok.type = tok_global;
 			nextChar();
 		}
+		else if ((m_char == '/') && m_char == tok.type)
+		{
+			while (m_char != '\n' || m_char != '\r') nextChar();
+		}
+		else if ((m_char == '*') && tok.type == '/')
+		{
+			nextChar();
+			tchar last = m_char;
+			nextChar();
+			while (last != '*' && m_char != '/')
+			{
+				last = m_char;
+				nextChar();
+			} 
+		}
 	}
 }

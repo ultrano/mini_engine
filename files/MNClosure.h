@@ -78,6 +78,8 @@ public:
 	const MNObject& getFunc() const;
 	void setFunc(const MNObject& func);
 
+	void clone(MNObject& cls) const;
+
 protected:
 
 	virtual void travelMark();

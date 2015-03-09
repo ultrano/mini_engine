@@ -142,6 +142,7 @@ MNClosure::MNClosure(MNObject func)
 
 MNClosure::~MNClosure()
 {
+	//printf("~MNClosure\n");
 	for (tsize i = 0; i < m_uplinks.size(); ++i)
 	{
 		if (UpLink* link = m_uplinks[i])
@@ -200,6 +201,15 @@ const MNObject& MNClosure::getFunc() const
 void MNClosure::setFunc(const MNObject& func)
 {
 	m_func = func;
+}
+
+void MNClosure::clone(MNObject& cls) const
+{
+	MNClosure* closure = new MNClosure(m_func);
+	closure->link(global());
+	tsize sz = m_uplinks.size();
+	for (tsize i = 0; i < sz; ++i) closure->addLink(m_uplinks[i]);
+	cls = MNObject(TObjectType::Closure, closure->getReferrer());
 }
 
 void MNClosure::travelMark()

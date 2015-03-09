@@ -1,4 +1,5 @@
 
+/*
 var vector2 = {};
 vector2.constructor = func(x, y) { var v = {x:x, y:y}; ::setmeta(v, vector2); return v; };
 vector2.length      = func() { return ::sqrt(x*x + y*y); };
@@ -14,3 +15,16 @@ var d = v.dot();
 print("dot x: " + d.x);
 print("dot y: " + d.y);
 print("dot len: " + d.length());
+
+var del = ::delegator(v.length, v);
+print("del: " + del());
+d.foo = del;
+print("d.foo: " + d.foo());
+print("d.length: " + d.length());
+del = null;
+d.foo = null;
+*/
+var a = {a:null};
+a.a = a;
+a = null;
+print("garbage collected: " + ::GC());
