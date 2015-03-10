@@ -5,11 +5,11 @@ var vector2 =
   length   : func() { return ::sqrt(x*x + y*y); },
   dot      : func() { return new(x*x, y*y); },
   finalize : func() { ::print("vector2 finalized"); },
-  "->"     : this,
-  "=="     : func(val) { return (x == val.x && y == val.y); },
   add      : func(v) { return new(x+v.x, y+v.y);},
   sub      : func(v) { return new(x-v.x, y-v.y);},
   scale    : func(f) { x *= f; y *= f; return this; },
+  "->"     : this,
+  "=="     : func(val) { return (x == val.x && y == val.y); },
   "+"      : add,
   "-"      : sub,
 };
@@ -27,8 +27,31 @@ while (vector2.traverse(itor))
   print("index: " + itor.index + ", key: "+itor.key+", val: "+itor.val);
 }
 
-var i=0;
-while ((i+=1)>0)
-{
-  print(""+i);
-}
+var data = {"widget": {
+    "debug": "on",
+    "window": {
+        "title": "Sample Konfabulator Widget",
+        "name": "main_window",
+        "width": 500,
+        "height": 500
+    },
+    "image": { 
+        "src": "Images/Sun.png",
+        "name": "sun1",
+        "hOffset": 250,
+        "vOffset": 250,
+        "alignment": "center"
+    },
+    "text": {
+        "data": "Click Here",
+        "size": 36,
+        "style": "bold",
+        "name": "text1",
+        "hOffset": 250,
+        "vOffset": 100,
+        "alignment": "center",
+        "onMouseUp": "sun1.opacity = (sun1.opacity / 100) * 90;"
+    }
+}};
+
+print(""+data.widget.debug);
