@@ -18,11 +18,17 @@ var v = vector2.new(0,2);
 print("v.foo " + v.scale(2.2).y);
 print("vector2.count: " + vector2.count());
 print("vector2.total: " + vector2.total());
+
 print("GC: " + ::GC());
 
 var itor = {};
-while (v.traverse(itor))
+while (vector2.traverse(itor))
 {
   print("index: " + itor.index + ", key: "+itor.key+", val: "+itor.val);
 }
 
+var i=0;
+while ((i+=1)>0)
+{
+  print(""+i);
+}

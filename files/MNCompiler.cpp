@@ -227,7 +227,7 @@ void MNCompiler::_block()
 	if (nlocals < m_func->locals.size())
 	{
 		m_func->locals.resize(nlocals);
-		code() << cmd_close_links << tuint16(nlocals+1);
+		code() << cmd_close_links << tuint16(nlocals);
 	}
 }
 
