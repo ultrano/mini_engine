@@ -22,7 +22,7 @@ void compile_error_print(tsize row, tsize col, const tchar* format, ...)
 	va_start(args, format);
 	vsprintf(&buf1[0], format, args);
 	va_end(args);
-	sprintf(&buf2[0], "compile error(%d, %d): ", row, col, &buf1[0]);
+	sprintf(&buf2[0], "compile error(%d, %d): %s", row, col, &buf1[0]);
 	throw new MNCompileException(&buf2[0]);
 }
 
@@ -350,9 +350,9 @@ void MNCompiler::_func()
 	tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, func->func->getReferrer()));
 	tuint16 linkIndex = tuint16(func->links.size());
 	code() << cmd_push_closure << funcIndex << linkIndex;
-	while (linkIndex--)
+	for (tsize i = 0; i < linkIndex; ++i)
 	{
-		const MNExp& e = func->links[linkIndex];
+		const MNExp& e = func->links[i];
 		tbyte cmd = (e.type == MNExp::exp_local) ? cmd_load_stack : cmd_load_upval;
 		code() << cmd << e.index;
 	}
@@ -544,7 +544,7 @@ void MNCompiler::_exp_postfix(MNExp& e)
 				_load(e);
 				code() << cmd_load_stack << tuint16(0);
 			}
-			else compile_error("postfix compile is failed");
+			else if (e.type == MNExp::exp_none) compile_error("postfix compile is failed");
 
 			tbyte nargs = 1;
 			if (!check(')')) while (true)
@@ -656,19 +656,31 @@ void MNCompiler::_exp_primary(MNExp& e)
 		MNFuncBuilder* func = new MNFuncBuilder(m_func);
 		m_func = func;
 
+		tuint16 nfield = 0;
 		while (!check('}'))
 		{
 			if (!check(tok_string) && !check(tok_identify)) compile_error("wrong table field");
+			tbyte cmd = peek(':') ? cmd_store_field : peek('=') ? cmd_store_stack : cmd_none;
 
-			code() << cmd_load_stack << tuint16(0);
-			e.index = m_func->addConst(MNObject::String(m_current.str));
-			code() << cmd_load_const << e.index;
-			advance();
-			if (!check(':')) compile_error("delimiter ':' is missing ");
-			advance();
+			if (cmd == cmd_store_field)
+			{
+				code() << cmd_load_stack << tuint16(0);
+				code() << cmd_load_const << (e.index = m_func->addConst(MNObject::String(m_current.str)));
+			}
+			else if (cmd == cmd_store_stack)
+			{
+				e.index = m_func->addLocal(m_current.str);
+			}
+			else compile_error("delimiter ':' or '=' is missing ");
+
+			advance(); //! field name
+			advance(); //! ':' or '='
 			_exp();
-			code() << cmd_store_field;
-			e.index += 1;
+
+			if (cmd == cmd_store_field) code() << cmd_store_field;
+			else if (cmd == cmd_store_stack) code() << cmd_store_stack << e.index;
+
+			nfield += 1;
 			if (check(',')) advance();
 		}
 		advance();
@@ -678,13 +690,13 @@ void MNCompiler::_exp_primary(MNExp& e)
 		tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, func->func->getReferrer()));
 		tuint16 linkIndex = tuint16(func->links.size());
 		code() << cmd_push_closure << funcIndex << linkIndex;
-		while (linkIndex--)
+		for (tsize i = 0; i < linkIndex; ++i)
 		{
-			const MNExp& ul = func->links[linkIndex];
+			const MNExp& ul = func->links[i];
 			tbyte cmd = (ul.type == MNExp::exp_local) ? cmd_load_stack : cmd_load_upval;
 			code() << cmd << ul.index;
 		}
-		code() << cmd_push_table << e.index;
+		code() << cmd_push_table << nfield;
 		code() << cmd_call << tbyte(1);
 		delete func;
 
