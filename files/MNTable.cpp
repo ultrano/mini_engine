@@ -164,11 +164,16 @@ void  MNTable::expandNodes()
 MNTable::Node* MNTable::getFreeNode()
 {
 	if (!m_frees) return NULL;
-	do
+
+	while (true)
 	{
 		Node* node = m_frees;
 		if (node->key.isNull()) return node;
-	} while (--m_frees != m_nodes);
+
+		if (m_frees != m_nodes) --m_frees;
+		else break;
+		
+	}
 	return NULL;
 }
 
