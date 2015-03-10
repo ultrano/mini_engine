@@ -228,56 +228,57 @@ void MNFiber::store_stack(tint32 idx)
 	pop(1);
 }
 
-void MNFiber::load_raw_field()
+bool MNFiber::load_raw_field()
 {
-	MNObject obj = get(-2);
-	MNObject key = get(-1);
-	pop(2);
+	const MNObject& obj = get(-2);
+	const MNObject& key = get(-1);
 
+	bool ret = false;
 	MNObject val;
 	switch (obj.getType())
 	{
-	case TObjectType::Table: obj.toTable()->tryGet(key, val); break;
-	case TObjectType::Array: obj.toArray()->tryGet(key, val); break;
+	case TObjectType::Table: ret = obj.toTable()->tryGet(key, val); break;
+	case TObjectType::Array: ret = obj.toArray()->tryGet(key, val); break;
 	}
-
+	pop(2);
 	push(val);
+	return ret;
 }
 
-void MNFiber::store_raw_field()
+tboolean MNFiber::store_raw_field(tboolean insert)
 {
-	MNObject obj = get(-3);
-	MNObject key = get(-2);
-	MNObject val = get(-1);
-	pop(3);
+	const MNObject& obj = get(-3);
+	const MNObject& key = get(-2);
+	const MNObject& val = get(-1);
 
+	bool ret = false;
 	switch (obj.getType())
 	{
-	case TObjectType::Table: obj.toTable()->insert(key, val); break;
-	case TObjectType::Array: obj.toArray()->trySet(key, val); break;
+	case TObjectType::Table: 
+		if (insert) ret = obj.toTable()->insert(key, val); 
+		else ret = obj.toTable()->trySet(key, val); 
+		break;
+	case TObjectType::Array: ret = obj.toArray()->trySet(key, val); break;
 	}
+	pop(3);
+	return ret;
 }
 
 void MNFiber::load_field()
 {
-	MNObject obj = get(-2);
-	MNObject key = get(-1);
-	pop(2);
+	const MNObject& obj = get(-2);
+	const MNObject& key = get(-1);
 
-	MNObject ret;
-	tboolean succeed = false;
+	bool ret = false;
+	MNObject val;
 	switch (obj.getType())
 	{
-	case TObjectType::Table:
-	{
-		MNTable* table = obj.toTable();
-		succeed = table->tryGet(key, ret);
-	}
-	break;
+	case TObjectType::Table: ret = obj.toTable()->tryGet(key, val); break;
+	case TObjectType::Array: ret = obj.toArray()->tryGet(key, val); break;
 	}
 
 	MNCollectable* collectable = obj.toCollectable();
-	if (!succeed && collectable)
+	if (!ret && collectable)
 	{
 		MNObject meta  = collectable->getMeta();
 		MNObject field = MNObject::String("->");
@@ -289,7 +290,7 @@ void MNFiber::load_field()
 				if (op.isTable())
 				{
 					MNTable* table = op.toTable();
-					if (table->tryGet(key, ret)) break;
+					if (table->tryGet(key, val)) break;
 				}
 				else if (op.isClosure())
 				{
@@ -297,7 +298,7 @@ void MNFiber::load_field()
 					push(obj);
 					push(key);
 					call(2, true);
-					ret = get(-1);
+					val = get(-1);
 					pop(1);
 					break;
 				}
@@ -306,30 +307,28 @@ void MNFiber::load_field()
 		}
 	}
 
-	push(ret);
+	pop(2);
+	push(val);
 }
 
 void MNFiber::store_field(tboolean insert)
 {
-	MNObject obj = get(-3);
-	MNObject key = get(-2);
-	MNObject val = get(-1);
-	pop(3);
+	const MNObject& obj = get(-3);
+	const MNObject& key = get(-2);
+	const MNObject& val = get(-1);
 
-	MNObject ret;
-	tboolean succeed = false;
+	bool ret = false;
 	switch (obj.getType())
 	{
-	case TObjectType::Table:
-	{
-		MNTable* table = obj.toTable();
-		succeed = insert ? table->insert(key, val):table->trySet(key, val);
-	}
-	break;
+	case TObjectType::Table: 
+		if (insert) ret = obj.toTable()->insert(key, val); 
+		else ret = obj.toTable()->trySet(key, val); 
+		break;
+	case TObjectType::Array: ret = obj.toArray()->trySet(key, val); break;
 	}
 
 	MNCollectable* collectable = obj.toCollectable();
-	if (!succeed && collectable)
+	if (!ret && collectable)
 	{
 		MNObject meta  = collectable->getMeta();
 		MNObject field = MNObject::String("-<");
@@ -341,7 +340,7 @@ void MNFiber::store_field(tboolean insert)
 				if (op.isTable())
 				{
 					MNTable* metaTable = meta.toTable();
-					if (metaTable->trySet(key, ret)) break;
+					if (metaTable->trySet(key, val)) break;
 				}
 				else if (op.isClosure())
 				{
@@ -357,6 +356,7 @@ void MNFiber::store_field(tboolean insert)
 			meta = metaTable->getMeta();
 		}
 	}
+	pop(3);
 }
 
 void MNFiber::load_global()
@@ -497,12 +497,12 @@ void MNFiber::tostring()
 	case TObjectType::Array    : str = MNObject::Format("[array: %p]", object.toArray()); break;
 	case TObjectType::Table    : str = MNObject::Format("[table: %p]", object.toTable()); break;
 	case TObjectType::Pointer  : str = MNObject::Format("[pointer: %p]", object.toPointer()); break;
-	case TObjectType::Boolean  : str = MNObject::Format("[boolean: %s]", object.toBool() ? "true" : "false"); break;
 	case TObjectType::CFunction: str = MNObject::Format("[cfunction: %p]", object.toCFunction()); break;
 	case TObjectType::Closure  : str = MNObject::Format("[closure: %p]", object.toClosure()); break;
 	case TObjectType::String   : str = object; break;
 	case TObjectType::Int      : str = MNObject::Format("%d", object.toInt()); break;
 	case TObjectType::Float    : str = MNObject::Format("%f", object.toFloat()); break;
+	case TObjectType::Boolean  : str = MNObject::Format("%s", object.toBool() ? "true" : "false"); break;
 	}
 
 	push(str);
@@ -919,7 +919,8 @@ void MNFiber::call(tsize nargs, bool ret)
 			}
 			break;
 			case cmd_load_field  : load_field(); break;
-			case cmd_store_field : store_field(); break;
+			case cmd_store_field : store_field(false); break;
+			case cmd_insert_field: store_field(true); break;
 			case cmd_load_global:
 			{
 				tuint16 index;

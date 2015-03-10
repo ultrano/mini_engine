@@ -163,6 +163,7 @@ enum TCommand : tbyte
 	cmd_store_stack, //! >> tuint16
 	cmd_load_field,
 	cmd_store_field,
+	cmd_insert_field,
 	cmd_load_global, //! >> tuint16
 	cmd_store_global, //! >> tuint16
 	cmd_set_meta,

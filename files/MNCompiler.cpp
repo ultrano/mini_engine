@@ -12,7 +12,7 @@ public:
 	tstring msg;
 };
 
-#define compile_error(format, ...) compile_error_print(m_current.row, m_current.col, (format), __VA_ARGS__)
+#define compile_error(format, ...) //compile_error_print(m_current.row, m_current.col, (format), __VA_ARGS__)
 void compile_error_print(tsize row, tsize col, const tchar* format, ...)
 {
 	static const tuint bufSize = 512;
@@ -26,7 +26,7 @@ void compile_error_print(tsize row, tsize col, const tchar* format, ...)
 	throw new MNCompileException(&buf2[0]);
 }
 
-#define compile_warning(format, ...) compile_warning_print(m_current.row, m_current.col, (format), __VA_ARGS__)
+#define compile_warning(format, ...) //compile_warning_print(m_current.row, m_current.col, (format), __VA_ARGS__)
 void compile_warning_print(tsize row, tsize col, const tchar* format, ...)
 {
 	static const tuint bufSize = 256;
@@ -660,16 +660,17 @@ void MNCompiler::_exp_primary(MNExp& e)
 		while (!check('}'))
 		{
 			if (!check(tok_string) && !check(tok_identify)) compile_error("wrong table field");
-			tbyte cmd = peek(':') ? cmd_store_field : peek('=') ? cmd_store_stack : cmd_none;
+			tbyte cmd = peek(':') ? cmd_insert_field : peek('=') ? cmd_store_stack : cmd_none;
 
-			if (cmd == cmd_store_field)
+			if (cmd == cmd_insert_field)
 			{
 				code() << cmd_load_stack << tuint16(0);
 				code() << cmd_load_const << (e.index = m_func->addConst(MNObject::String(m_current.str)));
 			}
 			else if (cmd == cmd_store_stack)
 			{
-				e.index = m_func->addLocal(m_current.str);
+				if (!m_func->addLocal(m_current.str)) compile_warning("overapped field name");
+				m_func->findLocal(m_current.str, e);
 			}
 			else compile_error("delimiter ':' or '=' is missing ");
 
@@ -677,14 +678,14 @@ void MNCompiler::_exp_primary(MNExp& e)
 			advance(); //! ':' or '='
 			_exp();
 
-			if (cmd == cmd_store_field) code() << cmd_store_field;
-			else if (cmd == cmd_store_stack) code() << cmd_store_stack << e.index;
+			if (cmd == cmd_insert_field) code() << cmd;
+			else if (cmd == cmd_store_stack) code() << cmd << e.index;
 
 			nfield += 1;
 			if (check(',')) advance();
 		}
 		advance();
-		code() << cmd_return;
+		code() << cmd_load_stack << tuint16(0) << cmd_return;
 
 		m_func = func->upFunc;
 		tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, func->func->getReferrer()));

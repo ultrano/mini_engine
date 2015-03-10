@@ -65,11 +65,11 @@ public:
 	void load_stack(tint32 idx);
 	void store_stack(tint32 idx);
 
-	void load_raw_field();
-	void store_raw_field();
+	bool load_raw_field();
+	bool store_raw_field(bool insert = true);
 
 	void load_field();
-	void store_field(tboolean insert = true);
+	void store_field(bool insert = true);
 		 
 	void load_global();
 	void store_global();

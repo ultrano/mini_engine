@@ -25,6 +25,28 @@ tboolean common_print(MNFiber* fiber)
 	printf("\n");
 	return false;
 }
+
+tboolean common_bind(MNFiber* fiber)
+{
+	MNObject cls = fiber->get(1);
+	MNObject obj = fiber->get(2);
+	MNClosure* closure = cls.toClosure();
+	if (closure) closure->bindThis(obj);
+	return false;
+}
+
+tboolean common_float(MNFiber* fiber)
+{
+	fiber->push_float(fiber->get(1).toFloat());
+	return true;
+}
+
+tboolean common_int(MNFiber* fiber)
+{
+	fiber->push_int(fiber->get(1).toInt());
+	return true;
+}
+
 tboolean object_garbage_collect(MNFiber* fiber)
 {
 	fiber->push_int(fiber->global()->GC());
@@ -55,30 +77,6 @@ tboolean math_sqrt(MNFiber* fiber)
 	return true;
 }
 
-tboolean common_bind(MNFiber* fiber)
-{
-	MNObject cls = fiber->get(1);
-	MNObject obj = fiber->get(2);
-	MNClosure* closure = cls.toClosure();
-	if (closure) closure->bindThis(obj);
-	return false;
-}
-
-tboolean array_get_field(MNFiber* fiber)
-{
-	const MNObject& obj = fiber->get(0);
-	MNArray* arr = obj.toArray();
-	if (!arr) return false;
-
-	const MNObject& arg1 = fiber->get(1);
-	MNObject val;
-	
-	arr->tryGet(arg1, val);
-	fiber->push(val);
-
-	return true;
-}
-
 tboolean array_count(MNFiber* fiber)
 {
 	const MNObject& obj = fiber->get(0);
@@ -97,19 +95,6 @@ tboolean array_add(MNFiber* fiber)
 	return false;
 }
 
-tboolean array_set_field(MNFiber* fiber)
-{
-	const MNObject& obj = fiber->get(0);
-	MNArray* arr = obj.toArray();
-	if (!arr) return false;
-
-	const MNObject& arg1 = fiber->get(1);
-	const MNObject& arg2 = fiber->get(2);
-	arr->trySet(arg1, arg2);
-
-	return false;
-}
-
 tboolean table_count(MNFiber* fiber)
 {
 	const MNObject& obj = fiber->get(0);
@@ -117,6 +102,12 @@ tboolean table_count(MNFiber* fiber)
 	if (!tbl) return false;
 	fiber->push_int(tbl->count());
 	return true;
+}
+
+tboolean table_insert(MNFiber* fiber)
+{
+	fiber->store_raw_field(true);
+	return false;
 }
 
 tboolean table_total(MNFiber* fiber)
@@ -133,19 +124,48 @@ tboolean table_traverse(MNFiber* fiber)
 	MNTable* tbl  = fiber->get(0).toTable();
 	if (!tbl) return false;
 
-	tsize index = fiber->get(1).toInt();
+	MNTable* itor  = fiber->get(1).toTable();
+	if (!itor) return false;
+
+	tsize index = 0;
+	fiber->load_stack(1);
+	fiber->push_string("index");
+	if (fiber->load_raw_field())
+	{
+		index = fiber->get(-1).toInt() + 1;
+	}
+	else
+	{
+		fiber->load_stack(1);
+		fiber->push_string("index");
+		fiber->push_int(0);
+		fiber->store_raw_field(true);
+	}
+
 	MNObject key, val;
-	bool ret = tbl->traverse(index, key, val);
+	bool ret = false;
+	while (ret = tbl->traverse(index, key, val))
+	{
+		if (!key.isNull()) break;
+		index += 1;
+	}
+	if (ret)
+	{
+		fiber->load_stack(1);
+		fiber->push_string("index");
+		fiber->push_int(index);
+		fiber->store_field();
 
-	fiber->up(1,0);
-	fiber->push_string("key");
-	fiber->push(key);
-	fiber->store_field();
+		fiber->load_stack(1);
+		fiber->push_string("key");
+		fiber->push(key);
+		fiber->store_field();
 
-	fiber->up(1,0);
-	fiber->push_string("val");
-	fiber->push(val);
-	fiber->store_field();
+		fiber->load_stack(1);
+		fiber->push_string("val");
+		fiber->push(val);
+		fiber->store_field();
+	}
 
 	fiber->push(MNObject::Bool(ret));
 	return true;
@@ -174,6 +194,16 @@ MNGlobal::MNGlobal(MNFiber* root)
 		root->up(1, 0);
 		root->push_string("bind");
 		root->push_closure(common_bind);
+		root->store_field();
+
+		root->up(1, 0);
+		root->push_string("float");
+		root->push_closure(common_float);
+		root->store_field();
+
+		root->up(1, 0);
+		root->push_string("int");
+		root->push_closure(common_int);
 		root->store_field();
 	}
 
@@ -216,18 +246,13 @@ MNGlobal::MNGlobal(MNFiber* root)
 			root->store_field();
 
 			root->up(1, 0);
-			root->push_string("-<");
-			root->push_closure(array_set_field);
+			root->push_string("count");
+			root->push_closure(array_count);
 			root->store_field();
 
 			root->up(1, 0);
 			root->push_string("->");
-			root->push_closure(array_get_field);
-			root->store_field();
-
-			root->up(1, 0);
-			root->push_string("count");
-			root->push_closure(array_count);
+			root->load_stack(-2);
 			root->store_field();
 		}
 
@@ -247,6 +272,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 			root->store_field();
 
 			root->up(1, 0);
+			root->push_string("insert");
+			root->push_closure(table_insert);
+			root->store_field();
+
+			root->up(1, 0);
 			root->push_string("total");
 			root->push_closure(table_total);
 			root->store_field();
@@ -254,6 +284,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 			root->up(1, 0);
 			root->push_string("traverse");
 			root->push_closure(table_traverse);
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("->");
+			root->load_stack(-2);
 			root->store_field();
 		}
 

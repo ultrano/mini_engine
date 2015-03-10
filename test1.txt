@@ -1,17 +1,27 @@
 
 var vector2 = 
 {
-  private  = 1,
-  foo1     : func() {::print("foo1 " + private); },
+  new      : func(x, y) { var v = {x: ::float(x), y: ::float(y)}; ::setmeta(v, this); return v; },
+  length   : func() { return ::sqrt(x*x + y*y); },
+  dot      : func() { return new(x*x, y*y); },
+  finalize : func() { ::print("vector2 finalized"); },
+  "->"     : this,
+  "=="     : func(val) { return (x == val.x && y == val.y); },
+  add      : func(v) { return new(x+v.x, y+v.y);},
+  sub      : func(v) { return new(x-v.x, y-v.y);},
+  scale    : func(f) { x *= f; y *= f; return this; },
+  "+"      : add,
+  "-"      : sub,
 };
 
-vector2.foo1();
-vector2.foo2();
-
 var v = vector2.new(0,2);
-print("v: " + v.length());
-v = null;
-vector2 = null;
+print("v.foo " + v.scale(2.2).y);
+print("c " + v.count());
 print("GC: " + ::GC());
 
+var itor = {};
+while (v.traverse(itor))
+{
+  print("index: " + itor.index + ", key: "+itor.key+", val: "+itor.val);
+}
 
