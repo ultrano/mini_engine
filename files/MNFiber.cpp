@@ -10,31 +10,26 @@
 void binomalOp(MNFiber* fiber, const tstring& opStr, const MNObject& left, const MNObject& right, MNObject& ret)
 {
 	MNCollectable* collectable = left.toCollectable();
-	MNObject meta = collectable->getMeta();
-	MNObject op = MNObject::String(opStr);
+	MNObject meta  = collectable->getMeta();
+	MNObject field = MNObject::String(opStr);
 	ret = MNObject::Null();
-	while (true)
+	while (MNTable* metaTable = meta.toTable())
 	{
-		if (meta.isTable())
+		MNObject op;
+		if (metaTable->tryGet(field, op))
 		{
-			meta.toTable()->tryGet(op, ret);
-			if (ret.isClosure()) meta = ret;
+			if (op.isClosure())
+			{
+				fiber->push(op);
+				fiber->push(left);
+				fiber->push(right);
+				fiber->call(2, true);
+				ret = fiber->get(-1);
+				fiber->pop(1);
+				break;
+			}
 		}
-
-		if (meta.isClosure())
-		{
-			fiber->push(meta);
-			fiber->push(left);
-			fiber->push(right);
-			fiber->call(2, true);
-			ret = fiber->get(-1);
-			fiber->pop(1);
-			break;
-		}
-
-		collectable = meta.toCollectable();
-		if (collectable) meta = collectable->getMeta();
-		else break;
+		meta = metaTable->getMeta();
 	}
 }
 
@@ -284,40 +279,37 @@ void MNFiber::load_field()
 	MNCollectable* collectable = obj.toCollectable();
 	if (!succeed && collectable)
 	{
-		MNObject meta = collectable->getMeta();
-		MNObject op = MNObject::String("->");
-		while (true)
+		MNObject meta  = collectable->getMeta();
+		MNObject field = MNObject::String("->");
+		while (MNTable* metaTable = meta.toTable())
 		{
-			if (meta.isTable())
+			MNObject op;
+			if (metaTable->tryGet(field, op))
 			{
-				MNTable* metaTable = meta.toTable();
-				if (metaTable->tryGet(key, ret)) break;
-				metaTable->tryGet(op, ret);
-				if (ret.isClosure()) meta = ret;
-				ret = MNObject::Null();
+				if (op.isTable())
+				{
+					MNTable* table = op.toTable();
+					if (table->tryGet(key, ret)) break;
+				}
+				else if (op.isClosure())
+				{
+					push(op);
+					push(obj);
+					push(key);
+					call(2, true);
+					ret = get(-1);
+					pop(1);
+					break;
+				}
 			}
-
-			if (meta.isClosure())
-			{
-				push(meta);
-				push(obj);
-				push(key);
-				call(2, true);
-				ret = get(-1);
-				pop(1);
-				break;
-			}
-
-			collectable = meta.toCollectable();
-			if (collectable) meta = collectable->getMeta();
-			else break;
+			meta = metaTable->getMeta();
 		}
 	}
 
 	push(ret);
 }
 
-void MNFiber::store_field()
+void MNFiber::store_field(tboolean insert)
 {
 	MNObject obj = get(-3);
 	MNObject key = get(-2);
@@ -331,7 +323,7 @@ void MNFiber::store_field()
 	case TObjectType::Table:
 	{
 		MNTable* table = obj.toTable();
-		succeed = table->insert(key, val);
+		succeed = insert ? table->insert(key, val):table->trySet(key, val);
 	}
 	break;
 	}
@@ -339,32 +331,30 @@ void MNFiber::store_field()
 	MNCollectable* collectable = obj.toCollectable();
 	if (!succeed && collectable)
 	{
-		MNObject meta = collectable->getMeta();
-		MNObject op = MNObject::String("-<");
-		while (true)
+		MNObject meta  = collectable->getMeta();
+		MNObject field = MNObject::String("-<");
+		while (MNTable* metaTable = meta.toTable())
 		{
-			if (meta.isTable())
+			MNObject op;
+			if (metaTable->tryGet(field, op))
 			{
-				MNTable* metaTable = meta.toTable();
-				if (metaTable->trySet(key, ret)) break;
-				metaTable->tryGet(op, ret);
-				if (ret.isClosure()) meta = ret;
-				ret = MNObject::Null();
+				if (op.isTable())
+				{
+					MNTable* metaTable = meta.toTable();
+					if (metaTable->trySet(key, ret)) break;
+				}
+				else if (op.isClosure())
+				{
+					push(meta);
+					push(obj);
+					push(key);
+					push(val);
+					call(3, false);
+					break;
+				}
 			}
 
-			if (meta.isClosure())
-			{
-				push(meta);
-				push(obj);
-				push(key);
-				push(val);
-				call(3, false);
-				break;
-			}
-
-			collectable = meta.toCollectable();
-			if (collectable) meta = collectable->getMeta();
-			else break;
+			meta = metaTable->getMeta();
 		}
 	}
 }

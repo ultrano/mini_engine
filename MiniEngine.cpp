@@ -62,7 +62,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		MNObject func;
 		MNCompiler compiler;
-		compiler.m_lexer.openFile("D:/documents/workspace/mini_engine/test1.txt");
+		compiler.m_lexer.openFile("C:/workspace/mini_engine/test1.txt");
 		compiler.build(func);
 
 		MNClosure* closure = new MNClosure(func);
@@ -134,7 +134,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 	//! table test
-	{
+	/*{
 		const tchar* val = NULL;
 
 		fiber->push_table();
@@ -164,7 +164,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		fiber->load_stack(-1);
 		fiber->load_stack(-1);
 		fiber->equals();
-	}
+	}*/
 
 	//! array test
 	{

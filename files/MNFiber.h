@@ -69,7 +69,7 @@ public:
 	void store_raw_field();
 
 	void load_field();
-	void store_field();
+	void store_field(tboolean insert = true);
 		 
 	void load_global();
 	void store_global();

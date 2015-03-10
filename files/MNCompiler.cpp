@@ -652,13 +652,15 @@ void MNCompiler::_exp_primary(MNExp& e)
 	else if (check('{'))
 	{
 		advance();
-		tsize pos = (code() << cmd_push_table).cursor;
-		code() << (e.index = 0);
+
+		MNFuncBuilder* func = new MNFuncBuilder(m_func);
+		m_func = func;
+
 		while (!check('}'))
 		{
 			if (!check(tok_string) && !check(tok_identify)) compile_error("wrong table field");
 
-			code() << cmd_up1;
+			code() << cmd_load_stack << tuint16(0);
 			e.index = m_func->addConst(MNObject::String(m_current.str));
 			code() << cmd_load_const << e.index;
 			advance();
@@ -670,7 +672,22 @@ void MNCompiler::_exp_primary(MNExp& e)
 			if (check(',')) advance();
 		}
 		advance();
-		code().modify(pos, e.index);
+		code() << cmd_return;
+
+		m_func = func->upFunc;
+		tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, func->func->getReferrer()));
+		tuint16 linkIndex = tuint16(func->links.size());
+		code() << cmd_push_closure << funcIndex << linkIndex;
+		while (linkIndex--)
+		{
+			const MNExp& ul = func->links[linkIndex];
+			tbyte cmd = (ul.type == MNExp::exp_local) ? cmd_load_stack : cmd_load_upval;
+			code() << cmd << ul.index;
+		}
+		code() << cmd_push_table << e.index;
+		code() << cmd_call << tbyte(1);
+		delete func;
+
 		e.type = MNExp::exp_loaded;
 	}
 	else if (check('['))
