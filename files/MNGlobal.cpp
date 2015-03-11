@@ -47,6 +47,31 @@ tboolean common_int(MNFiber* fiber)
 	return true;
 }
 
+tboolean common_typeof(MNFiber* fiber)
+{
+	const MNObject& val = fiber->get(1);
+
+	MNObject ret;
+	switch (val.getType())
+	{
+	case TObjectType::Int      : fiber->push_string("int"); break;
+	case TObjectType::Null     : fiber->push_string("null"); break;
+	case TObjectType::Float    : fiber->push_string("float"); break;
+	case TObjectType::String   : fiber->push_string("string"); break;
+	case TObjectType::Pointer  : fiber->push_string("pointer"); break;
+	case TObjectType::Function : fiber->push_string("function"); break;
+	case TObjectType::CFunction: fiber->push_string("cfunction"); break;
+	default:
+	{
+		fiber->load_stack(1);
+		fiber->push_string("type");
+		fiber->load_field();
+	}
+	break;
+	}
+	return true;
+}
+
 tboolean object_garbage_collect(MNFiber* fiber)
 {
 	fiber->push_int(fiber->global()->GC());
@@ -205,6 +230,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 		root->push_string("int");
 		root->push_closure(common_int);
 		root->store_field();
+
+		root->up(1, 0);
+		root->push_string("typeof");
+		root->push_closure(common_typeof);
+		root->store_field();
 	}
 
 	//! math function
@@ -241,6 +271,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 
 		{
 			root->up(1, 0);
+			root->push_string("type");
+			root->push_string("array");
+			root->store_field();
+
+			root->up(1, 0);
 			root->push_string("add");
 			root->push_closure(array_add);
 			root->store_field();
@@ -266,6 +301,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 		root->push_table();
 
 		{
+			root->up(1, 0);
+			root->push_string("type");
+			root->push_string("table");
+			root->store_field();
+
 			root->up(1, 0);
 			root->push_string("count");
 			root->push_closure(table_count);

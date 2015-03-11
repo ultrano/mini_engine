@@ -419,28 +419,30 @@ void MNFiber::equals()
 	MNObject right = get(-1);
 	pop(2);
 
-	MNObject ret;
+	bool ret = false;
 	switch (left.getType())
 	{
-	case TObjectType::Null     : ret = MNObject::Bool(right.isNull()); break;
-	case TObjectType::Pointer  : ret = MNObject::Bool(left.toPointer() == right.toPointer()); break;
-	case TObjectType::Boolean  : ret = MNObject::Bool(left.toBool() == right.toBool()); break;
-	case TObjectType::CFunction: ret = MNObject::Bool(left.toCFunction() == right.toCFunction()); break;
+	case TObjectType::Null     : ret = (right.isNull()); break;
+	case TObjectType::Pointer  : ret = (left.toPointer() == right.toPointer()); break;
+	case TObjectType::Boolean  : ret = (left.toBool() == right.toBool()); break;
+	case TObjectType::CFunction: ret = (left.toCFunction() == right.toCFunction()); break;
 	case TObjectType::String   : if (right.isString()) ret = left.toString()->ss() == right.toString()->ss(); break;
 	case TObjectType::Int:
 	case TObjectType::Float:
 	{
-		if (right.isInt()) ret = MNObject::Bool(left.toInt() == right.toInt());
-		else if (right.isFloat()) ret = MNObject::Bool(left.toFloat() == right.toFloat());
+		if (right.isInt()) ret = (left.toInt() == right.toInt());
+		else if (right.isFloat()) ret = (left.toFloat() == right.toFloat());
 	}
 	break;
 	case TObjectType::Table:
 	{
-		binomalOp(this, "==", left, right, ret);
+		MNObject val;
+		binomalOp(this, "==", left, right, val);
+		ret = val.toBool();
 	}
 	break;
 	}
-	push(ret);
+	push(MNObject::Bool(ret));
 }
 
 void MNFiber::less_than()
