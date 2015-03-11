@@ -164,9 +164,14 @@ void MNFiber::push_bool(tboolean val)
 
 void MNFiber::push_closure(TCFunction val)
 {
+	push_string("closure");
+	load_global();
+
 	MNClosure* closure = new MNClosure(MNObject::CFunction(val));
-	MNReferrer* ref = closure->link(global())->getReferrer();
-	MNObject obj(TObjectType::Closure, ref);
+	closure->setMeta(get(-1));
+	pop(1);
+
+	MNObject obj(TObjectType::Closure, closure->link(global())->getReferrer());
 	push(obj);
 }
 
@@ -860,9 +865,11 @@ void MNFiber::call(tsize nargs, bool ret)
 			{
 				tuint16 funcIndex, upLinkSize;
 				code >> funcIndex >> upLinkSize;
-				MNClosure* cls = new MNClosure();
+
+				push_closure(NULL);
+				MNClosure* cls = get(-1).toClosure();
 				cls->setFunc(getConst(funcIndex));
-				cls->link(global());
+
 				while (upLinkSize--)
 				{
 					tbyte loc;
@@ -871,7 +878,6 @@ void MNFiber::call(tsize nargs, bool ret)
 					UpLink* ul = (loc == cmd_load_stack) ? openLink(index) : closure->getLink(index);
 					cls->addLink(ul);
 				}
-				push(MNObject(TObjectType::Closure, cls->getReferrer()));
 			}
 			break;
 

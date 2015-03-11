@@ -144,6 +144,12 @@ tboolean table_total(MNFiber* fiber)
 	return true;
 }
 
+tboolean closure_call(MNFiber* fiber)
+{
+	fiber->call(fiber->stackSize()-1, true);
+	return true;
+}
+
 tboolean table_traverse(MNFiber* fiber)
 {
 	MNTable* tbl  = fiber->get(0).toTable();
@@ -260,6 +266,32 @@ MNGlobal::MNGlobal(MNFiber* root)
 		root->up(1, 0);
 		root->push_string("GC");
 		root->push_closure(object_garbage_collect);
+		root->store_field();
+	}
+
+	//! closure meta table
+	{
+		root->up(1, 0);
+		root->push_string("closure");
+		root->push_table();
+
+		{
+			root->up(1, 0);
+			root->push_string("type");
+			root->push_string("closure");
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("call");
+			root->push_closure(closure_call);
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("->");
+			root->load_stack(-2);
+			root->store_field();
+		}
+
 		root->store_field();
 	}
 

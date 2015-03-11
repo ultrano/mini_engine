@@ -207,6 +207,7 @@ void MNClosure::clone(MNObject& cls) const
 {
 	MNClosure* closure = new MNClosure(m_func);
 	closure->link(global());
+	closure->setMeta(getMeta());
 	tsize sz = m_uplinks.size();
 	for (tsize i = 0; i < sz; ++i) closure->addLink(m_uplinks[i]);
 	cls = MNObject(TObjectType::Closure, closure->getReferrer());
