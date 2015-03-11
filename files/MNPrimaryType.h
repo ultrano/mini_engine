@@ -193,6 +193,7 @@ enum TCommand : tbyte
 	cmd_call_void,//! >> 1byte
 	cmd_return,
 	cmd_return_void,
+	cmd_yield,
 	cmd_close_links, //! >> tuint16
 };
 

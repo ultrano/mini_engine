@@ -168,6 +168,11 @@ bool MNObject::isFunction() const
 	return isReferrer() && (getType() == TObjectType::Function);
 }
 
+bool MNObject::isFiber() const
+{
+	return isReferrer() && (getType() == TObjectType::Fiber);
+}
+
 void*       MNObject::toRaw() const
 {
 	return val._pointer;
@@ -244,5 +249,11 @@ MNArray*    MNObject::toArray() const
 MNFunction* MNObject::toFunction() const
 {
 	if (isReferrer()) return mnrtti_cast<MNFunction>(toCountable());
+	return NULL;
+}
+
+MNFiber* MNObject::toFiber() const
+{
+	if (isReferrer()) return mnrtti_cast<MNFiber>(toCountable());
 	return NULL;
 }

@@ -613,6 +613,15 @@ void MNCompiler::_exp_primary(MNExp& e)
 		_func();
 		e.type = MNExp::exp_loaded;
 	}
+	else if (check(tok_yield))
+	{
+		advance();
+
+		bool hasRet = true;
+		if (hasRet = !check(';')) _exp();
+		code() << cmd_yield;
+		e.type = MNExp::exp_loaded;
+	}
 	else if (check(tok_null))
 	{
 		code() << cmd_push_null;

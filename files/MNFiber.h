@@ -42,6 +42,7 @@ public:
 
 	CallInfo*       enterCall(tuint nargs, bool ret);
 	CallInfo*       returnCall(bool retOnTop);
+	tint32          excuteCall();
 
 	UpLink*         openLink(tint32 index);
 	void            closeLinks(tint32 level);

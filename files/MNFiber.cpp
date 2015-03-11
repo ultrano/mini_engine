@@ -45,7 +45,8 @@ MNFiber::MNFiber(MNGlobal* global)
 	if (global == NULL) global = new MNGlobal(this);
 
 	link(m_global = global);
-	setAt(0, MNObject::Referrer(global->m_shared->getReferrer()));
+	if (stackSize() == 0) push_null();
+	setAt(0, global->m_root->getAt(0));
 }
 
 MNFiber::~MNFiber()
@@ -669,68 +670,6 @@ void MNFiber::mod()
 	push(ret);
 }
 
-MNFiber::CallInfo* MNFiber::enterCall(tuint nargs, bool ret)
-{
-	tuint clsIndex = m_info->end - (nargs + 1);
-	MNObject clsVal = getAt(clsIndex);
-	MNClosure* cls = clsVal.toClosure();
-	if (!cls)
-	{
-		pop(nargs + ret);
-		if (ret) push(MNObject::Null());
-		return NULL;
-	}
-
-	MNFunction* func = cls->getFunc().toFunction();
-
-	CallInfo* info = new CallInfo();
-	info->prev    = m_info;
-	info->closure = cls;
-	info->begin   = clsIndex + 1;
-	info->end     = m_info->end;
-	info->pc      = func? func->getCode() : NULL;
-	info->ret     = ret;
-
-	m_info->end   = clsIndex;
-	m_info        = info;
-
-	if (!cls->getThis().isNull()) setAt(m_info->begin, cls->getThis());
-
-	//! if it's c-function, call directly
-	if (func)
-	{
-		tsize sz = m_info->end - m_info->begin;
-		while (sz++ < func->getVarCount()) push_null();
-		return m_info;
-	}
-	else
-	{
-		TCFunction func = cls->getFunc().toCFunction();
-		bool ret = (func) ? func(this) : false;
-		returnCall(ret);
-		return NULL;
-	}
-}
-
-MNFiber::CallInfo* MNFiber::returnCall(bool retOnTop)
-{
-	bool needRet = m_info->ret;
-	MNObject obj;
-	if (needRet && retOnTop) obj = get(-1);
-	closeLinks(0);
-
-	tsize count = (m_info->end - m_info->prev->end);
-	while (count--) setAt(--(m_info->end), MNObject::Null());
-
-	CallInfo* info = m_info;
-	m_info = info->prev;
-	delete info;
-
-	if (needRet) push(obj);
-
-	return m_info;
-}
-
 UpLink*  MNFiber::openLink(tint32 index)
 {
 	tlist<UpLink*>::iterator itor = m_openLinks.begin();
@@ -812,16 +751,81 @@ public:
 
 void MNFiber::call(tsize nargs, bool ret)
 {
-	CallInfo* lastInfo = m_info;
-	CallInfo* info = enterCall(nargs, ret);
-	if (!info) return;
+	if (enterCall(nargs, ret)) excuteCall();
+}
 
+MNFiber::CallInfo* MNFiber::enterCall(tuint nargs, bool ret)
+{
+	tuint clsIndex = m_info->end - (nargs + 1);
+	MNObject clsVal = getAt(clsIndex);
+	MNClosure* cls = clsVal.toClosure();
+	if (!cls)
+	{
+		pop(nargs + ret);
+		if (ret) push(MNObject::Null());
+		return NULL;
+	}
+
+	MNFunction* func = cls->getFunc().toFunction();
+
+	CallInfo* info = new CallInfo();
+	info->prev    = m_info;
+	info->closure = cls;
+	info->begin   = clsIndex + 1;
+	info->end     = m_info->end;
+	info->pc      = func? func->getCode() : NULL;
+	info->ret     = ret;
+
+	m_info->end   = clsIndex;
+	m_info        = info;
+
+	if (!cls->getThis().isNull()) setAt(m_info->begin, cls->getThis());
+
+	//! if it's c-function, call directly
+	if (func)
+	{
+		tsize sz = m_info->end - m_info->begin;
+		while (sz++ < func->getVarCount()) push_null();
+		return m_info;
+	}
+	else
+	{
+		TCFunction func = cls->getFunc().toCFunction();
+		bool ret = (func) ? func(this) : false;
+		returnCall(ret);
+		return NULL;
+	}
+}
+
+MNFiber::CallInfo* MNFiber::returnCall(bool retOnTop)
+{
+	bool needRet = m_info->ret;
+	MNObject obj;
+	if (needRet && retOnTop) obj = get(-1);
+	closeLinks(0);
+
+	tsize count = (m_info->end - m_info->prev->end);
+	while (count--) setAt(--(m_info->end), MNObject::Null());
+
+	CallInfo* info = m_info;
+	m_info = info->prev;
+	delete info;
+
+	if (needRet) push(obj);
+
+	return m_info;
+}
+
+tint32 MNFiber::excuteCall()
+{
+	CallInfo* info     = m_info; 
+	CallInfo* prevInfo = m_info->prev;
 	//! script
-	while (info != lastInfo)
+	while (info != prevInfo)
 	{
 		MNClosure* closure = info->closure;
 		if (!closure) break;
-		if (closure->getFunc().isNull()) break;
+		if (closure->getFunc().isNull()) return cmd_none;
 
 		CodeIterator code(info);
 		while (code.info == info)
@@ -834,137 +838,137 @@ void MNFiber::call(tsize nargs, bool ret)
 			case cmd_push_false: push_bool(false); break;
 			case cmd_push_true: push_bool(true); break;
 			case cmd_push_float:
-			{
-				float _float;
-				code >> _float;
-				push_float(_float);
-			}
-			break;
-			case cmd_push_int:
-			{
-				tint32 _int;
-				code >> _int;
-				push_int(_int);
-			}
-			break;
-			case cmd_push_table:
-			{
-				tuint16 size = 0;
-				code >> size;
-				push_table(size); 
-			}
-			break;
-			case cmd_push_array:
-			{
-				tuint16 size = 0;
-				code >> size;
-				push_array(size);
-			}
-			break;
-			case cmd_push_closure:
-			{
-				tuint16 funcIndex, upLinkSize;
-				code >> funcIndex >> upLinkSize;
-
-				push_closure(NULL);
-				MNClosure* cls = get(-1).toClosure();
-				cls->setFunc(getConst(funcIndex));
-
-				while (upLinkSize--)
 				{
-					tbyte loc;
-					tuint16 index;
-					code >> loc >> index;
-					UpLink* ul = (loc == cmd_load_stack) ? openLink(index) : closure->getLink(index);
-					cls->addLink(ul);
+					float _float;
+					code >> _float;
+					push_float(_float);
 				}
-			}
-			break;
+				break;
+			case cmd_push_int:
+				{
+					tint32 _int;
+					code >> _int;
+					push_int(_int);
+				}
+				break;
+			case cmd_push_table:
+				{
+					tuint16 size = 0;
+					code >> size;
+					push_table(size); 
+				}
+				break;
+			case cmd_push_array:
+				{
+					tuint16 size = 0;
+					code >> size;
+					push_array(size);
+				}
+				break;
+			case cmd_push_closure:
+				{
+					tuint16 funcIndex, upLinkSize;
+					code >> funcIndex >> upLinkSize;
+
+					push_closure(NULL);
+					MNClosure* cls = get(-1).toClosure();
+					cls->setFunc(getConst(funcIndex));
+
+					while (upLinkSize--)
+					{
+						tbyte loc;
+						tuint16 index;
+						code >> loc >> index;
+						UpLink* ul = (loc == cmd_load_stack) ? openLink(index) : closure->getLink(index);
+						cls->addLink(ul);
+					}
+				}
+				break;
 
 			case cmd_pop1: pop(1); break;
 			case cmd_pop2: pop(2); break;
 			case cmd_popn:
-			{
-				tbyte count;
-				code >> count;
-				pop(count);
-			}
-			break;
+				{
+					tbyte count;
+					code >> count;
+					pop(count);
+				}
+				break;
 			case cmd_load_upval:
-			{
-				tuint16 index;
-				code >> index;
-				push(closure->getUpval(index));
-			}
-			break;
+				{
+					tuint16 index;
+					code >> index;
+					push(closure->getUpval(index));
+				}
+				break;
 			case cmd_store_upval:
-			{
-				tuint16 index;
-				code >> index;
-				closure->setUpval(index, get(-1));
-				pop(1);
-			}
-			break;
+				{
+					tuint16 index;
+					code >> index;
+					closure->setUpval(index, get(-1));
+					pop(1);
+				}
+				break;
 			case cmd_load_const:
-			{
-				tuint16 index;
-				code >> index;
-				push_const(index);
-			}
-			break;
+				{
+					tuint16 index;
+					code >> index;
+					push_const(index);
+				}
+				break;
 			case cmd_load_stack:
-			{
-				tuint16 index;
-				code >> index;
-				load_stack(index);
-			}
-			break;
+				{
+					tuint16 index;
+					code >> index;
+					load_stack(index);
+				}
+				break;
 			case cmd_store_stack:
-			{
-				tuint16 index;
-				code >> index;
-				store_stack(index);
-			}
-			break;
+				{
+					tuint16 index;
+					code >> index;
+					store_stack(index);
+				}
+				break;
 			case cmd_load_field  : load_field(); break;
 			case cmd_store_field : store_field(false); break;
 			case cmd_insert_field: store_field(true); break;
 			case cmd_load_global:
-			{
-				tuint16 index;
-				code >> index;
+				{
+					tuint16 index;
+					code >> index;
 
-				push(getAt(0));
-				push_const(index);
-				load_raw_field();
-			}
-			break;
+					push(getAt(0));
+					push_const(index);
+					load_raw_field();
+				}
+				break;
 			case cmd_store_global:
-			{
-				tuint16 index;
-				code >> index;
+				{
+					tuint16 index;
+					code >> index;
 
-				MNObject val = get(-1);
-				pop(1);
+					MNObject val = get(-1);
+					pop(1);
 
-				push(getAt(0));
-				push_const(index);
-				push(val);
-				store_global();
-			}
-			break;
+					push(getAt(0));
+					push_const(index);
+					push(val);
+					store_global();
+				}
+				break;
 			case cmd_set_meta    : set_meta(); break;
 			case cmd_get_meta    : get_meta(); break;
 			case cmd_up1:    up(1, 0); break;
 			case cmd_up1_x2: up(1, 2); break;
 			case cmd_up2:    up(2, 0); break;
 			case cmd_up:
-			{
-				tbyte n, x;
-				code >> n >> x;
-				up(n, x);
-			}
-			break;
+				{
+					tbyte n, x;
+					code >> n >> x;
+					up(n, x);
+				}
+				break;
 			case cmd_swap    : swap(); break;
 			case cmd_eq  : equals(); break;
 			case cmd_neq :
@@ -978,40 +982,40 @@ void MNFiber::call(tsize nargs, bool ret)
 			case cmd_lt : less_than(); break;
 			case cmd_gt : swap(); less_than(); break;
 			case cmd_leq:
-			{
-				up(2, 0);    //! [left right left right]
-				less_than(); //! [left right bool]
+				{
+					up(2, 0);    //! [left right left right]
+					less_than(); //! [left right bool]
 
-				if (!get(-1).toBool())
-				{
-					pop(1);   //! [left right]
-					equals(); //! [bool]
+					if (!get(-1).toBool())
+					{
+						pop(1);   //! [left right]
+						equals(); //! [bool]
+					}
+					else
+					{
+						up(1, 2); //! [bool left right bool]
+						pop(3);   //! [bool]
+					}
 				}
-				else
-				{
-					up(1, 2); //! [bool left right bool]
-					pop(3);   //! [bool]
-				}
-			}
-			break;
+				break;
 			case cmd_geq:
-			{
-				swap();
-				up(2, 0);    //! [right left left right]
-				less_than(); //! [right left bool]
+				{
+					swap();
+					up(2, 0);    //! [right left left right]
+					less_than(); //! [right left bool]
 
-				if (!get(-1).toBool())
-				{
-					pop(1);   //! [right left]
-					equals(); //! [bool]
+					if (!get(-1).toBool())
+					{
+						pop(1);   //! [right left]
+						equals(); //! [bool]
+					}
+					else
+					{
+						up(1, 2); //! [bool right left bool]
+						pop(3);   //! [bool]
+					}
 				}
-				else
-				{
-					up(1, 2); //! [bool right left bool]
-					pop(3);   //! [bool]
-				}
-			}
-			break;
+				break;
 			case cmd_and: and(); break;
 			case cmd_or : or();  break;
 			case cmd_tostring: tostring(); break;
@@ -1022,43 +1026,44 @@ void MNFiber::call(tsize nargs, bool ret)
 			case cmd_mod     : mod(); break;
 
 			case cmd_jmp:
-			{
-				tint16 len;
-				code >> len;
-				code.jump(len);
-			}
-			break;
+				{
+					tint16 len;
+					code >> len;
+					code.jump(len);
+				}
+				break;
 			case cmd_fjp:
-			{
-				tint16 len;
-				code >> len;
-				if (!get(-1).toBool(false)) code.jump(len);
-				pop(1);
-			}
-			break;
+				{
+					tint16 len;
+					code >> len;
+					if (!get(-1).toBool(false)) code.jump(len);
+					pop(1);
+				}
+				break;
 			case cmd_call:
 			case cmd_call_void:
-			{
-				tbyte nargs;
-				code >> nargs;
-				if (CallInfo* newCall = enterCall(nargs, cmd_call == cmd)) info = newCall;
-			}
-			break;
+				{
+					tbyte nargs;
+					code >> nargs;
+					if (CallInfo* newCall = enterCall(nargs, cmd_call == cmd)) info = newCall;
+				}
+				break;
 			case cmd_return:
 			case cmd_return_void:
-			{
-				info = returnCall(cmd_return == cmd);
-				if (info->closure && info->closure->isNative()) return;
-			}
-			break;
+				{
+					info = returnCall(cmd_return == cmd);
+				}
+				break;
+			case cmd_yield: return cmd_yield;
 			case cmd_close_links:
-			{
-				tuint16 level = 0;
-				code >> level;
-				closeLinks(level);
-			}
-			break;
+				{
+					tuint16 level = 0;
+					code >> level;
+					closeLinks(level);
+				}
+				break;
 			}
 		}
 	}
+	return cmd_return;
 }

@@ -34,44 +34,45 @@ public:
 
 enum tok_type
 {
-	tok_none     = 127,
-	tok_string   = 128,
-	tok_integer  = 129,
-	tok_float    = 130,
-	tok_identify = 131,
-	tok_global   = 132,
-
-	tok_if       = 133,
-	tok_else     = 134,
-	tok_for      = 135,
-	tok_while    = 136,
-	tok_switch   = 137,
-	tok_case     = 138,
-	tok_break    = 139,
-	tok_continue = 140,
-	tok_func     = 141,
-	tok_var      = 142,
-	tok_this     = 143,
-	tok_null     = 144,
-	tok_true     = 145,
-	tok_false    = 146,
-	tok_return   = 147,
-
-	tok_add_assign = 148,
-	tok_sub_assign = 149,
-	tok_div_assign = 150,
-	tok_mul_assign = 151,
-
-	tok_eq       = 152,
-	tok_neq      = 153,
-	tok_geq      = 154,
-	tok_leq      = 155,
-	tok_inc      = 156,
-	tok_dec      = 157,
-	tok_push     = 158,
-	tok_pull     = 159,
-	tok_and      = 160,
-	tok_or       = 161,
+	tok_none       = 127,
+	tok_string     = 128,
+	tok_integer    = 129,
+	tok_float      = 130,
+	tok_identify   = 131,
+	tok_global     = 132,
+	tok_if         = 133,
+	tok_else       = 134,
+	tok_for        = 135,
+	tok_while      = 136,
+	tok_switch     = 137,
+	tok_case       = 138,
+	tok_break      = 139,
+	tok_continue   = 140,
+	tok_func       = 141,
+	tok_var        = 142,
+	tok_this       = 143,
+	tok_null       = 144,
+	tok_true       = 145,
+	tok_false      = 146,
+	tok_return     = 147,
+	tok_yield      = 148,
+	tok_temp1      = 149,
+	tok_temp2      = 150,
+	tok_temp3      = 151,
+	tok_add_assign = 152,
+	tok_sub_assign = 153,
+	tok_div_assign = 154,
+	tok_mul_assign = 155,
+	tok_eq         = 156,
+	tok_neq        = 157,
+	tok_geq        = 158,
+	tok_leq        = 159,
+	tok_inc        = 160,
+	tok_dec        = 161,
+	tok_push       = 162,
+	tok_pull       = 163,
+	tok_and        = 164,
+	tok_or         = 165,
 
 	tok_error  = 254,
 	tok_eos    = 255,
@@ -98,6 +99,7 @@ inline void reservedWords(MNLexer::Token& tok)
 	static const thashstring _true("true");
 	static const thashstring _false("false");
 	static const thashstring _return("return");
+	static const thashstring _yield("yield");
 
 	if (tok.str == _var)           tok.type = tok_var;
 	else if (tok.str == _func)     tok.type = tok_func;
@@ -114,6 +116,7 @@ inline void reservedWords(MNLexer::Token& tok)
 	else if (tok.str == _case)     tok.type = tok_case;
 	else if (tok.str == _break)    tok.type = tok_break;
 	else if (tok.str == _continue) tok.type = tok_continue;
+	else if (tok.str == _yield)    tok.type = tok_yield;
 }
 
 #endif

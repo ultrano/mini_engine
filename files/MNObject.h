@@ -51,6 +51,7 @@ public:
 	bool isTable() const;
 	bool isArray() const;
 	bool isFunction() const;
+	bool isFiber() const;
 
 	void*       toRaw() const;
 	void*       toPointer() const;
@@ -65,6 +66,7 @@ public:
 	MNTable*    toTable() const;
 	MNArray*    toArray() const;
 	MNFunction* toFunction() const;
+	MNFiber*    toFiber() const;
 
 private:
 

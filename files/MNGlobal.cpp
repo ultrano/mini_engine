@@ -144,6 +144,38 @@ tboolean table_total(MNFiber* fiber)
 	return true;
 }
 
+tboolean fiber_new(MNFiber* fiber)
+{
+	MNFiber* newFiber = new MNFiber(fiber->global());
+	newFiber->setMeta(fiber->get(0));
+	newFiber->push(fiber->get(1));
+	newFiber->load_stack(0);
+	newFiber->enterCall(1, true);
+	newFiber->push_null();
+	fiber->push(MNObject(TObjectType::Fiber, newFiber->getReferrer()));
+	return true;
+}
+
+tboolean fiber_next(MNFiber* fiber)
+{
+	MNFiber* newFiber = fiber->get(0).toFiber();
+	if (!newFiber) return false;
+	newFiber->pop(1);
+	newFiber->push(fiber->get(1));
+	printf("stack size: %d\n", newFiber->stackSize());
+	tbyte cmd = newFiber->excuteCall();
+	fiber->push_bool(cmd == cmd_yield);
+	return true;
+}
+
+tboolean fiber_value(MNFiber* fiber)
+{
+	MNFiber* newFiber = fiber->get(0).toFiber();
+	if (!newFiber) return false;
+	fiber->push(newFiber->get(-1));
+	return true;
+}
+
 tboolean closure_call(MNFiber* fiber)
 {
 	fiber->call(fiber->stackSize()-1, true);
@@ -212,8 +244,9 @@ MNGlobal::MNGlobal(MNFiber* root)
 	m_stringTable->link(this);
 
 	//! global table
-	root->push_table();
-	m_shared = root->get(-1).toTable();
+	m_shared = new MNTable();
+	m_shared->link(this);
+	root->push(MNObject(TObjectType::Table, m_shared->getReferrer()));
 
 	//! common function
 	{
@@ -284,6 +317,42 @@ MNGlobal::MNGlobal(MNFiber* root)
 			root->up(1, 0);
 			root->push_string("call");
 			root->push_closure(closure_call);
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("->");
+			root->load_stack(-2);
+			root->store_field();
+		}
+
+		root->store_field();
+	}
+
+	//! fiber meta table
+	{
+		root->up(1, 0);
+		root->push_string("fiber");
+		root->push_table();
+
+		{
+			root->up(1, 0);
+			root->push_string("type");
+			root->push_string("fiber");
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("new");
+			root->push_closure(fiber_new);
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("next");
+			root->push_closure(fiber_next);
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("value");
+			root->push_closure(fiber_value);
 			root->store_field();
 
 			root->up(1, 0);
