@@ -1,33 +1,9 @@
 
-insert("test1","yeah");
+dofile("vec2.mn");
+dofile("vec3.mn");
 
-var vector2 = 
-{
-  type   : "vector2",
-  new    : func(x, y) { var v = {x: ::float(x), y: ::float(y)}; ::setmeta(v, this); return v; },
-  length : func() { return ::sqrt(x*x + y*y); },
-  dot    : func() { return new(x*x, y*y); },
-  add    : func(v) { return new(x+v.x, y+v.y);},
-  sub    : func(v) { return new(x-v.x, y-v.y);},
-  scale  : func(f) { x *= f; y *= f; },
-  normalize: func() { var len = length(); x /= len; y /= len; },
-  "->"   : this,
-  "-<"   : func(k,v) {::print("there is no "+k);},
-  "=="   : func(val) { return (x == val.x && y == val.y); },
-  "+"    : add,
-  "-"    : sub,
-  "*"    : func(f) { var v = new(x*f,y*f); return v;},
-  "/"    : func(f) { var v = new(x/f,y/f); return v;},
-  "~"    : func() { ::print("vector2 finalized"); },
-};
+iterate(func(k,v) {::print(k);} );
 
-var v = vector2.new(1,1);
-v.z = 1;
-v.iterate(func(k,v) {::print(""+k);});
-print(""+v.x+", "+v.y);
-v.normalize();
-print(""+v.x+", "+v.y);
-v *= 10;
-print(""+v.x+", "+v.y);
-v /= 2;
-print(""+v.x+", "+v.y);
+var v2 = vec2.new(1,1);
+;
+print(""+v2.length());

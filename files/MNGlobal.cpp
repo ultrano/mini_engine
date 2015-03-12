@@ -14,13 +14,11 @@ tboolean common_print(MNFiber* fiber)
 	tsize sz = fiber->stackSize();
 	for (tsize i = 1; i < sz; ++i)
 	{
-		fiber->tostring();
 		fiber->load_stack(i);
 		fiber->tostring();
-		MNObject obj = fiber->get(-1);
-		fiber->pop(1);
-		MNString* str = obj.toString();
+		MNString* str = fiber->get(-1).toString();
 		printf(str->ss().c_str());
+		fiber->pop(1);
 	}
 	printf("\n");
 	return false;
@@ -69,6 +67,17 @@ tboolean common_typeof(MNFiber* fiber)
 	}
 	break;
 	}
+	return true;
+}
+
+tboolean common_dofile(MNFiber* fiber)
+{
+	MNObject arg1 = fiber->get(1);
+	if (!arg1.isString()) return false;
+
+	MNString* path = arg1.toString();
+	fiber->push_bool(fiber->dofile(path->ss().str()));
+
 	return true;
 }
 
@@ -133,10 +142,12 @@ tboolean array_iterate(MNFiber* fiber)
 	{
 		fiber->load_stack(1);
 		fiber->load_stack(0);
-		fiber->push_int(index-1);
+		fiber->push_int(index - 1);
 		fiber->push(val);
 		fiber->call(3, true);
-		if (!fiber->get(-1).toBool(true)) break;
+		bool ret = fiber->get(-1).toBool(true);
+		fiber->pop(1);
+		if (!ret) break;
 	}
 	return false;
 }
@@ -182,7 +193,9 @@ tboolean table_iterate(MNFiber* fiber)
 		fiber->push(key);
 		fiber->push(val);
 		fiber->call(3, true);
-		if (!fiber->get(-1).toBool(true)) break;
+		bool ret = fiber->get(-1).toBool(true);
+		fiber->pop(1);
+		if (!ret) break;
 	}
 	return false;
 }
@@ -218,7 +231,7 @@ tboolean fiber_value(MNFiber* fiber)
 
 tboolean closure_call(MNFiber* fiber)
 {
-	fiber->call(fiber->stackSize()-1, true);
+	fiber->call(fiber->stackSize() - 1, true);
 	return true;
 }
 
@@ -261,6 +274,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 		root->up(1, 0);
 		root->push_string("typeof");
 		root->push_closure(common_typeof);
+		root->store_field();
+
+		root->up(1, 0);
+		root->push_string("dofile");
+		root->push_closure(common_dofile);
 		root->store_field();
 	}
 
@@ -430,6 +448,14 @@ MNGlobal::MNGlobal(MNFiber* root)
 
 		root->store_field();
 		root->set_meta();
+	}
+
+	//! cache table
+	{
+		root->up(1, 0);
+		root->push_string("cache");
+		root->push_table();
+		root->store_field();
 	}
 }
 

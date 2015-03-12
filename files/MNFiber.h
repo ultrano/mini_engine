@@ -29,6 +29,8 @@ public:
 
 	//MNValue globalTable() const;
 
+	bool dofile(const tstring& path);
+
 	void            setAt(tint32 idx, const MNObject& val);
 	const MNObject& getAt(tint32 idx) const;
 

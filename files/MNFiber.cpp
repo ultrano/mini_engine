@@ -6,6 +6,7 @@
 #include "MNTable.h"
 #include "MNArray.h"
 #include "MNFunction.h"
+#include "MNCompiler.h"
 
 void binomalOp(MNFiber* fiber, const tstring& opStr, const MNObject& left, const MNObject& right, MNObject& ret)
 {
@@ -71,6 +72,48 @@ MNFiber::~MNFiber()
 MNGlobal* MNFiber::global() const
 {
 	return m_global;
+}
+
+bool MNFiber::dofile(const tstring& path)
+{
+	push_string("rootPath"); //! ["rootPath"]
+	load_global();           //! [rootPath]
+	push_string(path);       //! [rootPath path]
+	add();                   //! [fullPath]
+
+	MNObject fullPath = get(-1);
+	if (!fullPath.isString()) return false;
+
+	push_string("cache"); //! [fullPath "cache"]
+	load_global();        //! [fullPath cache]
+	MNObject cache = get(-1);
+
+	swap();               //! [cache fullPath]
+	load_field();         //! [func]
+
+	MNObject func = get(-1);
+	pop(1); //! []
+
+	if (!func.isFunction()) //! there is no cached func
+	{
+		MNCompiler compiler;
+		compiler.m_lexer.openFile(fullPath.toString()->ss().str());
+		if (!compiler.build(func)) return false;
+
+		push(cache);
+		push(fullPath);
+		push(func);
+		store_field();
+	}
+
+	push_closure(NULL); //! [closure]
+
+	MNClosure* closure = get(-1).toClosure();
+	closure->setFunc(func);
+
+	load_stack(0);  //! [closure global]
+	call(1, false);
+	return true;
 }
 
 void MNFiber::setAt(tint32 idx, const MNObject& val)
@@ -210,8 +253,16 @@ void MNFiber::push_const(tsize idx)
 void MNFiber::push(const MNObject& val)
 {
 	const tsize expand = 32;
-	if (m_info->end >= (tint32)m_stack.size()) m_stack.resize(m_info->end + expand);
-	setAt(m_info->end++, val);
+	if (m_info->end >= (tint32)m_stack.size())
+	{
+		MNObject val2 = val;
+		m_stack.resize(m_info->end + expand);
+		setAt(m_info->end++, val2);
+	}
+	else
+	{
+		setAt(m_info->end++, val);
+	}
 }
 
 void MNFiber::pop(tuint32 count)

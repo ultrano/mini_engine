@@ -53,8 +53,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		fiber->push_closure(__test);
 		fiber->store_global();
 
-		fiber->push_string("test");
-		fiber->push_string("test");
+		fiber->push_string("rootPath");
+		fiber->push_string("C:/workspace/mini_engine/");
 		fiber->store_global();
 	}
 
@@ -62,17 +62,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		MNObject func;
 		MNCompiler compiler;
-		//compiler.m_lexer.openFile("C:/workspace/mini_engine/test1.txt");
-		compiler.m_lexer.openFile("D:/documents/workspace/mini_engine/test2.txt");
-		compiler.build(func);
-
-		MNClosure* closure = new MNClosure(func);
-		closure->link(fiber->global());
-
-		MNObject cls(TObjectType::Closure, closure->getReferrer());
-		fiber->push(cls);
-		fiber->load_stack(0);
-		fiber->call(1, false);
+		compiler.m_lexer.openFile("C:/workspace/mini_engine/test2.txt");
+		//compiler.m_lexer.openFile("D:/documents/workspace/mini_engine/test2.txt");
+		fiber->dofile("test2.txt");
 	}
 
 	//! garbage collect test
