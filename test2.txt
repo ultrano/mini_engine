@@ -1,4 +1,6 @@
 
+insert("test1","yeah");
+
 var vector2 = 
 {
   type   : "vector2",
@@ -7,28 +9,25 @@ var vector2 =
   dot    : func() { return new(x*x, y*y); },
   add    : func(v) { return new(x+v.x, y+v.y);},
   sub    : func(v) { return new(x-v.x, y-v.y);},
-  scale  : func(f) { x *= f; y *= f; return this; },
+  scale  : func(f) { x *= f; y *= f; },
+  normalize: func() { var len = length(); x /= len; y /= len; },
   "->"   : this,
+  "-<"   : func(k,v) {::print("there is no "+k);},
   "=="   : func(val) { return (x == val.x && y == val.y); },
   "+"    : add,
   "-"    : sub,
+  "*"    : func(f) { var v = new(x*f,y*f); return v;},
+  "/"    : func(f) { var v = new(x/f,y/f); return v;},
   "~"    : func() { ::print("vector2 finalized"); },
 };
 
-print("ss");
-var getIterator = func(t)
-{
-  var itor = {};
-  while (vector2.traverse(itor))
-  {
-    yield itor.key;
-  }
-};
-
-var itor = fiber.new(getIterator);
-::print(itor.type);
-
-while (itor.next())
-{
-  print("value: " + itor.value());
-}
+var v = vector2.new(1,1);
+v.z = 1;
+v.iterate(func(k,v) {::print(""+k);});
+print(""+v.x+", "+v.y);
+v.normalize();
+print(""+v.x+", "+v.y);
+v *= 10;
+print(""+v.x+", "+v.y);
+v /= 2;
+print(""+v.x+", "+v.y);

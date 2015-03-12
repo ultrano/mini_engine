@@ -38,6 +38,14 @@ tsize MNArray::count() const
 {
 	return m_arr.size();
 }
+
+tboolean MNArray::iterate(tsize index, MNObject& val) const
+{
+	if (index >= m_arr.size()) return false;
+	val = m_arr[index];
+	return true;
+}
+
 void MNArray::travelMark()
 {
 	tsize count = m_arr.size();

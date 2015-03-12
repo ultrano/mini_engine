@@ -219,7 +219,7 @@ tsize MNTable::total() const
 	return m_size;
 }
 
-tboolean MNTable::traverse(tsize index, MNObject& key, MNObject& val) const
+tboolean MNTable::iterate(tsize index, MNObject& key, MNObject& val) const
 {
 	if (index >= m_size) return false;
 	Node& node = m_nodes[index];

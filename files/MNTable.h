@@ -18,7 +18,7 @@ public:
 	tboolean hasKey(const MNObject& key);
 	tsize    count() const;
 	tsize    total() const;
-	tboolean traverse(tsize index, MNObject& key, MNObject& val) const;
+	tboolean iterate(tsize index, MNObject& key, MNObject& val) const;
 private:
 	struct Node;
 

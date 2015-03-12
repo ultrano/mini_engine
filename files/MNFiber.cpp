@@ -350,7 +350,7 @@ void MNFiber::store_field(tboolean insert)
 				}
 				else if (op.isClosure())
 				{
-					push(meta);
+					push(op);
 					push(obj);
 					push(key);
 					push(val);
