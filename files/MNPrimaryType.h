@@ -159,6 +159,9 @@ enum TCommand : tbyte
 	cmd_load_const, //! >> tuint16
 	cmd_load_upval, //! >> tuint16
 	cmd_store_upval, //! >> tuint16
+	cmd_load_stack_0,  //! load_stack(0)
+	cmd_load_stack_x1, //! load_stack(-1)
+	cmd_load_stack_x2, //! load_stack(-2)
 	cmd_load_stack, //! >> tuint16
 	cmd_store_stack, //! >> tuint16
 	cmd_load_field,

@@ -5,5 +5,4 @@ dofile("vec3.mn");
 iterate(func(k,v) {::print(k);} );
 
 var v2 = vec2.new(1,1);
-;
 print(""+v2.length());
