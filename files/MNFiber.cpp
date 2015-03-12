@@ -701,14 +701,15 @@ void  MNFiber::closeLinks(tint32 level)
 		Opened* ov = (Opened*)ul->link;
 		if (ov->index >= index)
 		{
+			tsize i = ov->index;
 			ul->close();
 			ul->dec();
+			setAt(i, MNObject::Null());
 			itor = m_openLinks.erase(itor);
 			continue;
 		}
 		++itor;
 	}
-	pop(m_info->end - index);
 }
 
 tsize MNFiber::stackSize() const

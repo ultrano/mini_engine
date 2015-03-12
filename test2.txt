@@ -1,5 +1,4 @@
 
-
 var foo1 = func()
 {
   var i=0;
@@ -14,7 +13,7 @@ var f1 = fiber.new(foo1);
 
 print(""+f1.next);
 var j = 1;
-while(f1.next(j*=7))
+while(f1.next(j*=2))
 {
   print(f1.value());
 }

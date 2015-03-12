@@ -151,7 +151,6 @@ tboolean fiber_new(MNFiber* fiber)
 	newFiber->push(fiber->get(1));
 	newFiber->load_stack(0);
 	newFiber->enterCall(1, true);
-	newFiber->push_null();
 	fiber->push(MNObject(TObjectType::Fiber, newFiber->getReferrer()));
 	return true;
 }
@@ -160,8 +159,7 @@ tboolean fiber_next(MNFiber* fiber)
 {
 	MNFiber* newFiber = fiber->get(0).toFiber();
 	if (!newFiber) return false;
-	newFiber->pop(1);
-	newFiber->push(fiber->get(1));
+	newFiber->set(-1, fiber->get(-1));
 	printf("stack size: %d\n", newFiber->stackSize());
 	tbyte cmd = newFiber->excuteCall();
 	fiber->push_bool(cmd == cmd_yield);
