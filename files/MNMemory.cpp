@@ -131,6 +131,18 @@ int& getMemCount()
 	return count;
 }
 
+int& getUsedBytes()
+{
+	static int count = 0;
+	return count;
+}
+
+int& getMaxUsedBytes()
+{
+	static int count = 0;
+	return count;
+}
+
 class MemCore
 {
 	enum { DEFAULT_MAX_CAPACITY = 512 };
@@ -144,7 +156,9 @@ class MemCore
 	};
 	~MemCore()
 	{
-		printf("\nremain requested mem count: %d\n", getMemCount());
+		printf("\n");
+		printf("remain requested mem count: %d\n", getMemCount());
+		printf("maximum used bytes: %dbytes\n", getMaxUsedBytes());
 		MemRod* rod = m_fuelRod;
 		while (rod)
 		{
@@ -173,6 +187,8 @@ public:
 
 	inline void* alloc(unsigned int size)
 	{
+		getUsedBytes() += size;
+		if (getUsedBytes() > getMaxUsedBytes()) getMaxUsedBytes() = getUsedBytes();
 		MemBlock* block = NULL;
 		do
 		{
@@ -197,6 +213,7 @@ public:
 	{
 		MemBlock* block = (MemBlock*)((char*)mem - MemBlockSize);
 		block->isUsing = false;
+		getUsedBytes() -= block->capacity();
 	}
 
 	void defragment()

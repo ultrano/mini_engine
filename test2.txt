@@ -2,19 +2,27 @@
 dofile("vec2.mn");
 dofile("vec3.mn");
 
-
 var co = fiber.new
 (
   func()
   {
     while (true)
 	{
-	  var a = yield ;
-	  ::print(a);
-	  if (a == 20) break;
+      var t = {};
+      t.insert("t", t);
+	  ::print(yield null);
+	  if ((yield t) >= 20) break;
 	}
   }
 );
 
 var i=0;
-while (co.next(i+=1));
+while (co.next(i+=1))
+{
+  print("out side "+co.value());
+}
+
+print("gc: " + GC());
+
+
+
