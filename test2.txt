@@ -1,19 +1,34 @@
 
-var foo1 = func()
+var vector2 = 
 {
-  var i=0;
-  while (i < 20)
+  type   : "vector2",
+  new    : func(x, y) { var v = {x: ::float(x), y: ::float(y)}; ::setmeta(v, this); return v; },
+  length : func() { return ::sqrt(x*x + y*y); },
+  dot    : func() { return new(x*x, y*y); },
+  add    : func(v) { return new(x+v.x, y+v.y);},
+  sub    : func(v) { return new(x-v.x, y-v.y);},
+  scale  : func(f) { x *= f; y *= f; return this; },
+  "->"   : this,
+  "=="   : func(val) { return (x == val.x && y == val.y); },
+  "+"    : add,
+  "-"    : sub,
+  "~"    : func() { ::print("vector2 finalized"); },
+};
+
+print("ss");
+var getIterator = func(t)
+{
+  var itor = {};
+  while (vector2.traverse(itor))
   {
-    ::print("yield: "+(i+=1));
-	var v = yield ("ret: " + i);
-    ::print("resume: "+v);
+    yield itor.key;
   }
 };
-var f1 = fiber.new(foo1);
 
-print(""+f1.next);
-var j = 1;
-while(f1.next(j*=2))
+var itor = fiber.new(getIterator);
+::print(itor.type);
+
+while (itor.next())
 {
-  print(f1.value());
+  print("value: " + itor.value());
 }
