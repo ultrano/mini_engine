@@ -157,7 +157,7 @@ class MemCore
 	~MemCore()
 	{
 		printf("\n");
-		printf("remain requested mem count: %d\n", getMemCount());
+		printf("remained requested mem count: %d\n", getMemCount());
 		printf("maximum used bytes: %dbytes\n", getMaxUsedBytes());
 		MemRod* rod = m_fuelRod;
 		while (rod)
