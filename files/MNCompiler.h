@@ -58,6 +58,7 @@ struct MNExp
 		exp_upval,
 		exp_global,
 		exp_field,
+		exp_call,
 	};
 	tbyte type;
 	tuint16 index;

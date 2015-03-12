@@ -85,7 +85,7 @@ void MNCollectable::finalize()
 		{
 			fiber->push(m_meta);
 			fiber->push_string("~");
-			fiber->load_field();
+			fiber->load_raw_field();
 			fiber->push(MNObject::Referrer(getReferrer()));
 			fiber->call(1, 0);
 		}

@@ -377,6 +377,7 @@ void MNCompiler::_load(MNExp& e)
 	case MNExp::exp_upval : code() << cmd_load_upval  << e.index; break;
 	case MNExp::exp_global: code() << cmd_load_global << e.index; break;
 	case MNExp::exp_field : code() << cmd_load_field; break;
+	case MNExp::exp_call  : code() << cmd_call << tbyte(e.index); break;
 	case MNExp::exp_loaded: break;
 	default: compile_error("unknown expression can't be loaded ");
 	}
@@ -400,7 +401,7 @@ void MNCompiler::_assign(MNExp& e, tboolean leftVal)
 	case MNExp::exp_upval : code() << cmd_store_upval  << e.index; break;
 	case MNExp::exp_global: code() << cmd_store_global << e.index; break;
 	case MNExp::exp_field : code() << cmd_store_field; break;
-	default: compile_error("unknown r-expression"); break;
+	default: compile_error("unassignable l-expression"); break;
 	}
 	e.type = leftVal? MNExp::exp_loaded : MNExp::exp_none;
 }
@@ -432,6 +433,7 @@ tboolean MNCompiler::_exp(tboolean leftVal)
 	else if (leftVal) _load(e);
 	else if (e.type == MNExp::exp_loaded) code() << cmd_pop1;
 	else if (e.type == MNExp::exp_field)  code() << cmd_pop2;
+	else if (e.type == MNExp::exp_call)   code() << cmd_call_void << tbyte(e.index);
 	else if (e.type == MNExp::exp_none) return false;
 	else compile_error("expression wasn't completed");
 
@@ -542,19 +544,18 @@ void MNCompiler::_exp_postfix(MNExp& e)
 			}
 			else if (e.type == MNExp::exp_none) compile_error("postfix compile is failed");
 
-			tbyte nargs = 1;
+			e.index = 1;
 			if (!check(')')) while (true)
 			{
 				_exp();
-				nargs += 1;
+				e.index += 1;
 				if (check(')')) break;
 				else if (check(',')) advance();
 				else compile_error("function call arguments error");
 			}
 			advance();
 
-			code() << cmd_call << nargs;
-			e.type = MNExp::exp_loaded;
+			e.type = MNExp::exp_call;
 		}
 		else if (check('['))
 		{

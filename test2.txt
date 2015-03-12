@@ -1,20 +1,4 @@
 
-dofile("vec2.mn");
-dofile("vec3.mn");
+var f = func() { return func() {::print("inside!"); }; };
 
-
-var co = fiber.new
-(
-  func()
-  {
-    while (true)
-	{
-	  var a = yield "";
-	  ::print(a);
-	  if (a == 20) break;
-	}
-  }
-);
-
-var i=0;
-while (co.next(i+=1));
+f();
