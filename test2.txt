@@ -2,27 +2,12 @@
 dofile("vec2.mn");
 dofile("vec3.mn");
 
-var co = fiber.new
-(
-  func()
-  {
-    while (true)
-	{
-      var t = {};
-      t.insert("t", t);
-	  ::print(yield null);
-	  if ((yield t) >= 20) break;
-	}
-  }
-);
-
-var i=0;
-while (co.next(i+=1))
-{
-  print("out side "+co.value());
-}
 
 print("gc: " + GC());
 
+var t1 = {name:"i'm t1!"};
+var t2 = {name:"i'm t2!", say:func(){::print(name);}};
 
+t1.insert("say", ::delegator(t2.say, t2));
 
+var v = vec2.new(1,1);

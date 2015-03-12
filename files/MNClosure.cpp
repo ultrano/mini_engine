@@ -40,19 +40,23 @@ void Opened::set(const MNObject& v)
 
 //////////////////////////////////////////////////////////////////////////
 
-UpLink::UpLink() : link(NULL)
+UpLink::UpLink() 
+	: link(NULL)
+	, nref(0)
 {
 
 }
 
 UpLink::UpLink(const MNObject& v)
 	: link(new Closed(v))
+	, nref(0)
 {
 
 }
 
 UpLink::UpLink(MNFiber* fiber, tuint index)
 	: link(new Opened(fiber, index))
+	, nref(0)
 {
 
 }
