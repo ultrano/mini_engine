@@ -54,16 +54,13 @@ int _tmain(int argc, _TCHAR* argv[])
 		fiber->store_global();
 
 		fiber->push_string("rootPath");
-		fiber->push_string("C:/workspace/mini_engine/");
+		//fiber->push_string("C:/workspace/mini_engine/");
+		fiber->push_string("D:/documents/workspace/mini_engine/");
 		fiber->store_global();
 	}
 
 	//! compile test
 	{
-		MNObject func;
-		MNCompiler compiler;
-		compiler.m_lexer.openFile("C:/workspace/mini_engine/test2.txt");
-		//compiler.m_lexer.openFile("D:/documents/workspace/mini_engine/test2.txt");
 		fiber->dofile("test2.txt");
 	}
 

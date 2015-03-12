@@ -533,16 +533,12 @@ void MNCompiler::_exp_postfix(MNExp& e)
 			advance();
 			if (e.type == MNExp::exp_field)
 			{
-				//! origin: obj key
-				code() << cmd_load_stack_x2; //! obj key obj
-				code() << cmd_swap;          //! obj obj key
-				code() << cmd_load_field;    //! obj closure
-				code() << cmd_swap;          //! closure obj
+				code() << cmd_load_method; //! [object key] -> [closure object]
 			}
 			else if (e.type != MNExp::exp_loaded)
 			{
-				_load(e);
-				code() << cmd_load_stack_0;
+				_load(e); //! [closure]
+				code() << cmd_load_this;  //! [closure object]
 			}
 			else if (e.type == MNExp::exp_none) compile_error("postfix compile is failed");
 
@@ -593,7 +589,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 		{
 			compile_warning("no var named '%s', trying to find in field", m_current.str.c_str());
 			e.index = m_func->addConst(MNObject::String(m_current.str));
-			code() << cmd_load_stack_0;
+			code() << cmd_load_this;
 			code() << cmd_load_const << e.index;
 			e.type = MNExp::exp_field;
 		}
@@ -619,7 +615,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 
 		bool hasRet = true;
 		if (hasRet = !check(';')) _exp();
-		code() << cmd_yield;
+		code() << (hasRet? cmd_yield : cmd_yield_void);
 		e.type = MNExp::exp_loaded;
 	}
 	else if (check(tok_null))
@@ -673,7 +669,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 
 			if (cmd == cmd_insert_field)
 			{
-				code() << cmd_load_stack_0;
+				code() << cmd_load_this;
 				code() << cmd_load_const << (e.index = m_func->addConst(MNObject::String(m_current.str)));
 			}
 			else if (cmd == cmd_store_stack)
@@ -694,7 +690,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 			if (check(',')) advance();
 		}
 		advance();
-		code() << cmd_load_stack_0 << cmd_return;
+		code() << cmd_load_this << cmd_return;
 
 		m_func = func->upFunc;
 		tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, func->func->getReferrer()));

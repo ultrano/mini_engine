@@ -156,13 +156,12 @@ enum TCommand : tbyte
 	cmd_pop1,
 	cmd_pop2,
 	cmd_popn,//! >> tbyte
-	cmd_load_const, //! >> tuint16
-	cmd_load_upval, //! >> tuint16
+	cmd_load_const,  //! >> tuint16
+	cmd_load_upval,  //! >> tuint16
 	cmd_store_upval, //! >> tuint16
-	cmd_load_stack_0,  //! load_stack(0)
-	cmd_load_stack_x1, //! load_stack(-1)
-	cmd_load_stack_x2, //! load_stack(-2)
-	cmd_load_stack, //! >> tuint16
+	cmd_load_method, //! [object key] -> [closure object]
+	cmd_load_this,   //! load_stack(0)
+	cmd_load_stack,  //! >> tuint16
 	cmd_store_stack, //! >> tuint16
 	cmd_load_field,
 	cmd_store_field,
@@ -197,6 +196,7 @@ enum TCommand : tbyte
 	cmd_return,
 	cmd_return_void,
 	cmd_yield,
+	cmd_yield_void,
 	cmd_close_links, //! >> tuint16
 };
 

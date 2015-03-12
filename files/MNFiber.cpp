@@ -968,9 +968,15 @@ tint32 MNFiber::excuteCall()
 					push_const(index);
 				}
 				break;
-			case cmd_load_stack_0 : load_stack(0); break;
-			case cmd_load_stack_x1: load_stack(-1); break;
-			case cmd_load_stack_x2: load_stack(-2); break;
+			case cmd_load_method:
+				{
+					//! [object field]
+					MNObject object = get(-2);
+					load_field(); //! [closure]
+					push(object); //! [closure object]
+				}
+				break;
+			case cmd_load_this : load_stack(0); break;
 			case cmd_load_stack:
 				{
 					tuint16 index;
@@ -1109,7 +1115,6 @@ tint32 MNFiber::excuteCall()
 					info = returnCall(cmd_return == cmd);
 				}
 				break;
-			case cmd_yield: return cmd_yield;
 			case cmd_close_links:
 				{
 					tuint16 level = 0;
@@ -1117,6 +1122,10 @@ tint32 MNFiber::excuteCall()
 					closeLinks(level);
 				}
 				break;
+			case cmd_yield_void:
+				push_null();
+			case cmd_yield:
+				return cmd_yield;
 			}
 		}
 	}

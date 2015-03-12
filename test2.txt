@@ -2,7 +2,19 @@
 dofile("vec2.mn");
 dofile("vec3.mn");
 
-iterate(func(k,v) {::print(k);} );
 
-var v2 = vec2.new(1,1);
-print(""+v2.length());
+var co = fiber.new
+(
+  func()
+  {
+    while (true)
+	{
+	  var a = yield "";
+	  ::print(a);
+	  if (a == 20) break;
+	}
+  }
+);
+
+var i=0;
+while (co.next(i+=1));

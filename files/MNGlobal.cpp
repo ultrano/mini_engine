@@ -215,7 +215,7 @@ tboolean fiber_next(MNFiber* fiber)
 {
 	MNFiber* newFiber = fiber->get(0).toFiber();
 	if (!newFiber) return false;
-	newFiber->set(-1, fiber->get(-1));
+	newFiber->set(-1, fiber->get(1));
 	tbyte cmd = newFiber->excuteCall();
 	fiber->push_bool(cmd == cmd_yield);
 	return true;
