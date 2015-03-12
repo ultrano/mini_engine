@@ -86,12 +86,14 @@ tboolean object_garbage_collect(MNFiber* fiber)
 	fiber->push_int(fiber->global()->GC());
 	return true;
 }
+
 tboolean object_setmeta(MNFiber* fiber)
 {
 	MNCollectable* obj = fiber->get(1).toCollectable();
 	if (!obj) return false;
 	obj->setMeta(fiber->get(2));
-	return false;
+	fiber->load_stack(1);
+	return true;
 }
 
 tboolean object_delegator(MNFiber* fiber)

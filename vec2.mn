@@ -2,7 +2,8 @@
 var struct = 
 {
   type   : "vec2",
-  new    : func(x, y) { var v = {x: ::float(x), y: ::float(y)}; ::setmeta(v, this); return v; },
+  new    : func(x, y) { return ::setmeta({x: ::float(x), y: ::float(y)}, this); },
+  clone  : func() { return new(x, y); }
   length : func() { return ::sqrt(x*x + y*y); },
   dot    : func() { return new(x*x, y*y); },
   add    : func(v) { return new(x+v.x, y+v.y);},

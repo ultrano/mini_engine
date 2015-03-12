@@ -5,9 +5,8 @@ dofile("vec3.mn");
 
 print("gc: " + GC());
 
-var t1 = {name:"i'm t1!"};
-var t2 = {name:"i'm t2!", say:func(){::print(name);}};
-
-t1.insert("say", ::delegator(t2.say, t2));
-
-var v = vec2.new(1,1);
+var v1 = vec2.new(3,1);
+var v2 = v1.clone();
+v2.x = 10;
+::print(v1.x);
+::print(v2.x);
