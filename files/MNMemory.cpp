@@ -1,5 +1,7 @@
 #include "MNMemory.h"
 
+#include <stdio.h>
+
 //#ifdef PLATFORM_WIN32
 //#pragma pack(push,1)
 //#endif
@@ -123,6 +125,12 @@ struct MemRod
 //#pragma pack(pop)
 //#endif
 
+int& getMemCount()
+{
+	static int count = 0;
+	return count;
+}
+
 class MemCore
 {
 	enum { DEFAULT_MAX_CAPACITY = 512 };
@@ -136,6 +144,7 @@ class MemCore
 	};
 	~MemCore()
 	{
+		printf("\nremain requested mem count: %d\n", getMemCount());
 		MemRod* rod = m_fuelRod;
 		while (rod)
 		{
@@ -210,12 +219,6 @@ void* MNMemory::operator new(size_t size)
 void MNMemory::operator delete(void* memory)
 {
 	MNMemory::free(memory);
-}
-
-int& getMemCount()
-{
-	static int count = 0;
-	return count;
 }
 
 void* MNMemory::malloc(size_t size)

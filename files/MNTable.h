@@ -16,6 +16,7 @@ public:
 	tboolean trySet(const MNObject& key, const MNObject& val);
 	tboolean tryGet(const MNObject& key, MNObject& val) const;
 	tboolean hasKey(const MNObject& key);
+	void     clear();
 	tsize    count() const;
 	tsize    total() const;
 	tboolean iterate(tsize index, MNObject& key, MNObject& val) const;

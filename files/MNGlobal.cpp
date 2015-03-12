@@ -475,24 +475,16 @@ void MNGlobal::getString(MNObject& ret, const tstring& str)
 	}
 }
 
-//
-//MNGCObject* MNGlobal::generateString(const tstring& str)
-//{
-//	tsolidstring ss(str);
-//	MNObject strVal;
-//	
-//	StringTable::iterator itor = m_stringTable.find(ss.hash());
-//	if (itor != m_stringTable.end()) strVal = itor->second;
-//
-//	if (!strVal.isObject())
-//	{
-//		MNString* strObj = (MNString*)(new MNString(str))->linkToState(this);
-//		strVal = MNObject(strObj, true);
-//		m_stringTable.insert(std::make_pair(ss.hash(), strVal));
-//	}
-//
-//	return strVal.toObject();
-//}
+void MNGlobal::finalize()
+{
+	while (m_heap != NULL)
+	{
+		if (m_heap == m_root) m_heap = m_heap->m_next;
+		else m_heap->finalize();
+	}
+	m_root->finalize();
+	delete this;
+}
 
 tsize MNGlobal::GC()
 {

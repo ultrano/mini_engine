@@ -139,6 +139,7 @@ tboolean MNCompiler::build(MNObject& func)
 		code() << cmd_return_void;
 
 		func = MNObject(TObjectType::Function, m_func->func->getReferrer());
+		delete m_func;
 		return true;
 	}
 	catch (MNCompileException* e)

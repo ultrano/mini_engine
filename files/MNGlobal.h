@@ -17,6 +17,7 @@ public:
 	//MNGCObject* generateString(const tstring& str);
 	void getString(MNObject& ret, const tstring& str);
 	tsize GC();
+	void finalize();
 
 	MNTable* m_stringTable;
 	MNCollectable* m_heap;

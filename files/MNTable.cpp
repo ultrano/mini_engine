@@ -35,11 +35,7 @@ MNTable::MNTable(tsize size)
 
 MNTable::~MNTable()
 {
-	for (tsize i = 0; i < m_size; ++i)
-	{
-		m_nodes[i].~Node();
-	}
-	if (m_nodes) MNMemory::free((void*)m_nodes);
+	clear();
 }
 
 tboolean MNTable::insert(const MNObject& key, const MNObject& val)
@@ -128,6 +124,18 @@ tboolean MNTable::hasKey(const MNObject& key)
 
 	Node* node = findNode(key);
 	return (node != NULL);
+}
+
+void  MNTable::clear()
+{
+	while (m_size--)
+	{
+		Node& node = m_nodes[m_size];
+		node.~Node();
+	}
+	if (m_nodes) MNMemory::free((void*)m_nodes);
+	m_nodes = NULL;
+	m_size  = 0;
 }
 
 void  MNTable::allocNodes(tsize size)

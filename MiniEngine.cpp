@@ -44,7 +44,6 @@ bool __test(MNFiber* fiber)
 int _tmain(int argc, _TCHAR* argv[])
 {
 	MNFiber* fiber = new MNFiber();
-	MNObject holder(TObjectType::Fiber, fiber->getReferrer());
 
 	//! set global field
 	{
@@ -175,7 +174,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		fiber->load_field();
 	}
 
-	holder = MNObject::Null();
+	fiber->global()->finalize();
 	return 0;
 }
 

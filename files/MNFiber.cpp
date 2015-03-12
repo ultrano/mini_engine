@@ -52,7 +52,9 @@ MNFiber::MNFiber(MNGlobal* global)
 
 MNFiber::~MNFiber()
 {
-	//setMeta(MNValue());
+	tlist<UpLink*>::iterator itor = m_openLinks.begin();
+	for (; itor != m_openLinks.end(); ++itor) (*itor)->dec();
+
 	m_stack.clear();
 	while (m_info)
 	{
@@ -60,12 +62,6 @@ MNFiber::~MNFiber()
 		m_info->closure = NULL;
 		delete m_info;
 		m_info = info;
-	}
-
-	if (this == m_global->m_root)
-	{
-		m_global->GC();
-		delete m_global;
 	}
 }
 
@@ -857,7 +853,7 @@ MNFiber::CallInfo* MNFiber::returnCall(bool retOnTop)
 	closeLinks(0);
 
 	tsize count = (m_info->end - m_info->prev->end);
-	while (count--) setAt(--(m_info->end), MNObject::Null());
+	for (tsize i=0; i < count; ++i) setAt(m_info->end-(i+1), MNObject::Null());
 
 	CallInfo* info = m_info;
 	m_info = info->prev;
