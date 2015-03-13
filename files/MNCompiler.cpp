@@ -211,6 +211,7 @@ void MNCompiler::_var()
 		if (!m_func->addLocal(m_current.str)) compile_error("overalpped variable declaration '%s'", m_current.str.c_str());
 
 		if (peek('=')) _exp(false);
+		else advance();
 		
 		if (check(',')) { advance(); continue; }
 		else break;

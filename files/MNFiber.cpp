@@ -510,19 +510,23 @@ void MNFiber::equals()
 	case TObjectType::CFunction: ret = (left.toCFunction() == right.toCFunction()); break;
 	case TObjectType::String   : if (right.isString()) ret = left.toString()->ss() == right.toString()->ss(); break;
 	case TObjectType::Int:
+		{
+			if (right.isInt()) ret = (left.toInt() == right.toInt());
+			else if (right.isFloat()) ret = (left.toFloat() == right.toFloat());
+		}
+		break;
 	case TObjectType::Float:
-	{
-		if (right.isInt()) ret = (left.toInt() == right.toInt());
-		else if (right.isFloat()) ret = (left.toFloat() == right.toFloat());
-	}
-	break;
+		{
+			ret = (left.toFloat() == right.toFloat());
+		}
+		break;
 	case TObjectType::Table:
-	{
-		MNObject val;
-		binaryOp(this, "==", left, right, val);
-		ret = val.toBool();
-	}
-	break;
+		{
+			MNObject val;
+			binaryOp(this, "==", left, right, val);
+			ret = val.toBool();
+		}
+		break;
 	}
 	push(MNObject::Bool(ret));
 }

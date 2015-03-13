@@ -2,60 +2,18 @@
 dofile("vec2.mn");
 dofile("vec3.mn");
 
-var foo1 = func()
-{
-  ::print(1);
-  yield;
-  ::print(2);
-  yield;
-  ::print(3);
-  yield;
-  ::print(4);
-};
-
-foo1 = fiber.new(foo1);
-foo1.next();
-foo1.next();
-foo1.next();
-foo1.next();
-foo1.reset();
-foo1.next();
-foo1.next();
-foo1.next();
-foo1.next();
-
-//*
-var gameobject = 
-{
-  objects : [],
-  new  : func() 
-         {
-		   var obj = ::setmeta({}, this);
-		   objects.add(obj);
-		   return obj;
-		 },
-  frame : func() { if (update.next() == false) update.reset(); },
-  startcoroutine : func(f) { this.insert("update", ::fiber.new(::delegator(f,this))); },
-  "~"   : func()
-          {},
-  "->"  : this,
-};
-
-var obj = gameobject.new();
-var update = func()
-{
-  var ch = 0;
-  while ((ch = ::getch()) == -1) yield;
-  ::print(ch);
-};
-
-obj.startcoroutine(update);
-
-
+var pos = vec2.new(0,0);
 
 //! game loop
 while (true)
 {
-  gameobject.objects.iterate(func(k,v) { v.frame(); } );
+  var ch = 0;
+  while ((ch = ::getch()) == -1.0) continue;
+  if (ch == 75) pos.x -= 1;
+  else if (ch == 77) pos.x += 1;
+  else if (ch == 80) pos.y += 1;
+  else if (ch == 72) pos.y -= 1;
+  ::printxy(pos.x, pos.y, "0");
+  if (ch == ' ') break;
 }
 //*/
