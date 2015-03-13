@@ -165,52 +165,54 @@ void     MNCompiler::_statements()
 tboolean MNCompiler::_statement()
 {
 	tboolean ret = false;
-	if (ret = check(tok_var)) _var();
-	else if (ret = check(tok_if)) _if();
+	if (ret = check(tok_if)) _if();
 	else if (ret = check(tok_for));
 	else if (ret = check(tok_switch));
 	else if (ret = check(tok_while)) _while();
 	else if (ret = check(tok_func)) _func();
 	else if (ret = check('{')) _block();
-	else if (ret = check(';')) while (check(';')) advance();
 	else if (ret = check(tok_return))
 	{
 		_return();
-		if (check(';')) while (check(';')) advance();
-		else compile_error("expected ';' is gone after 'return'");
+		if (!check(';')) compile_error("expected ';' is gone after 'return'");
 	}
 	else if (ret = check(tok_break))
 	{
 		_break();
-		if (check(';')) while (check(';')) advance();
-		else compile_error("expected ';' is gone after 'break'");
+		if (!check(';')) compile_error("expected ';' is gone after 'break'");
 	}
 	else if (ret = check(tok_continue))
 	{
 		_continue();
-		if (check(';')) while (check(';')) advance();
-		else compile_error("expected ';' is gone after 'continue'");
+		if (!check(';')) compile_error("expected ';' is gone after 'continue'");
+	}
+	else if (ret = check(tok_var))
+	{
+		_var();
+		if (!check(';')) compile_error("expected ';' is gone after declaration");
 	}
 	else if (ret = _exp(false))
 	{
-		if (check(';')) while (check(';')) advance();
-		else compile_error("expected ';' is gone after expression");
+		if (!check(';')) compile_error("expected ';' is gone after expression");
 	}
 
+	if (ret) while (check(';')) advance();
 	return ret;
 }
 
 void MNCompiler::_var()
 {
+	advance(); //! skip 'var'
 	while (true)
 	{
-		advance(); //! skip 'var' or ','
 
 		if (!check(tok_identify)) compile_error("worong variable");
 		if (!m_func->addLocal(m_current.str)) compile_error("overalpped variable declaration '%s'", m_current.str.c_str());
 
 		if (peek('=')) _exp(false);
-		if (check(',')) continue; else break;
+		
+		if (check(',')) { advance(); continue; }
+		else break;
 	}
 }
 
