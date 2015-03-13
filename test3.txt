@@ -1,19 +1,2 @@
 
-var foo1 = func()
-{
-  var i=0;
-  while (i < 20)
-  {
-    ::print("yield: "+(i+=1));
-	var v = yield ("ret: " + i);
-    ::print("resume: "+v);
-  }
-};
-var f1 = fiber.new(foo1);
-
-print(""+f1.next);
-var j = 1;
-while(f1.next(j*=2))
-{
-  print(f1.value());
-}
+::print("hello test3.txt");

@@ -31,6 +31,7 @@ public:
 
 	//MNValue globalTable() const;
 
+	bool compileFile(MNObject& func, const tstring& path);
 	bool dofile(const tstring& path);
 
 	void            setAt(tint32 idx, const MNObject& val);

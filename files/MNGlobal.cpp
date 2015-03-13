@@ -268,6 +268,21 @@ tboolean closure_call(MNFiber* fiber)
 	return true;
 }
 
+tboolean closure_compileFile(MNFiber* fiber)
+{
+	fiber->load_stack(1);
+	fiber->tostring();
+	MNString* str = fiber->get(-1).toString();
+	
+	MNObject func;
+	if (!fiber->compileFile(func, str->ss().str())) return false;
+
+	fiber->push_closure(NULL); //! [closure]
+	MNClosure* closure = fiber->get(-1).toClosure();
+	closure->setFunc(func);
+	return true;
+}
+
 MNGlobal::MNGlobal(MNFiber* root)
 	: m_heap(NULL)
 	, m_root(root)
@@ -356,6 +371,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 			root->up(1, 0);
 			root->push_string("call");
 			root->push_closure(closure_call);
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("compileFile");
+			root->push_closure(closure_compileFile);
 			root->store_field();
 
 			root->up(1, 0);

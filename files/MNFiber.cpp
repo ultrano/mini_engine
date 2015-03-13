@@ -99,7 +99,7 @@ MNGlobal* MNFiber::global() const
 	return m_global;
 }
 
-bool MNFiber::dofile(const tstring& path)
+bool MNFiber::compileFile(MNObject& func, const tstring& path)
 {
 	push_string("rootPath"); //! ["rootPath"]
 	load_global();           //! [rootPath]
@@ -116,7 +116,7 @@ bool MNFiber::dofile(const tstring& path)
 	swap();               //! [cache fullPath]
 	load_field();         //! [func]
 
-	MNObject func = get(-1);
+	func = get(-1);
 	pop(1); //! []
 
 	if (!func.isFunction()) //! there is no cached func
@@ -130,9 +130,15 @@ bool MNFiber::dofile(const tstring& path)
 		push(func);
 		store_field();
 	}
+	return true;
+}
+
+bool MNFiber::dofile(const tstring& path)
+{
+	MNObject func;
+	if (!compileFile(func, path)) return false;
 
 	push_closure(NULL); //! [closure]
-
 	MNClosure* closure = get(-1).toClosure();
 	closure->setFunc(func);
 
@@ -585,6 +591,7 @@ void MNFiber::tostring()
 	case TObjectType::Table    : str = MNObject::Format("[table: %p]", object.toTable()); break;
 	case TObjectType::Pointer  : str = MNObject::Format("[pointer: %p]", object.toPointer()); break;
 	case TObjectType::CFunction: str = MNObject::Format("[cfunction: %p]", object.toCFunction()); break;
+	case TObjectType::Function : str = MNObject::Format("[function: %p]", object.toFunction()); break;
 	case TObjectType::Closure  : str = MNObject::Format("[closure: %p]", object.toClosure()); break;
 	case TObjectType::String   : str = object; break;
 	case TObjectType::Int      : str = MNObject::Format("%d", object.toInt()); break;
