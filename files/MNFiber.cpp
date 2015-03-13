@@ -8,12 +8,10 @@
 #include "MNFunction.h"
 #include "MNCompiler.h"
 
-void binomalOp(MNFiber* fiber, const tstring& opStr, const MNObject& left, const MNObject& right, MNObject& ret)
+void unaryOp(MNFiber* fiber, const tstring& opStr, const MNObject& val, MNObject& ret)
 {
-	MNCollectable* collectable = left.toCollectable();
-	MNObject meta  = collectable->getMeta();
+	MNObject meta  = val.toCollectable()->getMeta();
 	MNObject field = MNObject::String(opStr);
-	ret = MNObject::Null();
 	while (MNTable* metaTable = meta.toTable())
 	{
 		MNObject op;
@@ -21,9 +19,38 @@ void binomalOp(MNFiber* fiber, const tstring& opStr, const MNObject& left, const
 		{
 			if (op.isClosure())
 			{
+				//! prepare dangling reference by expanding stack in "push"
+				MNObject v = val;
 				fiber->push(op);
-				fiber->push(left);
-				fiber->push(right);
+				fiber->push(v);
+				fiber->call(1, true);
+				ret = fiber->get(-1);
+				fiber->pop(1);
+				break;
+			}
+		}
+		meta = metaTable->getMeta();
+	}
+}
+
+void binaryOp(MNFiber* fiber, const tstring& opStr, const MNObject& left, const MNObject& right, MNObject& ret)
+{
+	MNCollectable* collectable = left.toCollectable();
+	MNObject meta  = collectable->getMeta();
+	MNObject field = MNObject::String(opStr);
+	while (MNTable* metaTable = meta.toTable())
+	{
+		MNObject op;
+		if (metaTable->tryGet(field, op))
+		{
+			if (op.isClosure())
+			{
+				//! prepare dangling reference by expanding stack in "push"
+				MNObject l = left;
+				MNObject r = right;
+				fiber->push(op);
+				fiber->push(l);
+				fiber->push(r);
 				fiber->call(2, true);
 				ret = fiber->get(-1);
 				fiber->pop(1);
@@ -42,6 +69,8 @@ MNFiber::MNFiber(MNGlobal* global)
 	m_info->begin = 0; //! index zero is place for 'this'
 	m_info->end = 0;
 	m_info->ret = false;
+
+	m_status = MNFiber::Resume;
 
 	if (global == NULL) global = new MNGlobal(this);
 
@@ -490,7 +519,7 @@ void MNFiber::equals()
 	case TObjectType::Table:
 	{
 		MNObject val;
-		binomalOp(this, "==", left, right, val);
+		binaryOp(this, "==", left, right, val);
 		ret = val.toBool();
 	}
 	break;
@@ -516,7 +545,7 @@ void MNFiber::less_than()
 		break;
 	case  TObjectType::Table:
 		{
-			binomalOp(this, "<", left, right, ret);
+			binaryOp(this, "<", left, right, ret);
 		}
 		break;
 	}
@@ -543,8 +572,7 @@ void MNFiber::or()
 
 void MNFiber::tostring()
 {
-	MNObject object = get(-1);
-	pop(1);
+	const MNObject& object = get(-1);
 
 	MNObject str = MNObject::String("[null:null]");
 	switch (object.getType())
@@ -560,6 +588,7 @@ void MNFiber::tostring()
 	case TObjectType::Boolean  : str = MNObject::Format("%s", object.toBool() ? "true" : "false"); break;
 	}
 
+	pop(1);
 	push(str);
 }
 
@@ -572,11 +601,25 @@ void MNFiber::dec()
 {
 }
 
+void MNFiber::neg()
+{
+	const MNObject& val = get(-1);
+
+	MNObject ret;
+	switch (val.getType())
+	{
+	case TObjectType::Int   : ret = MNObject::Int(-val.toInt()); break;
+	case TObjectType::Float : ret = MNObject::Float(-val.toFloat());  break;
+	case  TObjectType::Table: unaryOp(this, "-", val, ret); break;
+	}
+	pop(1);
+	push(ret);
+}
+
 void MNFiber::add()
 {
-	MNObject left  = get(-2);
-	MNObject right = get(-1);
-	pop(2);
+	const MNObject& left  = get(-2);
+	const MNObject& right = get(-1);
 
 	MNObject ret;
 	switch (left.getType())
@@ -590,10 +633,8 @@ void MNFiber::add()
 	case TObjectType::Float : if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() + right.toFloat()); break;
 	case TObjectType::String:
 	{
-		push(right);
 		tostring();
 		MNObject strObj1 = get(-1);
-		pop(1);
 
 		MNString* str1 = left.toString();
 		MNString* str2 = strObj1.toString();
@@ -602,19 +643,19 @@ void MNFiber::add()
 	break;
 	case  TObjectType::Table:
 	{
-		binomalOp(this, "+", left, right, ret);
+		binaryOp(this, "+", left, right, ret);
 	}
 	break;
 	}
 
+	pop(2);
 	push(ret);
 }
 
 void MNFiber::sub()
 {
-	MNObject left  = get(-2);
-	MNObject right = get(-1);
-	pop(2);
+	const MNObject& left  = get(-2);
+	const MNObject& right = get(-1);
 
 	MNObject ret;
 	switch (left.getType())
@@ -628,19 +669,19 @@ void MNFiber::sub()
 	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() - right.toFloat()); break;
 	case TObjectType::Table:
 	{
-		binomalOp(this, "-", left, right, ret);
+		binaryOp(this, "-", left, right, ret);
 	}
 	break;
 	}
 
+	pop(2);
 	push(ret);
 }
 
 void MNFiber::mul()
 {
-	MNObject left  = get(-2);
-	MNObject right = get(-1);
-	pop(2);
+	const MNObject& left  = get(-2);
+	const MNObject& right = get(-1);
 
 	MNObject ret;
 	switch (left.getType())
@@ -654,19 +695,19 @@ void MNFiber::mul()
 	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() * right.toFloat()); break;
 	case TObjectType::Table:
 	{
-		binomalOp(this, "*", left, right, ret);
+		binaryOp(this, "*", left, right, ret);
 	}
 	break;
 	}
 
+	pop(2);
 	push(ret);
 }
 
 void MNFiber::div()
 {
-	MNObject left  = get(-2);
-	MNObject right = get(-1);
-	pop(2);
+	const MNObject& left  = get(-2);
+	const MNObject& right = get(-1);
 
 	MNObject ret;
 	switch (left.getType())
@@ -687,19 +728,19 @@ void MNFiber::div()
 	break;
 	case TObjectType::Table:
 	{
-		binomalOp(this, "/", left, right, ret);
+		binaryOp(this, "/", left, right, ret);
 	}
 	break;
 	}
 
+	pop(2);
 	push(ret);
 }
 
 void MNFiber::mod()
 {
-	MNObject left  = get(-2);
-	MNObject right = get(-1);
-	pop(2);
+	const MNObject& left  = get(-2);
+	const MNObject& right = get(-1);
 
 	MNObject ret;
 	switch (left.getType())
@@ -720,11 +761,12 @@ void MNFiber::mod()
 	break;
 	case TObjectType::Table:
 	{
-		binomalOp(this, "%", left, right, ret);
+		binaryOp(this, "%", left, right, ret);
 	}
 	break;
 	}
 
+	pop(2);
 	push(ret);
 }
 
@@ -773,6 +815,16 @@ void  MNFiber::closeLinks(tint32 level)
 tsize MNFiber::stackSize() const
 {
 	return m_info->end - m_info->begin;
+}
+
+void  MNFiber::setStatus(tbyte status)
+{
+	m_status = status;
+}
+
+tbyte MNFiber::getStatus() const
+{
+	return m_status;
 }
 
 void MNFiber::travelMark()
@@ -845,15 +897,8 @@ MNFiber::CallInfo* MNFiber::enterCall(tuint nargs, bool ret)
 	{
 		tsize sz = m_info->end - m_info->begin;
 		while (sz++ < func->getVarCount()) push_null();
-		return m_info;
 	}
-	else
-	{
-		TCFunction func = cls->getFunc().toCFunction();
-		bool ret = (func) ? func(this) : false;
-		returnCall(ret);
-		return NULL;
-	}
+	return m_info;
 }
 
 MNFiber::CallInfo* MNFiber::returnCall(bool retOnTop)
@@ -884,7 +929,19 @@ tint32 MNFiber::excuteCall()
 	{
 		MNClosure* closure = info->closure;
 		if (!closure) break;
-		if (closure->getFunc().isNull()) return cmd_none;
+		if (closure->getFunc().isNull())
+		{
+			info = returnCall(false);
+			break;
+		}
+
+		if (closure->isNative())
+		{
+			TCFunction func = closure->getFunc().toCFunction();
+			bool ret = (func) ? func(this) : false;
+			info = returnCall(ret);
+			continue;;
+		}
 
 		CodeIterator code(info);
 		while (code.info == info)
@@ -1087,6 +1144,7 @@ tint32 MNFiber::excuteCall()
 			case cmd_and: and(); break;
 			case cmd_or : or();  break;
 			case cmd_tostring: tostring(); break;
+			case cmd_neg     : neg(); break;
 			case cmd_add     : add(); break;
 			case cmd_sub     : sub(); break;
 			case cmd_mul     : mul(); break;
@@ -1132,9 +1190,9 @@ tint32 MNFiber::excuteCall()
 			case cmd_yield_void:
 				push_null();
 			case cmd_yield:
-				return cmd_yield;
+				return MNFiber::Suspend;
 			}
 		}
 	}
-	return cmd_return;
+	return MNFiber::Stop;
 }

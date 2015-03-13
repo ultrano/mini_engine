@@ -116,6 +116,7 @@ void     MNCompiler::advance()
 {
 	m_current = m_peeking;
 	m_lexer.scan(m_peeking);
+	if (m_current.type == tok_error) compile_error("wrong lexicon");
 }
 
 tboolean MNCompiler::check(tint type) const
@@ -166,8 +167,8 @@ tboolean MNCompiler::_statement()
 {
 	tboolean ret = false;
 	if (ret = check(tok_if)) _if();
-	else if (ret = check(tok_for));
-	else if (ret = check(tok_switch));
+	//else if (ret = check(tok_for));
+	//else if (ret = check(tok_switch));
 	else if (ret = check(tok_while)) _while();
 	else if (ret = check(tok_func)) _func();
 	else if (ret = check('{')) _block();
@@ -525,7 +526,15 @@ void MNCompiler::_exp_mul_div(MNExp& e)
 
 void MNCompiler::_exp_term(MNExp& e)
 {
+	tbyte cmd = cmd_none;
+	if (check('-')) cmd = cmd_neg;
+	if (cmd != cmd_none) advance();
 	_exp_postfix(e);
+	if (cmd != cmd_none)
+	{
+		_load(e);
+		code() << cmd;
+	}
 }
 
 void MNCompiler::_exp_postfix(MNExp& e)

@@ -184,6 +184,7 @@ enum TCommand : tbyte
 	cmd_and,
 	cmd_or,
 	cmd_tostring,
+	cmd_neg,
 	cmd_add,
 	cmd_sub,
 	cmd_mul,

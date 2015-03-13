@@ -157,6 +157,23 @@ void MNLexer::scan(Token& tok)
 		advance();
 		tok.str = &buf[0];
 	}
+	else if (m_char == '\'')
+	{
+		advance();
+		if (m_next != '\'')
+		{
+			tok.type = tok_error;
+		}
+		else
+		{
+			tchar buf[4] = {0,0,0,0};
+			itoa((int)m_char, &buf[0], 10);
+			tok.type = tok_integer;
+			tok.str = &buf[0];
+			advance();
+			advance();
+		}
+	}
 	else if (isalpha(m_char) || m_char == '_')
 	{
 		const tsize bufSize = 256;

@@ -11,6 +11,8 @@ class MNFiber : public MNCollectable
 
 public:
 
+	enum Status { Stop = 0, Suspend = 1, Resume = 2 };
+
 	class CallInfo : public MNMemory
 	{
 	public:
@@ -50,6 +52,9 @@ public:
 	void            closeLinks(tint32 level);
 
 	tsize           stackSize() const;
+
+	void            setStatus(tbyte status);
+	tbyte           getStatus() const;
 
 	//! command methods.
 	void push_null();
@@ -92,6 +97,7 @@ public:
 
 	void inc();
 	void dec();
+	void neg();
 	void add();
 	void sub();
 	void mul();
@@ -109,6 +115,7 @@ private:
 	tarray<MNObject> m_stack;
 	tlist<UpLink*> m_openLinks;
 	CallInfo* m_info;
+	tbyte m_status;
 };
 
 #endif

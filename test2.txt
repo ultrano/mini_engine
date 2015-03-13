@@ -2,14 +2,60 @@
 dofile("vec2.mn");
 dofile("vec3.mn");
 
-iterate(func(k,v) {::print(k);} );
+var foo1 = func()
+{
+  ::print(1);
+  yield;
+  ::print(2);
+  yield;
+  ::print(3);
+  yield;
+  ::print(4);
+};
 
-var v1 = vec2.new(1,1);
-var v2 = v1.clone();
-v2.x *= 10;
-print(v1.x);
-print(v2.x);
+foo1 = fiber.new(foo1);
+foo1.next();
+foo1.next();
+foo1.next();
+foo1.next();
+foo1.reset();
+foo1.next();
+foo1.next();
+foo1.next();
+foo1.next();
 
-v2 = null;
-vec2 = null;
-print(GC());
+//*
+var gameobject = 
+{
+  objects : [],
+  new  : func() 
+         {
+		   var obj = ::setmeta({}, this);
+		   objects.add(obj);
+		   return obj;
+		 },
+  frame : func() { if (update.next() == false) update.reset(); },
+  startcoroutine : func(f) { this.insert("update", ::fiber.new(::delegator(f,this))); },
+  "~"   : func()
+          {},
+  "->"  : this,
+};
+
+var obj = gameobject.new();
+var update = func()
+{
+  var ch = 0;
+  while ((ch = ::getch()) == -1) yield;
+  ::print(ch);
+};
+
+obj.startcoroutine(update);
+
+
+
+//! game loop
+while (true)
+{
+  gameobject.objects.iterate(func(k,v) { v.frame(); } );
+}
+//*/

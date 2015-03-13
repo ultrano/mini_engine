@@ -206,6 +206,9 @@ tboolean fiber_new(MNFiber* fiber)
 {
 	MNFiber* newFiber = new MNFiber(fiber->global());
 	newFiber->setMeta(fiber->get(0));
+	newFiber->setStatus(MNFiber::Suspend);
+
+	newFiber->push(fiber->get(1));
 	newFiber->push(fiber->get(1));
 	newFiber->load_stack(0);
 	newFiber->enterCall(1, true);
@@ -217,10 +220,38 @@ tboolean fiber_next(MNFiber* fiber)
 {
 	MNFiber* newFiber = fiber->get(0).toFiber();
 	if (!newFiber) return false;
+	else if (newFiber->getStatus() == MNFiber::Stop)   return false;
+	else if (newFiber->getStatus() == MNFiber::Resume) return false;
+
+	newFiber->setStatus(MNFiber::Resume);
+
 	newFiber->set(-1, fiber->get(1));
-	tbyte cmd = newFiber->excuteCall();
-	fiber->push_bool(cmd == cmd_yield);
+	tint status = newFiber->excuteCall();
+
+	newFiber->setStatus(status);
+	fiber->push_bool(status == MNFiber::Suspend);
 	return true;
+}
+
+tboolean fiber_reset(MNFiber* fiber)
+{
+	MNFiber* newFiber = fiber->get(0).toFiber();
+	if (!newFiber) return false;
+	else if (newFiber->getStatus() != MNFiber::Stop)
+	{
+		MNFiber::CallInfo* info = NULL;
+		do 
+		{
+			info = newFiber->returnCall(false);
+		} while (info->closure != NULL);
+	}
+
+	newFiber->setStatus(MNFiber::Suspend);
+	newFiber->pop(1);
+	newFiber->push(newFiber->getAt(1));
+	newFiber->load_stack(0);
+	newFiber->enterCall(1, true);
+	return false;
 }
 
 tboolean fiber_value(MNFiber* fiber)
@@ -356,6 +387,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 			root->up(1, 0);
 			root->push_string("next");
 			root->push_closure(fiber_next);
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("reset");
+			root->push_closure(fiber_reset);
 			root->store_field();
 
 			root->up(1, 0);
