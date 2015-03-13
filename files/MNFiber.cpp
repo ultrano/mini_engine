@@ -581,7 +581,12 @@ void MNFiber::add()
 	MNObject ret;
 	switch (left.getType())
 	{
-	case TObjectType::Int   : if (right.isFloat() || right.isInt()) ret = MNObject::Int(left.toInt() + right.toInt()); break;
+	case TObjectType::Int:
+	{
+		if (right.isInt())   ret = MNObject::Int(left.toInt() + right.toInt());
+		if (right.isFloat()) ret = MNObject::Float(left.toFloat() + right.toFloat());
+	}
+	break;
 	case TObjectType::Float : if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() + right.toFloat()); break;
 	case TObjectType::String:
 	{
@@ -614,7 +619,12 @@ void MNFiber::sub()
 	MNObject ret;
 	switch (left.getType())
 	{
-	case TObjectType::Int  : if (right.isFloat() || right.isInt()) ret = MNObject::Int(left.toInt() - right.toInt()); break;
+	case TObjectType::Int:
+	{
+		if (right.isInt())   ret = MNObject::Int(left.toInt() - right.toInt());
+		if (right.isFloat()) ret = MNObject::Float(left.toFloat() - right.toFloat());
+	}
+	break;
 	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() - right.toFloat()); break;
 	case TObjectType::Table:
 	{
@@ -635,7 +645,12 @@ void MNFiber::mul()
 	MNObject ret;
 	switch (left.getType())
 	{
-	case TObjectType::Int: if (right.isFloat() || right.isInt()) ret = MNObject::Int(left.toInt() * right.toInt()); break;
+	case TObjectType::Int:
+	{
+		if (right.isInt())   ret = MNObject::Int(left.toInt() * right.toInt());
+		if (right.isFloat()) ret = MNObject::Float(left.toFloat() * right.toFloat());
+	}
+	break;
 	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() * right.toFloat()); break;
 	case TObjectType::Table:
 	{
@@ -658,10 +673,8 @@ void MNFiber::div()
 	{
 	case TObjectType::Int:
 	{
-		if (right.isFloat() || right.isInt())
-		{
-			if (right.toInt() != 0) ret = MNObject::Int(left.toInt() / right.toInt());
-		}
+		if (right.isInt()   && right.toInt() != 0)   ret = MNObject::Int(left.toInt() / right.toInt());
+		if (right.isFloat() && right.toFloat() != 0) ret = MNObject::Float(left.toFloat() / right.toFloat());
 	}
 	break;
 	case TObjectType::Float:
@@ -693,10 +706,8 @@ void MNFiber::mod()
 	{
 	case TObjectType::Int:
 	{
-		if (right.isFloat() || right.isInt())
-		{
-			if (right.toInt() != 0) ret = MNObject::Int(left.toInt() % right.toInt());
-		}
+		if (right.isInt() && right.toInt() != 0)   ret = MNObject::Int(left.toInt() % right.toInt());
+		if (right.isFloat() && right.toFloat() != 0) ret = MNObject::Float(fmod(left.toFloat(), right.toFloat()));
 	}
 	break;
 	case TObjectType::Float:
