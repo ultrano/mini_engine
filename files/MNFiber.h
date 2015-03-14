@@ -58,18 +58,19 @@ public:
 	tbyte           getStatus() const;
 
 	//! command methods.
-	void push_null();
-	void push_int(tint32 val);
-	void push_float(tfloat val);
-	void push_string(const tstring& val);
-	void push_pointer(void* val);
-	void push_bool(tboolean val);
-	void push_closure(TCFunction val);
-	void push_table(tsize size = 0);
-	void push_array(tsize size = 0);
-	void push_const(tsize idx);
-	void push(const MNObject& val);
-	void pop(tuint32 count);
+	void  push_null();
+	void  push_int(tint32 val);
+	void  push_float(tfloat val);
+	void  push_string(const tstring& val);
+	void  push_pointer(void* val);
+	void  push_bool(tboolean val);
+	void  push_closure(TCFunction val);
+	void  push_table(tsize size = 0);
+	void  push_array(tsize size = 0);
+	void  push_const(tsize idx);
+	void* push_userdata(tsize size);
+	void  push(const MNObject& val);
+	void  pop(tuint32 count);
 
 	void load_stack(tint32 idx);
 	void store_stack(tint32 idx);

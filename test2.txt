@@ -1,7 +1,4 @@
 
-dofile("vec2.mn");
-dofile("vec3.mn");
-
 var printFields = func(t)
 {
   var itor = func(k,v)
@@ -10,6 +7,15 @@ var printFields = func(t)
   };
   t.iterate(itor);
 };
+
+
+var v = v2.new();
+printFields(v2);
+v = null;
+
+/*
+dofile("vec2.mn");
+dofile("vec3.mn");
 
 this.insert("printFields", printFields);
 
@@ -31,4 +37,5 @@ while (true)
   else if (ch == 72) pos.y -= 1;
   ::printxy(pos.x, pos.y, "0");
 }
-//*/
+
+*/

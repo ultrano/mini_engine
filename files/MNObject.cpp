@@ -7,6 +7,7 @@
 #include "MNArray.h"
 #include "MNFunction.h"
 #include "MNFiber.h"
+#include "MNUserData.h"
 
 #include <stdarg.h>
 
@@ -32,6 +33,7 @@ MNObject MNObject::Format(const tchar* format, ...)
 	va_end(args);
 	return String(&buf[0]);
 }
+
 MNObject MNObject::Referrer(MNReferrer* ref)
 {
 	if (!ref) return MNObject::Null();
@@ -39,12 +41,13 @@ MNObject MNObject::Referrer(MNReferrer* ref)
 	MNCountable* obj = ref->getObject();
 	const MNRtti* rtti = obj->queryRtti();
 	TObjectType type = TObjectType::Null;
-	if (rtti == MNArray::getRtti()) type = TObjectType::Array;
-	else if (rtti == MNTable::getRtti()) type = TObjectType::Table;
-	else if (rtti == MNClosure::getRtti()) type = TObjectType::Closure;
+	if (rtti == MNArray::getRtti())         type = TObjectType::Array;
+	else if (rtti == MNTable::getRtti())    type = TObjectType::Table;
+	else if (rtti == MNClosure::getRtti())  type = TObjectType::Closure;
 	else if (rtti == MNFunction::getRtti()) type = TObjectType::Function;
-	else if (rtti == MNString::getRtti()) type = TObjectType::String;
-	else if (rtti == MNFiber::getRtti()) type = TObjectType::Fiber;
+	else if (rtti == MNString::getRtti())   type = TObjectType::String;
+	else if (rtti == MNFiber::getRtti())    type = TObjectType::Fiber;
+	else if (rtti == MNUserData::getRtti()) type = TObjectType::UserData;
 
 	return MNObject(type, ref);
 }
@@ -173,6 +176,11 @@ bool MNObject::isFiber() const
 	return isReferrer() && (getType() == TObjectType::Fiber);
 }
 
+bool MNObject::isUserData() const
+{
+	return isReferrer() && (getType() == TObjectType::UserData);
+}
+
 void*       MNObject::toRaw() const
 {
 	return val._pointer;
@@ -255,5 +263,11 @@ MNFunction* MNObject::toFunction() const
 MNFiber* MNObject::toFiber() const
 {
 	if (isReferrer()) return mnrtti_cast<MNFiber>(toCountable());
+	return NULL;
+}
+
+MNUserData* MNObject::toUserData() const
+{
+	if (isReferrer()) return mnrtti_cast<MNUserData>(toCountable());
 	return NULL;
 }

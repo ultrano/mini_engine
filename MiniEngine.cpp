@@ -11,6 +11,7 @@
 #include "files\MNClosure.h"
 #include "files\MNLexer.h"
 #include "files\MNCompiler.h"
+#include "files\MNUserData.h"
 
 #include <Windows.h>
 #include <stdio.h>
@@ -46,6 +47,37 @@ tboolean app_getch(MNFiber* fiber)
 	return true;
 }
 
+struct v2
+{
+	v2()
+	{
+		printf("%s\n",__FUNCTION__);
+	}
+	~v2()
+	{
+		printf("%s\n",__FUNCTION__);
+	}
+	float x,y;
+};
+
+tboolean v2_new(MNFiber* fiber)
+{
+	v2* p = (v2*)fiber->push_userdata(sizeof(v2));
+	p->v2::v2();
+	fiber->load_stack(-1);
+	fiber->load_stack(0);
+	fiber->set_meta();
+	return true;
+};
+
+tboolean v2_del(MNFiber* fiber)
+{
+	MNUserData* ud = fiber->get(0).toUserData();
+	v2* p = (v2*)ud->getData();
+	p->v2::~v2();
+	return false;
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	MNFiber* fiber = new MNFiber();
@@ -66,7 +98,26 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		fiber->push_string("rootPath");
 		//fiber->push_string("C:/workspace/mini_engine/");
-		fiber->push_string("D:/documents/workspace/mini_engine/");
+		//fiber->push_string("D:/documents/workspace/mini_engine/");
+		fiber->push_string("E:/dev/mini_engine/");
+		fiber->store_global();
+	}
+
+	//! user data test
+	{
+		fiber->push_string("v2");
+		fiber->push_table(2);
+
+		fiber->up(1, 0);
+		fiber->push_string("new");
+		fiber->push_closure(v2_new);
+		fiber->store_field();
+
+		fiber->up(1, 0);
+		fiber->push_string("~");
+		fiber->push_closure(v2_del);
+		fiber->store_field();
+
 		fiber->store_global();
 	}
 

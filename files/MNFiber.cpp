@@ -7,6 +7,7 @@
 #include "MNArray.h"
 #include "MNFunction.h"
 #include "MNCompiler.h"
+#include "MNUserData.h"
 
 void unaryOp(MNFiber* fiber, const tstring& opStr, const MNObject& val, MNObject& ret)
 {
@@ -281,6 +282,19 @@ void MNFiber::push_const(tsize idx)
 	push(getConst(idx));
 }
 
+void* MNFiber::push_userdata(tsize size)
+{
+	if (size > 0)
+	{
+		MNUserData* userData = new MNUserData(size);
+		MNObject ud(TObjectType::UserData, userData->link(global())->getReferrer());
+		push(ud);
+		return userData->getData();
+	}
+	push_null();
+	return NULL;
+}
+
 void MNFiber::push(const MNObject& val)
 {
 	const tsize expand = 32;
@@ -464,12 +478,13 @@ void MNFiber::store_global()
 
 void MNFiber::set_meta()
 {
-	MNObject obj  = get(-2);
-	MNObject meta = get(-1);
-	pop(2);
+	const MNObject& obj  = get(-2);
+	const MNObject& meta = get(-1);
 
 	MNCollectable* collectable = obj.toCollectable();
 	if (collectable) collectable->setMeta(meta);
+	
+	pop(2);
 }
 
 void MNFiber::get_meta()
@@ -526,6 +541,7 @@ void MNFiber::equals()
 			ret = (left.toFloat() == right.toFloat());
 		}
 		break;
+	case TObjectType::UserData:
 	case TObjectType::Table:
 		{
 			MNObject val;
@@ -553,6 +569,7 @@ void MNFiber::less_than()
 			else if (right.isFloat()) ret = MNObject::Bool(left.toFloat() < right.toFloat());
 		}
 		break;
+	case TObjectType::UserData:
 	case  TObjectType::Table:
 		{
 			binaryOp(this, "<", left, right, ret);
@@ -597,6 +614,12 @@ void MNFiber::tostring()
 	case TObjectType::Int      : str = MNObject::Format("%d", object.toInt()); break;
 	case TObjectType::Float    : str = MNObject::Format("%f", object.toFloat()); break;
 	case TObjectType::Boolean  : str = MNObject::Format("%s", object.toBool() ? "true" : "false"); break;
+	case TObjectType::UserData : 
+		{
+			MNUserData* ud = object.toUserData();
+			str = MNObject::Format("[userdata: %p, size: %d]", ud, ud->getSize());
+		}
+		break;
 	}
 
 	pop(1);
@@ -621,6 +644,7 @@ void MNFiber::neg()
 	{
 	case TObjectType::Int   : ret = MNObject::Int(-val.toInt()); break;
 	case TObjectType::Float : ret = MNObject::Float(-val.toFloat());  break;
+	case TObjectType::UserData :
 	case  TObjectType::Table: unaryOp(this, "-", val, ret); break;
 	}
 	pop(1);
@@ -652,6 +676,7 @@ void MNFiber::add()
 		ret = MNObject::Format("%s%s", str1->ss().str().c_str(), str2->ss().str().c_str());
 	}
 	break;
+	case TObjectType::UserData :
 	case  TObjectType::Table:
 	{
 		binaryOp(this, "+", left, right, ret);
@@ -678,6 +703,7 @@ void MNFiber::sub()
 	}
 	break;
 	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() - right.toFloat()); break;
+	case TObjectType::UserData :
 	case TObjectType::Table:
 	{
 		binaryOp(this, "-", left, right, ret);
@@ -704,6 +730,7 @@ void MNFiber::mul()
 	}
 	break;
 	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() * right.toFloat()); break;
+	case TObjectType::UserData :
 	case TObjectType::Table:
 	{
 		binaryOp(this, "*", left, right, ret);
@@ -737,6 +764,7 @@ void MNFiber::div()
 		}
 	}
 	break;
+	case TObjectType::UserData :
 	case TObjectType::Table:
 	{
 		binaryOp(this, "/", left, right, ret);
@@ -770,6 +798,7 @@ void MNFiber::mod()
 		}
 	}
 	break;
+	case TObjectType::UserData :
 	case TObjectType::Table:
 	{
 		binaryOp(this, "%", left, right, ret);

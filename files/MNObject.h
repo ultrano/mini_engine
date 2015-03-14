@@ -13,6 +13,7 @@ class MNClosure;
 class MNTable;
 class MNArray;
 class MNFunction;
+class MNUserData;
 class MNObject : public MNMemory
 {
 public:
@@ -52,6 +53,7 @@ public:
 	bool isArray() const;
 	bool isFunction() const;
 	bool isFiber() const;
+	bool isUserData() const;
 
 	void*       toRaw() const;
 	void*       toPointer() const;
@@ -67,6 +69,7 @@ public:
 	MNArray*    toArray() const;
 	MNFunction* toFunction() const;
 	MNFiber*    toFiber() const;
+	MNUserData* toUserData() const;
 
 private:
 
