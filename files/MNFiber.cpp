@@ -883,7 +883,7 @@ MNFiber::CallInfo* MNFiber::enterCall(tuint nargs, bool ret)
 	MNClosure* cls = clsVal.toClosure();
 	if (!cls)
 	{
-		pop(nargs + ret);
+		pop(nargs + 1);
 		if (ret) push(MNObject::Null());
 		return NULL;
 	}
@@ -920,7 +920,11 @@ MNFiber::CallInfo* MNFiber::returnCall(bool retOnTop)
 	closeLinks(0);
 
 	tsize count = (m_info->end - m_info->prev->end);
-	for (tsize i=0; i < count; ++i) setAt(m_info->end-(i+1), MNObject::Null());
+	tsize end = m_info->end;
+	for (tsize i=0; i < count; ++i)
+	{
+		setAt(end-(i+1), MNObject::Null());
+	}
 
 	CallInfo* info = m_info;
 	m_info = info->prev;
