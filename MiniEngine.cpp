@@ -13,119 +13,120 @@
 #include "files\MNCompiler.h"
 #include "files\MNUserData.h"
 
-#include <Windows.h>
-#include <stdio.h>
-#include <conio.h>
-#include <WinSock.h>
+#include "open\glew.h"
+#include "open\glut.h"
 
-tboolean app_printxy(MNFiber* fiber)
+#include "OpenGL.h"
+#include "App.h"
+
+MNFiber* mainFiber()
 {
-	fiber->load_stack(3);
-	fiber->tostring();
-	MNString* str = fiber->get(-1).toString();
-	if (!str) return false;
-
-	tint x = fiber->get(1).toInt();
-	tint y = fiber->get(2).toInt();
-
-	COORD coord = {x,y};
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-	printf(str->ss().c_str());
+	static MNFiber* fiber = new MNFiber();
+	return fiber;
 }
 
-tboolean app_kbhit(MNFiber* fiber)
+void callbackDisplay()
 {
-	fiber->push_bool(_kbhit());
-	return true;
+	//SW_GC.onRender();
+	glutSwapBuffers();
 }
 
-tboolean app_getch(MNFiber* fiber)
+void callbackIdle()
 {
-	int a = -1;
-	if (_kbhit()) a = getch();
-	fiber->push_int(a);
-	return true;
-}
-
-struct v2
-{
-	v2()
-	{
-		printf("%s\n",__FUNCTION__);
-	}
-	~v2()
-	{
-		printf("%s\n",__FUNCTION__);
-	}
-	float x,y;
-};
-
-tboolean v2_new(MNFiber* fiber)
-{
-	v2* p = (v2*)fiber->push_userdata(sizeof(v2));
-	p->v2::v2();
-	fiber->load_stack(-1);
+	MNFiber* fiber = mainFiber();
+	fiber->push_string("idleCallback");
+	fiber->load_global();
 	fiber->load_stack(0);
-	fiber->set_meta();
-	return true;
-};
+	fiber->call(1,0);
+}
 
-tboolean v2_del(MNFiber* fiber)
+void callbackTimer( int value )
 {
-	MNUserData* ud = fiber->get(0).toUserData();
-	v2* p = (v2*)ud->getData();
-	p->v2::~v2();
-	return false;
+	glutPostRedisplay();
+	glutTimerFunc( (1.0f/60.0f)*1000 ,callbackTimer,0);
+}
+
+void callbackMouse( int button, int state, int x, int y )
+{
+	MNFiber* fiber = mainFiber();
+	fiber->push_string("inputCallback");
+	fiber->load_global();
+	fiber->load_stack(0);
+	fiber->push_int(state);
+	fiber->push_int(x);
+	fiber->push_int(y);
+	fiber->call(4,0);
+}
+
+void callbackMouseMove( int x, int y )
+{
+	MNFiber* fiber = mainFiber();
+	fiber->push_string("inputCallback");
+	fiber->load_global();
+	fiber->load_stack(0);
+	fiber->push_int(2);
+	fiber->push_int(x);
+	fiber->push_int(y);
+	fiber->call(4,0);
+}
+
+void callbackReshape( int width, int height )
+{
+	//SW_GC.onResize( width, height );
+}
+
+void callbackKeyboard( unsigned char key, int x, int y )
+{
+	//SW_GC.onKeyChange( key, true );
+}
+
+void callbackKeyboardUp( unsigned char key, int x, int y )
+{
+	//SW_GC.onKeyChange( key, false );
 }
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	MNFiber* fiber = new MNFiber();
+	//! opengl
+	{
+		float width = 320;
+		float height = 480;
+		glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE );
+
+		glutInitWindowSize( (int)width, (int)height);
+		glutCreateWindow("TSP");
+
+		float nearPlane = 1;
+		float farPlane = 1000;
+		//float w = 2*SWMath.tan( SWMath.pi/4 )*nearPlane;
+		//float h = 2*SWMath.tan( SWMath.pi/4 )*nearPlane;
+
+		glViewport(0,0,width,height);
+		glutMouseFunc(callbackMouse);
+		glutMotionFunc( callbackMouseMove );
+		glutDisplayFunc(callbackDisplay);
+		glutIdleFunc(callbackIdle);
+		glutReshapeFunc( callbackReshape );
+		glutTimerFunc( 1 ,callbackTimer,0);
+		glutKeyboardFunc( callbackKeyboard );
+		glutKeyboardUpFunc( callbackKeyboardUp );
+		glewInit();
+	}
+
+	MNFiber* fiber = mainFiber();
 
 	//! set global field
 	{
-		fiber->push_string("printxy");
-		fiber->push_closure(app_printxy);
-		fiber->store_global();
-
-		fiber->push_string("kbhit");
-		fiber->push_closure(app_kbhit);
-		fiber->store_global();
-
-		fiber->push_string("getch");
-		fiber->push_closure(app_getch);
-		fiber->store_global();
-
-		fiber->push_string("rootPath");
-		//fiber->push_string("C:/workspace/mini_engine/");
-		//fiber->push_string("D:/documents/workspace/mini_engine/");
-		fiber->push_string("E:/dev/mini_engine/");
-		fiber->store_global();
-	}
-
-	//! user data test
-	{
-		fiber->push_string("v2");
-		fiber->push_table(2);
-
-		fiber->up(1, 0);
-		fiber->push_string("new");
-		fiber->push_closure(v2_new);
-		fiber->store_field();
-
-		fiber->up(1, 0);
-		fiber->push_string("~");
-		fiber->push_closure(v2_del);
-		fiber->store_field();
-
-		fiber->store_global();
+		exposeApp(fiber);
+		exposeGL(fiber);
 	}
 
 	//! compile test
 	{
-		fiber->dofile("test2.txt");
+		fiber->dofile("init.mn");
 	}
 
+	glutMainLoop();
 
 	fiber->global()->finalize();
 	return 0;

@@ -1,0 +1,16 @@
+
+
+var inputCallback = func (state, x, y)
+{
+	::print("state: " + state + ", x: " + x + ", y: " + y);
+	::GL.ClearColor(1,x/320.0,y/480.0,1);
+	::GL.Clear(true);
+};
+
+var idleCallback = func()
+{
+	//::print("idle");
+};
+
+::insert("inputCallback", inputCallback);
+::insert("idleCallback", idleCallback);
