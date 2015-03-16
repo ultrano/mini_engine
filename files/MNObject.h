@@ -39,6 +39,7 @@ public:
 	MNObject& operator = (const MNObject& right) { return assign(right); }
 
 	tint getType() const;
+	thash32 getHash() const;
 
 	bool isNull() const;
 	bool isPointer() const;

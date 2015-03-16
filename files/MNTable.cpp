@@ -9,19 +9,9 @@ struct MNTable::Node
 	Node* next;
 };
 
-thash32 objectHash(const MNObject& obj)
-{
-	switch (obj.getType())
-	{
-	case TObjectType::String: return obj.toString()->ss().hash();
-	default: return (thash32)obj.toRaw();
-	}
-	return 0;
-}
-
 tboolean isEqulas(const MNObject& left, const MNObject& right)
 {
-	return (left.getType() == right.getType() && objectHash(left) == objectHash(right));
+	return (left.getType() == right.getType() && left.getHash() == right.getHash());
 }
 
 MNTable::MNTable(tsize size)
@@ -62,7 +52,7 @@ tboolean MNTable::insert(const MNObject& key, const MNObject& val)
 	tsize   index;
 	m_used += 1;
 
-	thash32 hash = objectHash(key);
+	thash32 hash = key.getHash();
 	index = hash % m_size;
 	Node* head1 = &(m_nodes[index]);
 	if (head1->key.isNull())
@@ -73,7 +63,7 @@ tboolean MNTable::insert(const MNObject& key, const MNObject& val)
 		return true;
 	}
 
-	index = objectHash(head1->key) % m_size;
+	index = head1->key.getHash() % m_size;
 	Node* head2 = &(m_nodes[index]);
 	if (head1 == head2)
 	{
@@ -189,7 +179,7 @@ MNTable::Node* MNTable::findNode(const MNObject& key) const
 {
 	if (m_size == 0) return NULL;
 
-	thash32 hash = objectHash(key);
+	thash32 hash = key.getHash();
 	tsize index = hash % m_size;
 	
 	Node* node = &(m_nodes[index]);

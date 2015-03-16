@@ -111,6 +111,16 @@ tint MNObject::getType() const
 	return valType;
 }
 
+thash32 MNObject::getHash() const
+{
+	switch (getType())
+	{
+	case TObjectType::String: return toString()->ss().hash();
+	default: return (thash32)toRaw();
+	}
+	return 0;
+}
+
 bool MNObject::isNull() const
 {
 	return (getType() == TObjectType::Null);

@@ -1,6 +1,7 @@
 #ifndef _H_MNPrimaryType
 #define _H_MNPrimaryType
 
+#include <algorithm>
 #include <string>
 #include <list>
 #include <map>

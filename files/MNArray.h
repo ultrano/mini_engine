@@ -13,6 +13,7 @@ public:
 	~MNArray();
 
 	tboolean add(const MNObject& val);
+	tboolean remove(const MNObject& val);
 	tboolean tryGet(const MNObject& key, MNObject& val) const;
 	tboolean trySet(const MNObject& key, const MNObject& val);
 	tsize    count() const;

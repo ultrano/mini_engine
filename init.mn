@@ -1,5 +1,4 @@
 
-
 var inputCallback = func (state, x, y)
 {
 	::print("state: " + state + ", x: " + x + ", y: " + y);

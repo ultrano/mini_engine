@@ -1,5 +1,15 @@
 #include "MNArray.h"
 
+struct Comparer
+{
+	const MNObject& val;
+	Comparer(const MNObject& v):val(v){}
+	bool operator ()(const MNObject& v)
+	{
+		return (v.getType() == val.getType() && v.getHash() == val.getHash());
+	}
+};
+
 MNArray::MNArray(tsize size)
 {
 	m_arr.resize(size);
@@ -31,6 +41,15 @@ tboolean MNArray::trySet(const MNObject& key, const MNObject& val)
 	tsize idx = key.toInt();
 	tboolean ret = (idx < m_arr.size());
 	if (ret) m_arr[idx] = val;
+	return ret;
+}
+
+tboolean MNArray::remove(const MNObject& val)
+{
+	Comparer comparer(val);
+	tarray<MNObject>::iterator itor = std::remove_if(m_arr.begin(), m_arr.end(), comparer);
+	bool ret = (itor != m_arr.end());
+	m_arr.erase(itor, m_arr.end());
 	return ret;
 }
 

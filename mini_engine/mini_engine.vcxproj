@@ -93,6 +93,7 @@
     <ClInclude Include="..\files\MNFunction.h" />
     <ClInclude Include="..\files\MNGlobal.h" />
     <ClInclude Include="..\files\MNLexer.h" />
+    <ClInclude Include="..\files\MNList.h" />
     <ClInclude Include="..\files\MNMemory.h" />
     <ClInclude Include="..\files\MNObject.h" />
     <ClInclude Include="..\files\MNPrimaryType.h" />

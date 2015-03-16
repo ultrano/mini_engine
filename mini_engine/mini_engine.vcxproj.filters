@@ -90,6 +90,9 @@
     <ClInclude Include="..\App.h">
       <Filter>main</Filter>
     </ClInclude>
+    <ClInclude Include="..\files\MNList.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
