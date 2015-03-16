@@ -465,7 +465,7 @@ void MNFiber::load_global()
 {
 	push(getAt(0));
 	swap();
-	load_raw_field();
+	load_field();
 }
 
 void MNFiber::store_global()
@@ -473,7 +473,7 @@ void MNFiber::store_global()
 	push(getAt(0));
 	up(1, 2);
 	pop(1);
-	store_raw_field();
+	store_field();
 }
 
 void MNFiber::set_meta()
@@ -1107,9 +1107,8 @@ tint32 MNFiber::excuteCall()
 					tuint16 index;
 					code >> index;
 
-					push(getAt(0));
 					push_const(index);
-					load_raw_field();
+					load_global();
 				}
 				break;
 			case cmd_store_global:
@@ -1120,7 +1119,6 @@ tint32 MNFiber::excuteCall()
 					MNObject val = get(-1);
 					pop(1);
 
-					push(getAt(0));
 					push_const(index);
 					push(val);
 					store_global();
