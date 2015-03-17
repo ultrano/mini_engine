@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="app">
+      <UniqueIdentifier>{fbf03645-72ec-4c54-b6b9-c8db24268ac3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -78,6 +81,18 @@
     <ClInclude Include="files\MNTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="files\MNUserData.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>app</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -131,8 +146,17 @@
     <ClCompile Include="files\MNTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MiniEngine.cpp">
+    <ClCompile Include="files\MNUserData.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniEngine.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.c">
+      <Filter>app</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

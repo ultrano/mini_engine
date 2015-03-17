@@ -13,9 +13,6 @@
 #include "files\MNCompiler.h"
 #include "files\MNUserData.h"
 
-#include "open\glew.h"
-#include "open\glut.h"
-
 #include "OpenGL.h"
 #include "App.h"
 
