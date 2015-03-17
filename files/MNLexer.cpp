@@ -150,7 +150,7 @@ void MNLexer::scan(Token& tok)
 		char* d = &buf[0];
 		while (m_char != '"')
 		{
-			if (m_char == -1 || m_char == '\n') tok.type = tok_eos;
+			if (m_char == -1) tok.type = tok_eos;
 			*d++ = m_char;
 			advance();
 		}

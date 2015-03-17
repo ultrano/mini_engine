@@ -93,6 +93,9 @@
     <ClInclude Include="..\files\MNList.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="..\stb_image.h">
+      <Filter>main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -150,6 +153,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="..\MiniEngine.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stb_image.c">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\OpenGL.cpp">
       <Filter>main</Filter>
     </ClCompile>
   </ItemGroup>

@@ -25,6 +25,7 @@ MNFiber* mainFiber()
 void callbackDisplay()
 {
 	//SW_GC.onRender();
+	glDrawRegion(1,20,40,0,0,20,40);
 	glutSwapBuffers();
 }
 

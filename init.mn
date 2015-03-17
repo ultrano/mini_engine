@@ -1,21 +1,21 @@
 
 
-var shaderStr = "
-
-    varying   vec2 v_tex;
+var shaderStr = 
+"
     uniform   mat4 MATRIX_MVP;
-    uniform   mat4 u_texMat;
     uniform sampler2D TEXTURE_0;
     
+    varying   vec2 v_tex;
+
     #ifdef VERTEX_SHADER
     
-    attribute vec4 a_pos;
-    attribute vec2 a_tex;
+    attribute vec4 pos;
+    attribute vec2 tex;
     
     void main()
     {
-       gl_Position = MATRIX_MVP * a_pos;
-       v_tex = a_tex;
+       gl_Position = MATRIX_MVP * pos;
+       v_tex = tex;
     }
     
     #endif
@@ -31,15 +31,29 @@ var shaderStr = "
     }
     
     #endif
-	
 ";
 
 var programID = GL.LoadProgram(shaderStr);
 GL.BindAttribLocation(programID, 0, "pos");
 GL.BindAttribLocation(programID, 1, "tex");
-GL.EnableVertexAttribArray(0);
-GL.EnableVertexAttribArray(1);
-GL.LinkAndUse(programID);
+GL.LinkProgram(programID);
+GL.UseProgram(programID);
+
+var mvpLoc = GL.GetUniformLocation(programID, "MATRIX_MVP");
+var texLoc = GL.GetUniformLocation(programID, "TEXTURE_0");
+
+var orthoMat = GL.CreateMatrix();
+GL.PushMatrix();
+GL.LoadIdentity();
+GL.Ortho(-160, 160, -240, 240, -100, 1000);
+GL.LoadMatrix(orthoMat);
+Gl.PopMatrix();
+GL.UniformMatrix(mvpLoc, orthoMat);
+
+var tex = GL.LoadTexture("../test.png");
+print("tex.id: ",tex.id);
+
+GL.Viewport(0,0,320,480);
 
 var inputCallback = func (state, x, y)
 {
@@ -51,6 +65,11 @@ var inputCallback = func (state, x, y)
 var idleCallback = func()
 {
 	//::print("idle");
+GL.UseProgram(programID);
+GL.EnableVertexAttribArray(0);
+GL.EnableVertexAttribArray(1);
+GL.UniformMatrix(mvpLoc, orthoMat);
+GL.BindTexture(texLoc, tex.id);
 };
 
 ::insert("inputCallback", inputCallback);

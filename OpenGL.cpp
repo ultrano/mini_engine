@@ -1,6 +1,7 @@
 #include "OpenGL.h"
 #include "files\MNFiber.h"
 #include "files\MNString.h"
+#include "files\MNUserData.h"
 #include "stb_image.h"
 
 #define glLog printf
@@ -95,7 +96,7 @@ GLuint loadShader(GLenum type, const char* shaderSource)
 	return shaderID;
 }
 
-unsigned int glLoadProgram(const char* source)
+GLuint glLoadProgram(const char* source)
 {
 	GLuint vsID = 0;
 	GLuint fsID = 0;
@@ -142,6 +143,22 @@ unsigned int glLoadProgram(const char* source)
 
 	if (programID == 0) glLog("failed to loading program");
 	return programID;
+}
+
+void  glDrawRegion(int id, int srcWidth, int srcHeight, int offX, int offY, int width, int height)
+{
+	static tfloat ver[][3] = { {-10.0f, +10.0f, 0}, {+10.0f, +10.0f, 0}, {-10.0f, -10.0f, 0}, {+10.0f, -10.0f, 0}};
+	static tushort ind[][3] = { {0,1,2}, {3,2,1}};
+
+	tfloat x = (float)offX/(float)srcWidth;
+	tfloat y = (float)offY/(float)srcHeight;
+	tfloat w = (float)width/(float)srcWidth;
+	tfloat h = (float)height/(float)srcHeight;
+	tfloat tex[][2] = { {x,y}, {x+w,y}, {x,y+h}, {x+w,y+h}};
+
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, &ver[0] );
+	glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 0, &tex[0] );
+	glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, &ind[0] );
 }
 
 void exposeGL(MNFiber* fiber)
@@ -235,19 +252,257 @@ void exposeGL(MNFiber* fiber)
 	fiber->push_closure(EnableVertexAttribArray::invoke);
 	fiber->store_field();
 
-	struct LinkAndUse
+	struct GetAttribLocation
+	{
+		static bool invoke(MNFiber* f)
+		{
+			tint programID = f->get(1).toInt();
+			MNString* str  = f->get(2).toString();
+			if (!str) return false;
+			int loc = glGetAttribLocation(programID, str->ss().c_str());
+			f->push_int(loc);
+			return true;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("GetAttribLocation");
+	fiber->push_closure(GetAttribLocation::invoke);
+	fiber->store_field();
+
+	struct GetUniformLocation
+	{
+		static bool invoke(MNFiber* f)
+		{
+			tint programID = f->get(1).toInt();
+			MNString* str  = f->get(2).toString();
+			if (!str) return false;
+			int loc = glGetUniformLocation(programID, str->ss().c_str());
+			f->push_int(loc);
+			return true;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("GetUniformLocation");
+	fiber->push_closure(GetUniformLocation::invoke);
+	fiber->store_field();
+
+	struct UniformMatrix
+	{
+		static bool invoke(MNFiber* f)
+		{
+			tint loc = f->get(1).toInt();
+			MNUserData* ud  = f->get(2).toUserData();
+			if (!ud) return false;
+			glUniformMatrix4fv( loc, 1, GL_FALSE, (float*)(ud->getData()) );
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("UniformMatrix");
+	fiber->push_closure(UniformMatrix::invoke);
+	fiber->store_field();
+
+	struct LinkProgram
 	{
 		static bool invoke(MNFiber* f)
 		{
 			tuint programID = f->get(1).toInt();
 			glLinkProgram(programID);
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("LinkProgram");
+	fiber->push_closure(LinkProgram::invoke);
+	fiber->store_field();
+
+	struct UseProgram
+	{
+		static bool invoke(MNFiber* f)
+		{
+			tuint programID = f->get(1).toInt();
 			glUseProgram(programID);
 			return false;
 		}
 	};
 	fiber->up(1, 0);
-	fiber->push_string("LinkAndUse");
-	fiber->push_closure(LinkAndUse::invoke);
+	fiber->push_string("UseProgram");
+	fiber->push_closure(UseProgram::invoke);
+	fiber->store_field();
+
+	struct LoadTexture
+	{
+		static bool invoke(MNFiber* f)
+		{
+			MNString* str   = f->get(1).toString();
+			if (!str) return false;
+
+			tint id, width, height;
+			id = glLoadTexture(str->ss().c_str(), width, height);
+			if (id == 0) return false;
+
+			f->push_table(3);
+			
+			f->up(1,0);
+			f->push_string("id");
+			f->push_int(id);
+			f->store_field();
+
+			f->up(1,0);
+			f->push_string("width");
+			f->push_int(width);
+			f->store_field();
+
+			f->up(1,0);
+			f->push_string("height");
+			f->push_int(height);
+			f->store_field();
+			return true;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("LoadTexture");
+	fiber->push_closure(LoadTexture::invoke);
+	fiber->store_field();
+
+	struct BindTexture
+	{
+		static bool invoke(MNFiber* f)
+		{
+			tuint loc   = f->get(1).toInt();
+			tuint texID = f->get(2).toInt();
+			glActiveTexture( GL_TEXTURE0 );
+			glBindTexture( GL_TEXTURE_2D, texID );
+			glUniform1i( loc, 0 );
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("BindTexture");
+	fiber->push_closure(BindTexture::invoke);
+	fiber->store_field();
+
+	struct PushMatrix { static bool invoke(MNFiber* f) { glPushMatrix(); return false; } };
+	fiber->up(1, 0);
+	fiber->push_string("PushMatrix");
+	fiber->push_closure(PushMatrix::invoke);
+	fiber->store_field();
+
+	struct PopMatrix { static bool invoke(MNFiber* f) { glPopMatrix(); return false; } };
+	fiber->up(1, 0);
+	fiber->push_string("PopMatrix");
+	fiber->push_closure(PopMatrix::invoke);
+	fiber->store_field();
+
+	struct CreateMatrix
+	{
+		static bool invoke(MNFiber* f)
+		{
+			f->push_userdata(sizeof(float)*9);
+			return true;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("CreateMatrix");
+	fiber->push_closure(CreateMatrix::invoke);
+	fiber->store_field();
+
+	struct LoadIdentity { static bool invoke(MNFiber* f) { glLoadIdentity(); return true; } };
+	fiber->up(1, 0);
+	fiber->push_string("LoadIdentity");
+	fiber->push_closure(LoadIdentity::invoke);
+	fiber->store_field();
+
+	struct LoadMatrix
+	{
+		static bool invoke(MNFiber* f)
+		{
+			float* mat = NULL;
+			MNUserData* ud = f->get(1).toUserData();
+			if (!ud) return false;
+			mat = (float*)ud->getData();
+			glLoadMatrixf(mat);
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("LoadMatrix");
+	fiber->push_closure(LoadMatrix::invoke);
+	fiber->store_field();
+
+	struct Translate
+	{
+		static bool invoke(MNFiber* f)
+		{
+			glTranslatef(f->get(1).toFloat(), f->get(2).toFloat(), f->get(3).toFloat());
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("Translate");
+	fiber->push_closure(Translate::invoke);
+	fiber->store_field();
+
+	struct Rotate
+	{
+		static bool invoke(MNFiber* f)
+		{
+			glRotatef(f->get(1).toFloat(), f->get(2).toFloat(), f->get(3).toFloat(), f->get(4).toFloat());
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("Rotate");
+	fiber->push_closure(Rotate::invoke);
+	fiber->store_field();
+
+	struct Scale
+	{
+		static bool invoke(MNFiber* f)
+		{
+			glScalef(f->get(1).toFloat(), f->get(2).toFloat(), f->get(3).toFloat());
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("Scale");
+	fiber->push_closure(Scale::invoke);
+	fiber->store_field();
+
+	struct Ortho
+	{
+		static bool invoke(MNFiber* fi)
+		{
+			tint l = fi->get(1).toInt();
+			tint r = fi->get(2).toInt();
+			tint b = fi->get(3).toInt();
+			tint t = fi->get(4).toInt();
+			tint n = fi->get(5).toInt();
+			tint f = fi->get(6).toInt();
+			glOrtho(l,r,b,t,n,f);
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("Ortho");
+	fiber->push_closure(Ortho::invoke);
+	fiber->store_field();
+
+	struct Viewport
+	{
+		static bool invoke(MNFiber* fi)
+		{
+			tint x = fi->get(1).toInt();
+			tint y = fi->get(2).toInt();
+			tint w = fi->get(3).toInt();
+			tint h = fi->get(4).toInt();
+			glViewport(x, y, w, h);
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("Viewport");
+	fiber->push_closure(Viewport::invoke);
 	fiber->store_field();
 
 	fiber->pop(1);
@@ -255,6 +510,12 @@ void exposeGL(MNFiber* fiber)
 	////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////
+
+	glEnable(GL_TEXTURE_2D);
+
+	glEnable(GL_BLEND);
+	//glEnable(GL_ALPHA_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	/*
 	tuint programID = glLoadProgram("");

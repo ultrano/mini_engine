@@ -5,8 +5,9 @@
 #include "open\glut.h"
 
 class MNFiber;
-unsigned int glLoadTexture(const char* fileName, int& width, int& height);
-unsigned int glLoadProgram(const char* source);
-void exposeGL(MNFiber* fiber);;
+GLuint glLoadTexture(const char* fileName, int& width, int& height);
+GLuint glLoadProgram(const char* source);
+void   glDrawRegion(int id, int srcWidth, int srcHeight, int offX, int offY, int width, int height);
+void   exposeGL(MNFiber* fiber);;
 
 #endif
