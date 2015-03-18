@@ -293,6 +293,7 @@ void exposeGL(MNFiber* fiber)
 			tint loc = f->get(1).toInt();
 			MNUserData* ud  = f->get(2).toUserData();
 			if (!ud) return false;
+			if (ud->getSize() < sizeof(float) * 16) return false;
 			glUniformMatrix4fv( loc, 1, GL_FALSE, (float*)(ud->getData()) );
 			return false;
 		}
@@ -417,19 +418,6 @@ void exposeGL(MNFiber* fiber)
 	fiber->push_closure(PopMatrix::invoke);
 	fiber->store_field();
 
-	struct CreateMatrix
-	{
-		static bool invoke(MNFiber* f)
-		{
-			f->push_userdata(sizeof(float)*9);
-			return true;
-		}
-	};
-	fiber->up(1, 0);
-	fiber->push_string("CreateMatrix");
-	fiber->push_closure(CreateMatrix::invoke);
-	fiber->store_field();
-
 	struct LoadIdentity { static bool invoke(MNFiber* f) { glLoadIdentity(); return true; } };
 	fiber->up(1, 0);
 	fiber->push_string("LoadIdentity");
@@ -443,6 +431,7 @@ void exposeGL(MNFiber* fiber)
 			float* mat = NULL;
 			MNUserData* ud = f->get(1).toUserData();
 			if (!ud) return false;
+			if (ud->getSize() < sizeof(float) * 16) return false;
 			mat = (float*)ud->getData();
 			glLoadMatrixf(mat);
 			return false;

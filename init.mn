@@ -62,7 +62,7 @@ print("tex.h: ",tex.height);
 var posx = 0, posy = 0;
 var displayCallback = func()
 {
-  GL.DrawRegion(tex.id, tex.width, tex.height, 0, 0, tex.width, tex.height);
+  GL.DrawRegion(tex.id, tex.width, tex.height, posx, posy, tex.width, tex.height);
 };
 
 var inputCallback = func (state, x, y)
