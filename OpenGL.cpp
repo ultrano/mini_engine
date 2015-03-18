@@ -302,6 +302,28 @@ void exposeGL(MNFiber* fiber)
 	fiber->push_closure(UniformMatrix::invoke);
 	fiber->store_field();
 
+	struct MatrixMode { static bool invoke(MNFiber* f) { glMatrixMode(f->get(1).toInt()); return false; } };
+	fiber->up(1, 0);
+	fiber->push_string("MatrixMode");
+	fiber->push_closure(MatrixMode::invoke);
+	fiber->store_field();
+
+	struct GetFloatv
+	{
+		static bool invoke(MNFiber* f)
+		{
+			tint index = f->get(1).toInt();
+			MNUserData* ud = f->get(2).toUserData();
+			if (!ud) return false;
+			glGetFloatv(index, (float*)ud->getData());
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("GetFloatv");
+	fiber->push_closure(GetFloatv::invoke);
+	fiber->store_field();
+
 	struct LinkProgram
 	{
 		static bool invoke(MNFiber* f)
@@ -371,6 +393,7 @@ void exposeGL(MNFiber* fiber)
 		{
 			tuint loc   = f->get(1).toInt();
 			tuint texID = f->get(2).toInt();
+			glEnable(GL_TEXTURE_2D);
 			glActiveTexture( GL_TEXTURE0 );
 			glBindTexture( GL_TEXTURE_2D, texID );
 			glUniform1i( loc, 0 );
@@ -503,6 +526,37 @@ void exposeGL(MNFiber* fiber)
 	fiber->up(1, 0);
 	fiber->push_string("Viewport");
 	fiber->push_closure(Viewport::invoke);
+	fiber->store_field();
+
+	struct DrawRegion
+	{
+		static bool invoke(MNFiber* fi)
+		{
+			tint id = fi->get(1).toInt();
+			tint w = fi->get(2).toInt();
+			tint h = fi->get(3).toInt();
+			tint offX = fi->get(4).toInt();
+			tint offY = fi->get(5).toInt();
+			tint offW = fi->get(6).toInt();
+			tint offH = fi->get(7).toInt();
+
+			glDrawRegion(id, w, h, offX, offY, offW, offH);
+			return false;
+		}
+	};
+	fiber->up(1, 0);
+	fiber->push_string("DrawRegion");
+	fiber->push_closure(DrawRegion::invoke);
+	fiber->store_field();
+
+	fiber->up(1, 0);
+	fiber->push_string("MODELVIEW");
+	fiber->push_int(GL_MODELVIEW);
+	fiber->store_field();
+
+	fiber->up(1, 0);
+	fiber->push_string("MODELVIEW_MATRIX");
+	fiber->push_int(GL_MODELVIEW_MATRIX);
 	fiber->store_field();
 
 	fiber->pop(1);

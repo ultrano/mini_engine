@@ -24,8 +24,11 @@ MNFiber* mainFiber()
 
 void callbackDisplay()
 {
-	//SW_GC.onRender();
-	glDrawRegion(1,20,40,0,0,20,40);
+	MNFiber* fiber = mainFiber();
+	fiber->push_string("displayCallback");
+	fiber->load_global();
+	fiber->load_stack(0);
+	fiber->call(1, 0);
 	glutSwapBuffers();
 }
 

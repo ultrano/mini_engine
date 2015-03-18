@@ -45,6 +45,14 @@ tboolean common_int(MNFiber* fiber)
 	return true;
 }
 
+tboolean common_alloc(MNFiber* fiber)
+{
+	const MNObject& size = fiber->get(1);
+	if (!size.isInt()) return false;
+	fiber->push_userdata(size.toInt());
+	return true;
+}
+
 tboolean common_typeof(MNFiber* fiber)
 {
 	const MNObject& val = fiber->get(1);
@@ -336,6 +344,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 		root->up(1, 0);
 		root->push_string("dofile");
 		root->push_closure(common_dofile);
+		root->store_field();
+
+		root->up(1, 0);
+		root->push_string("alloc");
+		root->push_closure(common_alloc);
 		root->store_field();
 	}
 

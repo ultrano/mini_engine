@@ -36,28 +36,40 @@ var shaderStr =
 var programID = GL.LoadProgram(shaderStr);
 GL.BindAttribLocation(programID, 0, "pos");
 GL.BindAttribLocation(programID, 1, "tex");
+GL.EnableVertexAttribArray(0);
+GL.EnableVertexAttribArray(1);
 GL.LinkProgram(programID);
 GL.UseProgram(programID);
 
-var mvpLoc = GL.GetUniformLocation(programID, "MATRIX_MVP");
 var texLoc = GL.GetUniformLocation(programID, "TEXTURE_0");
+var mvpLoc = GL.GetUniformLocation(programID, "MATRIX_MVP");
 
-var orthoMat = GL.CreateMatrix();
-GL.PushMatrix();
+var mat = ::alloc(4*16);
 GL.LoadIdentity();
 GL.Ortho(-160, 160, -240, 240, -100, 1000);
-GL.LoadMatrix(orthoMat);
-Gl.PopMatrix();
-GL.UniformMatrix(mvpLoc, orthoMat);
+GL.MatrixMode(GL.MODELVIEW);
+GL.GetFloatv(GL.MODELVIEW_MATRIX, mat);
+GL.UniformMatrix(mvpLoc, mat);
+GL.Viewport(-100, -100, 320, 480);
 
-var tex = GL.LoadTexture("../test.png");
+var tex = GL.LoadTexture("./test.png");
+GL.BindTexture(texLoc, tex.id);
 print("tex.id: ",tex.id);
+print("tex.w: ",tex.width);
+print("tex.h: ",tex.height);
 
-GL.Viewport(0,0,320,480);
+
+var posx = 0, posy = 0;
+var displayCallback = func()
+{
+  GL.DrawRegion(tex.id, tex.width, tex.height, 0, 0, tex.width, tex.height);
+};
 
 var inputCallback = func (state, x, y)
 {
 	::print("state: " + state + ", x: " + x + ", y: " + y);
+	posx = x;
+	posy = y;
 	::GL.ClearColor(1,x/320.0,y/480.0,1);
 	::GL.Clear(true);
 };
@@ -65,12 +77,8 @@ var inputCallback = func (state, x, y)
 var idleCallback = func()
 {
 	//::print("idle");
-GL.UseProgram(programID);
-GL.EnableVertexAttribArray(0);
-GL.EnableVertexAttribArray(1);
-GL.UniformMatrix(mvpLoc, orthoMat);
-GL.BindTexture(texLoc, tex.id);
 };
 
+::insert("displayCallback", displayCallback);
 ::insert("inputCallback", inputCallback);
 ::insert("idleCallback", idleCallback);
