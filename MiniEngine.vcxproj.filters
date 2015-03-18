@@ -93,6 +93,15 @@
     <ClInclude Include="stb_image.h">
       <Filter>app</Filter>
     </ClInclude>
+    <ClInclude Include="TMatrix4x4.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="TQuaternion.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="TVector3f.h">
+      <Filter>app</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -156,6 +165,15 @@
       <Filter>app</Filter>
     </ClCompile>
     <ClCompile Include="stb_image.c">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="TMatrix4x4.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="TVector3f.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="TQuaternion.cpp">
       <Filter>app</Filter>
     </ClCompile>
   </ItemGroup>

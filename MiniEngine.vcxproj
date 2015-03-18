@@ -109,6 +109,9 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TMatrix4x4.h" />
+    <ClInclude Include="TQuaternion.h" />
+    <ClInclude Include="TVector3f.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="files\MNArray.cpp" />
@@ -132,6 +135,9 @@
     <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="stb_image.c" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="TMatrix4x4.cpp" />
+    <ClCompile Include="TQuaternion.cpp" />
+    <ClCompile Include="TVector3f.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
