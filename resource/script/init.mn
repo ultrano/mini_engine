@@ -1,5 +1,4 @@
 
-
 var shaderStr = 
 "
     uniform   mat4 MATRIX_MVP;
@@ -40,43 +39,54 @@ GL.EnableVertexAttribArray(0);
 GL.EnableVertexAttribArray(1);
 GL.LinkProgram(programID);
 GL.UseProgram(programID);
+GL.Viewport(0, 0, 320, 480);
 
 var texLoc = GL.GetUniformLocation(programID, "TEXTURE_0");
 var mvpLoc = GL.GetUniformLocation(programID, "MATRIX_MVP");
 
-var mat = ::alloc(4*16);
-GL.LoadIdentity();
-GL.Ortho(-160, 160, -240, 240, -100, 1000);
-GL.MatrixMode(GL.MODELVIEW);
-GL.GetFloatv(GL.MODELVIEW_MATRIX, mat);
-GL.UniformMatrix(mvpLoc, mat);
-GL.Viewport(-100, -100, 320, 480);
+var modelMat    = mat4.new();
+var viewProjMat = mat4.new();
+viewProjMat.ortho(0, 320, 0, 480, -100, 1000);
 
-var tex = GL.LoadTexture("../resource/texture/test.png");
+var tex = GL.LoadTexture("../resource/texture/flappy_bird.png");
 GL.BindTexture(texLoc, tex.id);
-print("tex.id: ",tex.id);
-print("tex.w: ",tex.width);
-print("tex.h: ",tex.height);
 
 
 var posx = 0, posy = 0;
+var fi = func()
+{
+	while(true) 
+	{
+		var i=0;
+		while (i<200)
+		{
+		  modelMat.transform(1,1,1, 0,0,0,1, posx + i*2, posy,0);
+		  modelMat.mult(viewProjMat);
+		  ::GL.UniformMatrix(mvpLoc, modelMat);
+		  ::GL.DrawRegion(tex.id, tex.width, tex.height, 264, 90, 18, 18);
+		  i += 1;
+		  yield;
+		}
+	}
+};
+fi = fiber.new(fi);
+
 var displayCallback = func()
 {
-  GL.DrawRegion(tex.id, tex.width, tex.height, posx, posy, tex.width, tex.height);
+	::GL.ClearColor(1,0,0,1);
+	::GL.Clear(true);
+	fi.next();
 };
 
 var inputCallback = func (state, x, y)
 {
 	::print("state: " + state + ", x: " + x + ", y: " + y);
 	posx = x;
-	posy = y;
-	::GL.ClearColor(1,x/320.0,y/480.0,1);
-	::GL.Clear(true);
+	posy = 480-y;
 };
 
 var idleCallback = func()
 {
-	//::print("idle");
 };
 
 ::insert("displayCallback", displayCallback);

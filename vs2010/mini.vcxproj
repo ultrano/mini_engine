@@ -113,6 +113,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\app\App.cpp" />
     <ClCompile Include="..\app\MiniEngine.cpp" />
     <ClCompile Include="..\app\OpenGL.cpp" />
     <ClCompile Include="..\app\stb_image.c" />
