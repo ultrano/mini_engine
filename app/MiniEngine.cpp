@@ -1,17 +1,16 @@
 // MiniEngine.cpp : 콘솔 응용 프로그램에 대한 진입점을 정의합니다.
 //
 
-#include "stdafx.h"
-#include "files\MNGlobal.h"
-#include "files\MNFiber.h"
-#include "files\MNTable.h"
-#include "files\MNCompiler.h"
-#include "files\MNString.h"
-#include "files\MNFunction.h"
-#include "files\MNClosure.h"
-#include "files\MNLexer.h"
-#include "files\MNCompiler.h"
-#include "files\MNUserData.h"
+#include "MNGlobal.h"
+#include "MNFiber.h"
+#include "MNTable.h"
+#include "MNCompiler.h"
+#include "MNString.h"
+#include "MNFunction.h"
+#include "MNClosure.h"
+#include "MNLexer.h"
+#include "MNCompiler.h"
+#include "MNUserData.h"
 
 #include "OpenGL.h"
 #include "App.h"
@@ -86,7 +85,7 @@ void callbackKeyboardUp( unsigned char key, int x, int y )
 	//SW_GC.onKeyChange( key, false );
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int main()
 {
 	//! opengl
 	{

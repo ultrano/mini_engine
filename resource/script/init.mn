@@ -52,7 +52,7 @@ GL.GetFloatv(GL.MODELVIEW_MATRIX, mat);
 GL.UniformMatrix(mvpLoc, mat);
 GL.Viewport(-100, -100, 320, 480);
 
-var tex = GL.LoadTexture("./test.png");
+var tex = GL.LoadTexture("../resource/texture/test.png");
 GL.BindTexture(texLoc, tex.id);
 print("tex.id: ",tex.id);
 print("tex.w: ",tex.width);

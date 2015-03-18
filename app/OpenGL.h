@@ -1,8 +1,8 @@
 #ifndef _H_OpenGL
 #define _H_OpenGL
 
-#include "open\glew.h"
-#include "open\glut.h"
+#include "glew.h"
+#include "glut.h"
 
 class MNFiber;
 GLuint glLoadTexture(const char* fileName, int& width, int& height);

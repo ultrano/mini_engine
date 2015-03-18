@@ -1,7 +1,7 @@
 #include "OpenGL.h"
-#include "files\MNFiber.h"
-#include "files\MNString.h"
-#include "files\MNUserData.h"
+#include "MNFiber.h"
+#include "MNString.h"
+#include "MNUserData.h"
 #include "stb_image.h"
 
 #define glLog printf

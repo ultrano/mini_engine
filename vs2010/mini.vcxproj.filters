@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="main">
-      <UniqueIdentifier>{f7013cba-fe3c-4b87-b4cd-a9c0296f94f8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -27,139 +24,157 @@
     <ClInclude Include="targetver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNArray.h">
+    <ClInclude Include="..\core\MNArray.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNClassBond.h">
+    <ClInclude Include="..\core\MNClassBond.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNClosure.h">
+    <ClInclude Include="..\core\MNClosure.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNCollectable.h">
+    <ClInclude Include="..\core\MNCollectable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNCommand.h">
+    <ClInclude Include="..\core\MNCommand.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNCompiler.h">
+    <ClInclude Include="..\core\MNCompiler.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNCountable.h">
+    <ClInclude Include="..\core\MNCountable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNFiber.h">
+    <ClInclude Include="..\core\MNFiber.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNFunction.h">
+    <ClInclude Include="..\core\MNFunction.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNGlobal.h">
+    <ClInclude Include="..\core\MNGlobal.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNLexer.h">
+    <ClInclude Include="..\core\MNLexer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNMemory.h">
+    <ClInclude Include="..\core\MNList.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNObject.h">
+    <ClInclude Include="..\core\MNMemory.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNPrimaryType.h">
+    <ClInclude Include="..\core\MNObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNReferrer.h">
+    <ClInclude Include="..\core\MNPrimaryType.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNRtti.h">
+    <ClInclude Include="..\core\MNReferrer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNString.h">
+    <ClInclude Include="..\core\MNRtti.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNTable.h">
+    <ClInclude Include="..\core\MNString.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\MNUserData.h">
+    <ClInclude Include="..\core\MNTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\OpenGL.h">
-      <Filter>main</Filter>
-    </ClInclude>
-    <ClInclude Include="..\App.h">
-      <Filter>main</Filter>
-    </ClInclude>
-    <ClInclude Include="..\files\MNList.h">
+    <ClInclude Include="..\core\MNUserData.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\stb_image.h">
-      <Filter>main</Filter>
+    <ClInclude Include="..\app\App.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\app\OpenGL.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\app\stb_image.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\app\TMatrix4x4.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\app\TQuaternion.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\app\TVector3f.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNArray.cpp">
+    <ClCompile Include="..\core\MNArray.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNClosure.cpp">
+    <ClCompile Include="..\core\MNClosure.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNCollectable.cpp">
+    <ClCompile Include="..\core\MNCollectable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNCommand.cpp">
+    <ClCompile Include="..\core\MNCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNCompiler.cpp">
+    <ClCompile Include="..\core\MNCompiler.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNCountable.cpp">
+    <ClCompile Include="..\core\MNCountable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNFiber.cpp">
+    <ClCompile Include="..\core\MNFiber.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNFunction.cpp">
+    <ClCompile Include="..\core\MNFunction.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNGlobal.cpp">
+    <ClCompile Include="..\core\MNGlobal.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNLexer.cpp">
+    <ClCompile Include="..\core\MNLexer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNMemory.cpp">
+    <ClCompile Include="..\core\MNMemory.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNObject.cpp">
+    <ClCompile Include="..\core\MNObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNPrimaryType.cpp">
+    <ClCompile Include="..\core\MNPrimaryType.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNReferrer.cpp">
+    <ClCompile Include="..\core\MNReferrer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNString.cpp">
+    <ClCompile Include="..\core\MNString.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNTable.cpp">
+    <ClCompile Include="..\core\MNTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\files\MNUserData.cpp">
+    <ClCompile Include="..\core\MNUserData.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\MiniEngine.cpp">
-      <Filter>main</Filter>
+    <ClCompile Include="..\app\MiniEngine.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\stb_image.c">
-      <Filter>main</Filter>
+    <ClCompile Include="..\app\OpenGL.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\OpenGL.cpp">
-      <Filter>main</Filter>
+    <ClCompile Include="..\app\stb_image.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\app\TMatrix4x4.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\app\TQuaternion.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\app\TVector3f.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
