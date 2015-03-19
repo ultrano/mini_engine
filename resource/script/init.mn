@@ -1,69 +1,15 @@
 
-var shaderStr = 
-"
-    uniform   mat4 MATRIX_MVP;
-    uniform sampler2D TEXTURE_0;
-    
-    varying   vec2 v_tex;
+dofile("opengl.mn");
 
-    #ifdef VERTEX_SHADER
-    
-    attribute vec4 pos;
-    attribute vec2 tex;
-    
-    void main()
-    {
-       gl_Position = MATRIX_MVP * pos;
-       v_tex = tex;
-    }
-    
-    #endif
-    
-    #ifdef FRAGMENT_SHADER
-    #ifdef GL_ES
-    precision mediump float;
-    #endif
-    
-    void main()
-    {
-       gl_FragColor = texture2D( TEXTURE_0, v_tex );
-    }
-    
-    #endif
-";
-
-var programID = GL.LoadProgram(shaderStr);
-GL.BindAttribLocation(programID, 0, "pos");
-GL.BindAttribLocation(programID, 1, "tex");
-GL.EnableVertexAttribArray(0);
-GL.EnableVertexAttribArray(1);
-GL.LinkProgram(programID);
-GL.UseProgram(programID);
-GL.Viewport(0, 0, 320, 480);
-
-var texLoc = GL.GetUniformLocation(programID, "TEXTURE_0");
-var mvpLoc = GL.GetUniformLocation(programID, "MATRIX_MVP");
-
-var modelMat    = mat4.new();
-var viewProjMat = mat4.new();
-viewProjMat.ortho(0, 320, 0, 480, -100, 1000);
-
-var tex = GL.LoadTexture("../resource/texture/flappy_bird.png");
-GL.BindTexture(texLoc, tex.id);
-
-
-var posx = 0, posy = 0;
 var fi = func()
 {
+	var img = ::LoadImage("../resource/texture/flappy_bird.png", 264, 90, 18, 18);
 	while(true) 
 	{
 		var i=0;
 		while (i<200)
 		{
-		  modelMat.transform(1,1,1, 0,0,0,1, posx + i*2, posy,0);
-		  modelMat.mult(viewProjMat);
-		  ::GL.UniformMatrix(mvpLoc, modelMat);
-		  ::GL.DrawRegion(tex.id, tex.width, tex.height, 264, 90, 18, 18);
+		  img.draw(::input.touchX + i*2, ::input.touchY);
 		  i += 1;
 		  yield;
 		}
@@ -78,11 +24,12 @@ var displayCallback = func()
 	fi.next();
 };
 
+::insert("input", {touchX:0, touchY:0, touchState:0});
 var inputCallback = func (state, x, y)
 {
-	::print("state: " + state + ", x: " + x + ", y: " + y);
-	posx = x;
-	posy = 480-y;
+	input.touchX = x;
+	input.touchY = 480-y;
+	input.touchState = state;
 };
 
 var idleCallback = func()
