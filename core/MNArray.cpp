@@ -12,7 +12,7 @@ struct Comparer
 
 MNArray::MNArray(tsize size)
 {
-	m_arr.resize(size);
+	m_arr.resize(200);
 }
 
 MNArray::~MNArray()
@@ -49,8 +49,13 @@ tboolean MNArray::remove(const MNObject& val)
 	Comparer comparer(val);
 	tarray<MNObject>::iterator itor = std::remove_if(m_arr.begin(), m_arr.end(), comparer);
 	bool ret = (itor != m_arr.end());
-	m_arr.erase(itor, m_arr.end());
+	if (ret) m_arr.erase(itor, m_arr.end());
 	return ret;
+}
+
+void  MNArray::clear()
+{
+	m_arr.clear();
 }
 
 tsize MNArray::count() const

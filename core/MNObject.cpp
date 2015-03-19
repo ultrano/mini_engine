@@ -107,7 +107,7 @@ MNObject& MNObject::assign(const MNObject& right)
 
 tint MNObject::getType() const
 {
-	if (valType == TObjectType::Referrer && val._ref->getHard() == 0) return TObjectType::Null;
+	if (((valType & TObjectType::Referrer) == 1) && val._ref->getHard() == 0) return TObjectType::Null;
 	return valType;
 }
 
@@ -115,6 +115,7 @@ thash32 MNObject::getHash() const
 {
 	switch (getType())
 	{
+	case TObjectType::Null : return 0;
 	case TObjectType::String: return toString()->ss().hash();
 	default: return (thash32)toRaw();
 	}

@@ -48,10 +48,16 @@ var modelMat    = mat4.new();
 var viewProjMat = mat4.new();
 viewProjMat.ortho(0, 320, 0, 480, -100, 1000);
 
+var cache = {};
 var loadImage = func(path, x, y, width, height)
 {
-	var tex = GL.LoadTexture("../resource/texture/flappy_bird.png");
-	GL.BindTexture(texLoc, tex.id);
+	var tex = cache[path];
+	if (tex == null)
+	{
+		tex = ::GL.LoadTexture(path);
+		::GL.BindTexture(texLoc, tex.id);
+		cache[path] = tex;
+	}
 	var image = 
 	{
 		tex : tex,

@@ -148,6 +148,15 @@ tboolean array_remove(MNFiber* fiber)
 	return true;
 }
 
+tboolean array_clear(MNFiber* fiber)
+{
+	const MNObject& obj = fiber->get(0);
+	MNArray* arr = obj.toArray();
+	if (!arr) return false;
+	arr->clear();
+	return false;
+}
+
 tboolean array_iterate(MNFiber* fiber)
 {
 	MNArray* arr = fiber->get(0).toArray();
@@ -470,6 +479,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 			root->up(1, 0);
 			root->push_string("remove");
 			root->push_closure(array_remove);
+			root->store_field();
+
+			root->up(1, 0);
+			root->push_string("clear");
+			root->push_closure(array_clear);
 			root->store_field();
 
 			root->up(1, 0);

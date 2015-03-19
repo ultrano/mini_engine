@@ -844,12 +844,13 @@ void  MNFiber::closeLinks(tint32 level)
 			tsize i = ov->index;
 			ul->close();
 			ul->dec();
-			setAt(i, MNObject::Null());
 			itor = m_openLinks.erase(itor);
 			continue;
 		}
 		++itor;
 	}
+	while (index < m_info->end) setAt(index++, MNObject::Null());
+	
 }
 
 tsize MNFiber::stackSize() const

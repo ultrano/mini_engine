@@ -515,7 +515,7 @@ void MNCompiler::_exp_mul_div(MNExp& e)
 	_exp_term(e);
 	while (e.type != MNExp::exp_none)
 	{
-		tbyte cmd = check('*')? cmd_mul:check('/')?cmd_div:cmd_none;
+		tbyte cmd = check('*')? cmd_mul:check('/')?cmd_div:check('%')? cmd_mod:cmd_none;
 		if (cmd == cmd_none) break;
 		advance();
 		_load(e);

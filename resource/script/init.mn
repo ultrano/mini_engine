@@ -1,39 +1,27 @@
 
-dofile("opengl.mn");
-
-var fi = func()
 {
-	var img = ::LoadImage("../resource/texture/flappy_bird.png", 264, 90, 18, 18);
-	while(true) 
-	{
-		var i=0;
-		while (i<200)
-		{
-		  img.draw(::input.touchX + i*2, ::input.touchY);
-		  i += 1;
-		  yield;
-		}
-	}
-};
-fi = fiber.new(fi);
+var arr1 = [];
+var arr2 = [];
+var tbl = {};
+}
+
+::print( ::GC());
 
 var displayCallback = func()
 {
-	::GL.ClearColor(1,0,0,1);
+	::GL.ClearColor(0,0,1,1);
 	::GL.Clear(true);
-	fi.next();
 };
 
-::insert("input", {touchX:0, touchY:0, touchState:0});
 var inputCallback = func (state, x, y)
 {
-	input.touchX = x;
-	input.touchY = 480-y;
-	input.touchState = state;
+		::print(::GC());
 };
 
 var idleCallback = func()
 {
+	::print("sdf");
+		::print(::GC());
 };
 
 ::insert("displayCallback", displayCallback);
