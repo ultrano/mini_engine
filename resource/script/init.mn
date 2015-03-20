@@ -46,7 +46,7 @@ var displayCallback = func()
 {
 	//::GL.ClearColor(0,0,1,1);
 	//::GL.Clear(true);
-	bg.draw(320, 480, 0, 0);
+	bg.draw(320, 480, 160, 240);
 	Bubble.exists.iterate(func(k,v) {v.draw();});
 	Bubble.exists.iterate(func(k,v) {v.update();});
 	Bubble.removes.iterate(func(k,v) {Bubble.exists.remove(v);});
@@ -60,7 +60,7 @@ var inputCallback = func (state, x, y)
 	input.touchX = x;
 	input.touchY = 480-y;
 	input.touchState = state;
-	::print(::GC());
+	//::print(::GC());
 };
 
 var idleCallback = func()

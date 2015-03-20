@@ -55,8 +55,8 @@ var loadImage = func(path, x, y, width, height)
 	if (tex == null)
 	{
 		tex = ::GL.LoadTexture(path);
-		::GL.BindTexture(texLoc, tex.id);
-		cache[path] = tex;
+		cache.insert(path, tex);
+		::print(tex.id);
 	}
 	var image = 
 	{
@@ -69,6 +69,7 @@ var loadImage = func(path, x, y, width, height)
 		{
 			modelMat.transform(width,height,1, 0,0,0,1, posx, posy,0);
 			modelMat.mult(viewProjMat);
+			::GL.BindTexture(texLoc, tex.id);
 			::GL.UniformMatrix(mvpLoc, modelMat);
 			::GL.DrawRegion(tex.id, tex.width, tex.height, x, y, w, h);
 		}
