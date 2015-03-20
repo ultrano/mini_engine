@@ -42,7 +42,7 @@ enum tok_type
 	tok_global     = 132,
 	tok_if         = 133,
 	tok_else       = 134,
-	//tok_for        = 135, //! not yet supported
+	tok_for        = 135,
 	tok_while      = 136,
 	//tok_switch     = 137, //! not yet supported
 	tok_case       = 138,
@@ -108,7 +108,7 @@ inline void reservedWords(MNLexer::Token& tok)
 	else if (tok.str == _null)     tok.type = tok_null;
 	else if (tok.str == _if)       tok.type = tok_if;
 	else if (tok.str == _else)     tok.type = tok_else;
-	//else if (tok.str == _for)      tok.type = tok_for; //! not yet supported
+	else if (tok.str == _for)      tok.type = tok_for;
 	else if (tok.str == _while)    tok.type = tok_while;
 	else if (tok.str == _true)     tok.type = tok_true;
 	else if (tok.str == _false)    tok.type = tok_false;

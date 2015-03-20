@@ -933,7 +933,6 @@ MNFiber::CallInfo* MNFiber::enterCall(tuint nargs, bool ret)
 
 	if (!cls->getThis().isNull()) setAt(m_info->begin, cls->getThis());
 
-	//! if it's c-function, call directly
 	if (func)
 	{
 		tsize sz = m_info->end - m_info->begin;

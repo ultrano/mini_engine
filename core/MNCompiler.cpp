@@ -296,6 +296,54 @@ void MNCompiler::_while()
 	code().modify(jmp, tint16(out_a - jmp_a));
 }
 
+void MNCompiler::_for()
+{
+	if (!check(tok_for)) return;
+	advance();
+	
+	//! for (exp1;exp2;exp3);
+
+	_exp(false); //! exp1
+
+	code() << cmd_jmp << tint16(sizeof(cmd_jmp) + sizeof(tint16));
+
+	tsize out_s = code().cursor;
+	tsize out   = (code() << cmd_jmp).cursor;
+	tsize out_a = (code() << tint16(0)).cursor;
+	m_func->breakouts.push_back(out_s);
+
+	_exp();
+
+	tsize cond_s = code().cursor;
+	tsize cond   = (code() << cmd_fjp).cursor;
+	tsize cond_a = (code() << tint16(0)).cursor;
+	code().modify(cond, out_s - cond_a);
+
+	tsize exp3_s = code().cursor;
+	tsize exp3   = (code() << cmd_jmp).cursor;
+	tsize exp3_a = (code() << tint16(0)).cursor;
+	m_func->playbacks.push_back(exp3_s);
+
+	_exp(false);
+
+	tsize exp2_s = code().cursor;
+	tsize exp2   = (code() << cmd_jmp).cursor;
+	tsize exp2_a = (code() << tint16(0)).cursor;
+
+	code().modify(exp2, cond_s - exp2_a);
+	code().modify(exp3, code().cursor - exp3_a);
+
+	_statement();
+
+	tsize end   = (code() << cmd_jmp).cursor;
+	tsize end_a = (code() << tint16(0)).cursor;
+	code().modify(end, exp3_a - end_a);
+	code().modify(out, end_a - out_a);
+
+	m_func->breakouts.pop_back();
+	m_func->playbacks.pop_back();
+}
+
 void MNCompiler::_break()
 {
 	if (!m_func->breakouts.size()) compile_error("wrong 'break' using");

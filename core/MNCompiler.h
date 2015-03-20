@@ -108,6 +108,7 @@ public:
 	void _block();
 	void _if();
 	void _while();
+	void _for();
 	void _break();
 	void _continue();
 	void _func();
