@@ -589,8 +589,7 @@ tsize MNGlobal::GC()
 {
 	//! clear marks in heap
 	{
-		MNCollectable* gct = m_heap;
-		for (; gct != NULL && gct != m_heap; gct = gct->m_next) gct->unmark();
+		for (MNCollectable* gct = m_heap; gct != NULL; gct = gct->m_next) gct->unmark();
 	}
 
 	//! make mark travel from root
