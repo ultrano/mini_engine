@@ -147,7 +147,7 @@ GLuint glLoadProgram(const char* source)
 
 void  glDrawRegion(int id, int srcWidth, int srcHeight, int offX, int offY, int width, int height)
 {
-	static tfloat ver[][3] = { {-10.0f, +10.0f, 0}, {+10.0f, +10.0f, 0}, {-10.0f, -10.0f, 0}, {+10.0f, -10.0f, 0}};
+	static tfloat ver[][3] = { { -0.5f, +0.5f, 0 }, { +0.5f, +0.5f, 0 }, { -0.5f, -0.5f, 0 }, { +0.5f, -0.5f, 0 } };
 	static tushort ind[][3] = { {0,1,2}, {3,2,1}};
 
 	tfloat x = (float)offX/(float)srcWidth;

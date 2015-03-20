@@ -12,7 +12,7 @@ struct Comparer
 
 MNArray::MNArray(tsize size)
 {
-	m_arr.resize(200);
+	m_arr.resize(size);
 }
 
 MNArray::~MNArray()

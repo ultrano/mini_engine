@@ -65,9 +65,9 @@ var loadImage = func(path, x, y, width, height)
 		y : y,
 		w : width,
 		h : height,
-		draw : func(posx, posy)
+		draw : func(width, height, posx, posy)
 		{
-			modelMat.transform(1,1,1, 0,0,0,1, posx, posy,0);
+			modelMat.transform(width,height,1, 0,0,0,1, posx, posy,0);
 			modelMat.mult(viewProjMat);
 			::GL.UniformMatrix(mvpLoc, modelMat);
 			::GL.DrawRegion(tex.id, tex.width, tex.height, x, y, w, h);
