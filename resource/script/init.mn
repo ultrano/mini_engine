@@ -1,9 +1,81 @@
 
+dofile("opengl.mn");
 
-for (var i=0;i<10;i+=1)
+var bg = ::LoadImage("../resource/texture/bg.png", 0, 0, 320, 480);
+var Bubble = 
 {
-	if (i == 5) continue;
-	print(i);
-}
+	exists : [],
+	removes : [],
+	new : func()
+	{
+		var img = ::LoadImage("../resource/texture/balls.png", 0, 0, 100, 100);
+		var obj = 
+		{
+			pos : ::vec3.new(::random()%320, 0, 0),
+			dir : ::vec3.new(::random()%100 - 50, ::random()%100 - 50, 0),
+			img : img,
+			update : func()
+			{
+				dir.normalize();
+				pos.x += dir.x;
+				pos.y += dir.y;
+				var len = pos.lengthXYZ(::input.touchX, ::input.touchY, 0);
+				if (len < 10) Bubble.removes.add(this);
+				else if (pos.y > 480) Bubble.removes.add(this);
+				else if (pos.x > 320) Bubble.removes.add(this);
+				else if (pos.y < 0) Bubble.removes.add(this);
+				else if (pos.x < 0) Bubble.removes.add(this);
+			},
+			draw : func()
+			{
+				img.draw(20, 20, pos.x, pos.y);
+			}
+		};
+		exists.add(obj);
+	}
+};
 
-print("end");
+var maxBubbles = 200;
+var i = 0;
+while (i < maxBubbles)
+{
+	Bubble.new();
+	i += 1;
+}
+var displayCallback = func()
+{
+	//::GL.ClearColor(0,0,1,1);
+	//::GL.Clear(true);
+	bg.draw(320, 480, 160, 240);
+	Bubble.exists.iterate(func(k,v) {v.draw();});
+};
+
+::insert("input", {touchX:0, touchY:0, touchState:0});
+var inputCallback = func (state, x, y)
+{
+	input.touchX = x;
+	input.touchY = 480-y;
+	input.touchState = state;
+	//::print(::GC());
+};
+
+var lastTick = ::getTick();
+var fps = 1.0/60.0;
+var accum = 0;
+var idleCallback = func()
+{
+	var newTick = ::getTick();
+	var deltaTick = newTick - lastTick;
+	lastTick = newTick;
+	for (accum += deltaTick / 1000.0; accum > fps;accum -= fps)
+	{
+		Bubble.exists.iterate(func(k,v) {v.update();});
+		Bubble.removes.iterate(func(k,v) {Bubble.exists.remove(v);});
+		Bubble.removes.clear();
+		if (Bubble.exists.count() < maxBubbles) Bubble.new();
+	}
+};
+
+::insert("displayCallback", displayCallback);
+::insert("inputCallback", inputCallback);
+::insert("idleCallback", idleCallback);

@@ -4,6 +4,8 @@
 #include "MNUserData.h"
 #include "MNString.h"
 
+#include <Windows.h>
+
 void exposeApp( MNFiber* fiber )
 {
 	fiber->push_string("rootPath");
@@ -66,11 +68,11 @@ void exposeApp( MNFiber* fiber )
 			if (!ud) return false;
 			if (ud->getSize() != sizeof(TMatrix4x4)) return false;
 			TMatrix4x4* mat = (TMatrix4x4*)ud->getData();
-			float fov    = fi->get(1).toFloat();
-			float aspect = fi->get(2).toFloat();
-			float near   = fi->get(3).toFloat();
-			float far    = fi->get(4).toFloat();
-			mat->perspective(fov, aspect, near, far);
+			float _fov    = fi->get(1).toFloat();
+			float _aspect = fi->get(2).toFloat();
+			float _near   = fi->get(3).toFloat();
+			float _far    = fi->get(4).toFloat();
+			mat->perspective(_fov, _aspect, _near, _far);
 			return false;
 		}
 
@@ -357,9 +359,20 @@ void exposeApp( MNFiber* fiber )
 			fiber->push_int(rand());
 			return true;
 		}
+
+		static bool getTick(MNFiber* fiber)
+		{
+			tint32 tick = (GetTickCount()%INT_MAX);
+			fiber->push_int(tick);
+			return true;
+		}
 	};
 
 	fiber->push_string("random");
 	fiber->push_closure(common::random);
+	fiber->store_global();
+
+	fiber->push_string("getTick");
+	fiber->push_closure(common::getTick);
 	fiber->store_global();
 }

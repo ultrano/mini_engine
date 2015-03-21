@@ -592,10 +592,9 @@ void MNCompiler::_exp_term(MNExp& e)
 	if (check('-')) cmd = cmd_neg;
 	if (cmd != cmd_none) advance();
 	_exp_postfix(e);
-	if (cmd != cmd_none)
+	switch (cmd)
 	{
-		_load(e);
-		code() << cmd;
+	case cmd_neg: _load(e); code() << cmd; break;
 	}
 }
 
