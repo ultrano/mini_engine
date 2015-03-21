@@ -12,7 +12,7 @@ var Bubble =
 		var obj = 
 		{
 			pos : ::vec3.new(::random()%320, 0, 0),
-			dir : ::vec3.new(::random()%100 - 50, ::random()%100 - 50, 0),
+			dir : ::vec3.new(::random()%100 - 50, ::random()%100, 0),
 			img : img,
 			update : func()
 			{
@@ -35,13 +35,7 @@ var Bubble =
 	}
 };
 
-var maxBubbles = 200;
-var i = 0;
-while (i < maxBubbles)
-{
-	Bubble.new();
-	i += 1;
-}
+var maxBubbles = 100;
 var displayCallback = func()
 {
 	//::GL.ClearColor(0,0,1,1);
@@ -57,10 +51,11 @@ var inputCallback = func (state, x, y)
 	input.touchY = 480-y;
 	input.touchState = state;
 	//::print(::GC());
+	::print("exist count: ", Bubble.exists.count());
 };
 
 var lastTick = ::getTick();
-var fps = 1.0/60.0;
+var fps = 1.0/30.0;
 var accum = 0;
 var idleCallback = func()
 {
