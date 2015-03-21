@@ -28,7 +28,7 @@ public:
 		tsize newtPos = cursor + sizeof(T);
 		if (newtPos > size)
 		{
-			tsize  newSize = (newtPos + 32);
+			tsize  newSize = (newtPos + 128);
 			tbyte* newBytes = (tbyte*)MNMemory::malloc(newSize);
 			memcpy(newBytes, bytes, size);
 			MNMemory::free(bytes);

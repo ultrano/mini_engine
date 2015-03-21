@@ -170,6 +170,7 @@ tboolean MNCompiler::_statement()
 	//else if (ret = check(tok_for));
 	//else if (ret = check(tok_switch));
 	else if (ret = check(tok_while)) _while();
+	else if (ret = check(tok_for)) _for();
 	else if (ret = check(tok_func)) _func();
 	else if (ret = check('{')) _block();
 	else if (ret = check(tok_return))
@@ -303,45 +304,57 @@ void MNCompiler::_for()
 	
 	//! for (exp1;exp2;exp3);
 
-	_exp(false); //! exp1
+	if (!check('(')) compile_error("it's wrong condition for 'for'"); else advance();
+
+	tsize nlocals = m_func->locals.size();
+	if (check(tok_var)) _var();
+	else _exp(false); //! exp1
+
+	if (!check(';')) compile_error("';' is missing in 'for'"); else advance();
 
 	code() << cmd_jmp << tint16(sizeof(cmd_jmp) + sizeof(tint16));
 
 	tsize out_s = code().cursor;
 	tsize out   = (code() << cmd_jmp).cursor;
 	tsize out_a = (code() << tint16(0)).cursor;
-	m_func->breakouts.push_back(out_s);
 
 	_exp();
 
-	tsize cond_s = code().cursor;
+	if (!check(';')) compile_error("';' is missing in 'for'"); else advance();
+
 	tsize cond   = (code() << cmd_fjp).cursor;
 	tsize cond_a = (code() << tint16(0)).cursor;
-	code().modify(cond, out_s - cond_a);
 
-	tsize exp3_s = code().cursor;
 	tsize exp3   = (code() << cmd_jmp).cursor;
 	tsize exp3_a = (code() << tint16(0)).cursor;
-	m_func->playbacks.push_back(exp3_s);
 
 	_exp(false);
 
-	tsize exp2_s = code().cursor;
+	if (!check(')')) compile_error("')' is missing in 'for'"); else advance();
+
 	tsize exp2   = (code() << cmd_jmp).cursor;
 	tsize exp2_a = (code() << tint16(0)).cursor;
 
-	code().modify(exp2, cond_s - exp2_a);
-	code().modify(exp3, code().cursor - exp3_a);
-
+	m_func->breakouts.push_back(out_s);
+	m_func->playbacks.push_back(exp3_a);
 	_statement();
+	m_func->breakouts.pop_back();
+	m_func->playbacks.pop_back();
 
 	tsize end   = (code() << cmd_jmp).cursor;
 	tsize end_a = (code() << tint16(0)).cursor;
-	code().modify(end, exp3_a - end_a);
-	code().modify(out, end_a - out_a);
 
-	m_func->breakouts.pop_back();
-	m_func->playbacks.pop_back();
+	if (nlocals < m_func->locals.size())
+	{
+		m_func->locals.resize(nlocals);
+		code() << cmd_close_links << tuint16(nlocals);
+	}
+
+	code().modify(cond, tint16(out_s - cond_a));
+	code().modify(exp2, tint16(out_a - exp2_a));
+	code().modify(exp3, tint16(exp2_a - exp3_a));
+	code().modify(end,  tint16(exp3_a - end_a));
+	code().modify(out,  tint16(end_a - out_a));
 }
 
 void MNCompiler::_break()
