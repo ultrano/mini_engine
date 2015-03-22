@@ -117,7 +117,7 @@ thash32 MNObject::getHash() const
 	{
 	case TObjectType::Null : return 0;
 	case TObjectType::String: return toString()->ss().hash();
-	default: return (thash32)toRaw();
+	default: return reinterpret_cast<thash64>(toRaw());
 	}
 	return 0;
 }

@@ -5,6 +5,8 @@
 #include "MNMemory.h"
 #include "MNRtti.h"
 
+class MNReferrer;
+
 class MNCountable : public MNMemory
 {
 	MN_RTTI_ROOT(MNCountable);

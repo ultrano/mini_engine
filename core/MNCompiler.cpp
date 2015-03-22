@@ -12,7 +12,7 @@ public:
 	tstring msg;
 };
 
-#define compile_error(format, ...) compile_error_print(m_current.row, m_current.col, (format), __VA_ARGS__)
+#define compile_error(format, ...) compile_error_print(m_current.row, m_current.col, (format), ##__VA_ARGS__)
 void compile_error_print(tsize row, tsize col, const tchar* format, ...)
 {
 	static const tuint bufSize = 512;
@@ -715,7 +715,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 	else if (check(tok_integer))
 	{
 		tint num = 0;
-		sscanf_s( m_current.str.str().c_str(), "%d", &num );
+		sscanf( m_current.str.str().c_str(), "%d", &num );
 		code() << cmd_push_int << num;
 		e.type = MNExp::exp_loaded;
 		advance();
@@ -723,7 +723,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 	else if (check(tok_float))
 	{
 		float num = 0;
-		sscanf_s( m_current.str.str().c_str(), "%f", &num );
+		sscanf( m_current.str.str().c_str(), "%f", &num );
 		code() << cmd_push_float << num;
 		e.type = MNExp::exp_loaded;
 		advance();

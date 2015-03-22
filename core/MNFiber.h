@@ -92,8 +92,8 @@ public:
 		
 	void equals();
 	void less_than();
-	void and();
-	void or();
+	void both();
+	void either();
 
 	void tostring();
 

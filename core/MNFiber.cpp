@@ -9,6 +9,8 @@
 #include "MNCompiler.h"
 #include "MNUserData.h"
 
+#include <math.h>
+
 void unaryOp(MNFiber* fiber, const tstring& opStr, const MNObject& val, MNObject& ret)
 {
 	MNObject meta  = val.toCollectable()->getMeta();
@@ -579,7 +581,7 @@ void MNFiber::less_than()
 	push(ret);
 }
 
-void MNFiber::and()
+void MNFiber::both()
 {
 	MNObject left = get(-2);
 	MNObject right = get(-1);
@@ -588,7 +590,7 @@ void MNFiber::and()
 	push(MNObject::Bool((left.toBool() && right.toBool())));
 }
 
-void MNFiber::or()
+void MNFiber::either()
 {
 	MNObject left = get(-2);
 	MNObject right = get(-1);
@@ -1183,8 +1185,8 @@ tint32 MNFiber::excuteCall()
 					}
 				}
 				break;
-			case cmd_and: and(); break;
-			case cmd_or : or();  break;
+			case cmd_and: both(); break;
+			case cmd_or : either();  break;
 			case cmd_tostring: tostring(); break;
 			case cmd_neg     : neg(); break;
 			case cmd_add     : add(); break;
