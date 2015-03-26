@@ -1,3 +1,28 @@
 
 
+::print("stack size: ",::stackSize());
 ::print("back to the pure");
+
+func nonLiteral()
+{
+	::print("it's not literal function");
+}
+nonLiteral();
+
+var local = 
+{
+	newFunc : func ()
+	{
+		func nonLiteralInsideFunc()
+		{
+			::print("nonLiteral inside func!");
+		}
+	}
+};
+
+local.newFunc();
+local.nonLiteralInsideFunc();
+
+::print("stack size: ",::stackSize());
+//::iterate(func(k,v){::print(k);});
+

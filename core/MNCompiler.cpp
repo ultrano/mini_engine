@@ -171,7 +171,7 @@ tboolean MNCompiler::_statement()
 	//else if (ret = check(tok_switch));
 	else if (ret = check(tok_while)) _while();
 	else if (ret = check(tok_for)) _for();
-	else if (ret = check(tok_func)) _func();
+	else if (ret = check(tok_func)) _func(false);
 	else if (ret = check('{')) _block();
 	else if (ret = check(tok_return))
 	{
@@ -381,10 +381,21 @@ void MNCompiler::_continue()
 	code().modify(jmp, step);
 }
 
-void MNCompiler::_func()
+void MNCompiler::_func(bool isLiteral)
 {
 	if (!check(tok_func)) return;
 	advance();
+
+	if (isLiteral && check(tok_identify)) compile_error("literal function doesn't need name");
+	else if (!isLiteral && !check(tok_identify)) compile_error("function needs name");
+
+	if (!isLiteral)
+	{
+		tuint16 index = m_func->addConst(MNObject::String(m_current.str));
+		code() << cmd_load_this;
+		code() << cmd_load_const << index;
+		advance();
+	}
 
 	MNFuncBuilder* func = new MNFuncBuilder(m_func);
 	m_func = func;
@@ -423,6 +434,8 @@ void MNCompiler::_func()
 		code() << cmd << e.index;
 	}
 	delete func;
+
+	if (!isLiteral) code() << cmd_insert_field;
 }
 
 void MNCompiler::_return()
@@ -680,7 +693,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 	}
 	else if (check(tok_func))
 	{
-		_func();
+		_func(true);
 		e.type = MNExp::exp_loaded;
 	}
 	else if (check(tok_yield))

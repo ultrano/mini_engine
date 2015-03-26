@@ -52,7 +52,8 @@ public:
 	UpLink*         openLink(tint32 index);
 	void            closeLinks(tint32 level);
 
-	tsize           stackSize() const;
+	tsize           localSize() const;
+	tsize			stackSize() const;
 
 	void            setStatus(tbyte status);
 	tbyte           getStatus() const;

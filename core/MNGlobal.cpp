@@ -11,7 +11,7 @@
 
 tboolean common_print(MNFiber* fiber)
 {
-	tsize sz = fiber->stackSize();
+	tsize sz = fiber->localSize();
 	for (tsize i = 1; i < sz; ++i)
 	{
 		fiber->load_stack(i);
@@ -86,6 +86,12 @@ tboolean common_dofile(MNFiber* fiber)
 	MNString* path = arg1.toString();
 	fiber->push_bool(fiber->dofile(path->ss().str()));
 
+	return true;
+}
+
+tboolean common_stackSize(MNFiber* fiber)
+{
+	fiber->push_int(fiber->stackSize());
 	return true;
 }
 
@@ -290,7 +296,7 @@ tboolean fiber_value(MNFiber* fiber)
 
 tboolean closure_call(MNFiber* fiber)
 {
-	fiber->call(fiber->stackSize() - 1, true);
+	fiber->call(fiber->localSize() - 1, true);
 	return true;
 }
 
@@ -355,6 +361,11 @@ MNGlobal::MNGlobal(MNFiber* root)
 		root->push_closure(common_dofile);
 		root->store_field();
 
+		root->up(1, 0);
+		root->push_string("stackSize");
+		root->push_closure(common_stackSize);
+		root->store_field();
+		
 		root->up(1, 0);
 		root->push_string("alloc");
 		root->push_closure(common_alloc);

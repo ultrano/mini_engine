@@ -855,12 +855,16 @@ void  MNFiber::closeLinks(tint32 level)
 		++itor;
 	}
 	while (index < m_info->end) setAt(index++, MNObject::Null());
-	
+}
+
+tsize MNFiber::localSize() const
+{
+	return m_info->end - m_info->begin;
 }
 
 tsize MNFiber::stackSize() const
 {
-	return m_info->end - m_info->begin;
+	return m_info->end;
 }
 
 void  MNFiber::setStatus(tbyte status)

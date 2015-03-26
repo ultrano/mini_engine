@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\core\MNArray.h" />
+    <ClInclude Include="..\core\MNClass.h" />
     <ClInclude Include="..\core\MNClassBond.h" />
     <ClInclude Include="..\core\MNClosure.h" />
     <ClInclude Include="..\core\MNCollectable.h" />

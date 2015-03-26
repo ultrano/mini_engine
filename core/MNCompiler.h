@@ -111,7 +111,7 @@ public:
 	void _for();
 	void _break();
 	void _continue();
-	void _func();
+	void _func(bool isLiteral);
 	void _return();
 
 	void _load(MNExp& e);
