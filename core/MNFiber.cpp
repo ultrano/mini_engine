@@ -102,10 +102,15 @@ MNGlobal* MNFiber::global() const
 
 bool MNFiber::compileFile(MNObject& func, const tstring& path)
 {
-	push_string("rootPath"); //! ["rootPath"]
-	load_global();           //! [rootPath]
-	push_string(path);       //! [rootPath path]
-	add();                   //! [fullPath]
+	push_string(path); //! [path]
+	push_string("rootPath"); //! [path "rootPath"]
+	load_global();           //! [path rootPath]
+	if (get(-1).isString()) //! [path rootPath]
+	{
+		swap();//! [rootPath path]
+		add(); //! [fullPath]
+	}
+	else pop(1); //! [path]
 
 	MNObject fullPath = get(-1);
 	if (!fullPath.isString()) return false;

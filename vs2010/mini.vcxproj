@@ -83,12 +83,6 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\app\App.h" />
-    <ClInclude Include="..\app\OpenGL.h" />
-    <ClInclude Include="..\app\stb_image.h" />
-    <ClInclude Include="..\app\TMatrix4x4.h" />
-    <ClInclude Include="..\app\TQuaternion.h" />
-    <ClInclude Include="..\app\TVector3f.h" />
     <ClInclude Include="..\core\MNArray.h" />
     <ClInclude Include="..\core\MNClassBond.h" />
     <ClInclude Include="..\core\MNClosure.h" />
@@ -113,13 +107,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\app\App.cpp" />
     <ClCompile Include="..\app\MiniEngine.cpp" />
-    <ClCompile Include="..\app\OpenGL.cpp" />
-    <ClCompile Include="..\app\stb_image.c" />
-    <ClCompile Include="..\app\TMatrix4x4.cpp" />
-    <ClCompile Include="..\app\TQuaternion.cpp" />
-    <ClCompile Include="..\app\TVector3f.cpp" />
     <ClCompile Include="..\core\MNArray.cpp" />
     <ClCompile Include="..\core\MNClosure.cpp" />
     <ClCompile Include="..\core\MNCollectable.cpp" />
