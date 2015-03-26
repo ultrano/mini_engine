@@ -63,10 +63,11 @@ tsize MNArray::count() const
 	return m_arr.size();
 }
 
-tboolean MNArray::iterate(tsize index, MNObject& val) const
+tboolean MNArray::iterate(tsize& itor, MNObject& val) const
 {
-	if (index >= m_arr.size()) return false;
-	val = m_arr[index];
+	if (itor >= m_arr.size()) return false;
+	val = m_arr[itor];
+	++itor;
 	return true;
 }
 

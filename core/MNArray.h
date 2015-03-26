@@ -18,7 +18,7 @@ public:
 	tboolean tryGet(const MNObject& key, MNObject& val) const;
 	tboolean trySet(const MNObject& key, const MNObject& val);
 	tsize    count() const;
-	tboolean iterate(tsize index, MNObject& val) const;
+	tboolean iterate(tsize& itor, MNObject& val) const;
 protected:
 	virtual void travelMark();
 private:

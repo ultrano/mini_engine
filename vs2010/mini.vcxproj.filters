@@ -146,5 +146,8 @@
     <ClCompile Include="..\app\MiniEngine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="..\core\MNClass.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -110,6 +110,7 @@
   <ItemGroup>
     <ClCompile Include="..\app\MiniEngine.cpp" />
     <ClCompile Include="..\core\MNArray.cpp" />
+    <ClCompile Include="..\core\MNClass.cpp" />
     <ClCompile Include="..\core\MNClosure.cpp" />
     <ClCompile Include="..\core\MNCollectable.cpp" />
     <ClCompile Include="..\core\MNCommand.cpp" />

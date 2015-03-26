@@ -448,6 +448,25 @@ void MNCompiler::_return()
 	code() << (hasRet ? cmd_return : cmd_return_void);
 }
 
+void MNCompiler::_class(bool isLiteral)
+{
+	if (!check(tok_class)) return;
+	advance();
+
+	if (isLiteral && check(tok_identify)) compile_error("literal class doesn't need name");
+	else if (!isLiteral && !check(tok_identify)) compile_error("class needs name");
+
+	if (!isLiteral)
+	{
+		tuint16 index = m_func->addConst(MNObject::String(m_current.str));
+		code() << cmd_load_this;
+		code() << cmd_load_const << index;
+		advance();
+	}
+
+	
+}
+
 void MNCompiler::_load(MNExp& e)
 {
 	switch ( e.type )

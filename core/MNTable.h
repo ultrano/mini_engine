@@ -19,7 +19,7 @@ public:
 	void     clear();
 	tsize    count() const;
 	tsize    total() const;
-	tboolean iterate(tsize index, MNObject& key, MNObject& val) const;
+	tboolean iterate(tsize& itor, MNObject& key, MNObject& val) const;
 private:
 	struct Node;
 

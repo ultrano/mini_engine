@@ -170,13 +170,13 @@ tboolean array_iterate(MNFiber* fiber)
 
 	if (!fiber->get(1).isClosure()) return false;
 
-	tsize index = 0;
+	tsize itor = 0;
 	MNObject val;
-	while (arr->iterate(index++, val))
+	while (arr->iterate(itor, val))
 	{
 		fiber->load_stack(1);
 		fiber->load_stack(0);
-		fiber->push_int(index - 1);
+		fiber->push_int(itor - 1);
 		fiber->push(val);
 		fiber->call(3, true);
 		bool ret = fiber->get(-1).toBool(true);
@@ -217,9 +217,9 @@ tboolean table_iterate(MNFiber* fiber)
 
 	if (!fiber->get(1).isClosure()) return false;
 
-	tsize index = 0;
+	tsize itor = 0;
 	MNObject key, val;
-	while (tbl->iterate(index++, key, val))
+	while (tbl->iterate(itor, key, val))
 	{
 		if (key.isNull()) continue;
 		fiber->load_stack(1);

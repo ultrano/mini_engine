@@ -113,6 +113,7 @@ public:
 	void _continue();
 	void _func(bool isLiteral);
 	void _return();
+	void _class(bool isLiteral);
 
 	void _load(MNExp& e);
 	void _assign(MNExp& e, tboolean leftVal);

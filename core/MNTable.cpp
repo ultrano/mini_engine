@@ -217,11 +217,20 @@ tsize MNTable::total() const
 	return m_size;
 }
 
-tboolean MNTable::iterate(tsize index, MNObject& key, MNObject& val) const
+tboolean MNTable::iterate(tsize& itor, MNObject& key, MNObject& val) const
 {
-	if (index >= m_size) return false;
-	Node& node = m_nodes[index];
-	key = node.key;
-	val = node.val;
-	return true;
+	bool ret = false;
+	while (ret = (itor < m_size))
+	{
+		Node& node = m_nodes[itor];
+		bool found = (!node.key.isNull());
+		if (found)
+		{
+			key = node.key;
+			val = node.val;
+		}
+		++itor;
+		if (found) break;
+	}
+	return ret;
 }
