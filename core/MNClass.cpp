@@ -35,8 +35,9 @@ void     MNClass::newInstance(MNObject& ret)
 	ret = MNObject::Referrer(inst->getReferrer());
 }
 
-tboolean MNClass::addField(const MNObject& key, MNObject& initVal)
+tboolean MNClass::addField(const MNObject& key, const MNObject& initVal)
 {
+	if (initVal.isClosure()) return addMethod(key, initVal);
 	Member mem;
 	mem.prop.set(Prop::Field, true);
 	mem.index = m_initVals.size();
@@ -44,8 +45,9 @@ tboolean MNClass::addField(const MNObject& key, MNObject& initVal)
 	return m_members->insert(key, MNObject::Int(mem._int));
 }
 
-tboolean MNClass::addMethod(const MNObject& key, MNObject& methodVal)
+tboolean MNClass::addMethod(const MNObject& key, const MNObject& methodVal)
 {
+	if (!methodVal.isClosure()) return addField(key, methodVal);
 	Member mem;
 	mem.prop.set(Prop::Method, true);
 	mem.index = m_initVals.size();

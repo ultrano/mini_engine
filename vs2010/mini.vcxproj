@@ -94,6 +94,7 @@
     <ClInclude Include="..\core\MNFiber.h" />
     <ClInclude Include="..\core\MNFunction.h" />
     <ClInclude Include="..\core\MNGlobal.h" />
+    <ClInclude Include="..\core\MNInstance.h" />
     <ClInclude Include="..\core\MNLexer.h" />
     <ClInclude Include="..\core\MNList.h" />
     <ClInclude Include="..\core\MNMemory.h" />
@@ -119,6 +120,7 @@
     <ClCompile Include="..\core\MNFiber.cpp" />
     <ClCompile Include="..\core\MNFunction.cpp" />
     <ClCompile Include="..\core\MNGlobal.cpp" />
+    <ClCompile Include="..\core\MNInstance.cpp" />
     <ClCompile Include="..\core\MNLexer.cpp" />
     <ClCompile Include="..\core\MNMemory.cpp" />
     <ClCompile Include="..\core\MNObject.cpp" />

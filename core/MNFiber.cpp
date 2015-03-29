@@ -8,6 +8,7 @@
 #include "MNFunction.h"
 #include "MNCompiler.h"
 #include "MNUserData.h"
+#include "MNClass.h"
 #include "MNInstance.h"
 
 void unaryOp(MNFiber* fiber, const tstring& opStr, const MNObject& val, MNObject& ret)
@@ -1058,7 +1059,17 @@ tint32 MNFiber::excuteCall()
 					}
 				}
 				break;
+			case cmd_new_class :
+				{
+					tuint16 nfield = 0;
+					code >> nfield;
 
+					MNClass* _class = new MNClass(nfield, MNObject::Null());
+					for (tuint16 i = 1; i <= nfield; ++i) _class->addField(get(-(i*2)), get(-(i*2)+1));
+					pop(nfield*2);
+					push(MNObject::Referrer(_class->getReferrer()));
+				}
+				break;
 			case cmd_pop1: pop(1); break;
 			case cmd_pop2: pop(2); break;
 			case cmd_popn:

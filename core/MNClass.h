@@ -29,8 +29,8 @@ public:
 	~MNClass();
 
 	void     newInstance(MNObject& ret);
-	tboolean addField(const MNObject& key, MNObject& initVal);
-	tboolean addMethod(const MNObject& key, MNObject& methodVal);
+	tboolean addField(const MNObject& key, const MNObject& initVal);
+	tboolean addMethod(const MNObject& key, const MNObject& methodVal);
 	tboolean tryGet(const MNObject& key, Member& mem) const;
 
 private:

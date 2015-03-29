@@ -112,8 +112,10 @@ public:
 	void _break();
 	void _continue();
 	void _func(bool isLiteral);
+	void _func_content();
 	void _return();
-	void _class(bool isLiteral);
+	void _class();
+	bool _class_field();
 
 	void _load(MNExp& e);
 	void _assign(MNExp& e, tboolean leftVal);

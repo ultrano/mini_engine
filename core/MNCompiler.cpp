@@ -173,6 +173,11 @@ tboolean MNCompiler::_statement()
 	else if (ret = check(tok_for)) _for();
 	else if (ret = check(tok_func)) _func(false);
 	else if (ret = check('{')) _block();
+	else if (ret = check(tok_class))
+	{
+		_class();
+		if (!check(';')) compile_error("expected ';' is gone after 'class'");
+	}
 	else if (ret = check(tok_return))
 	{
 		_return();
@@ -397,6 +402,13 @@ void MNCompiler::_func(bool isLiteral)
 		advance();
 	}
 
+	_func_content();
+
+	if (!isLiteral) code() << cmd_insert_field;
+}
+
+void MNCompiler::_func_content()
+{
 	MNFuncBuilder* func = new MNFuncBuilder(m_func);
 	m_func = func;
 
@@ -434,8 +446,6 @@ void MNCompiler::_func(bool isLiteral)
 		code() << cmd << e.index;
 	}
 	delete func;
-
-	if (!isLiteral) code() << cmd_insert_field;
 }
 
 void MNCompiler::_return()
@@ -448,23 +458,57 @@ void MNCompiler::_return()
 	code() << (hasRet ? cmd_return : cmd_return_void);
 }
 
-void MNCompiler::_class(bool isLiteral)
+void MNCompiler::_class()
 {
 	if (!check(tok_class)) return;
 	advance();
 
-	if (isLiteral && check(tok_identify)) compile_error("literal class doesn't need name");
-	else if (!isLiteral && !check(tok_identify)) compile_error("class needs name");
+	if (!check(tok_identify)) compile_error("class needs name");
 
-	if (!isLiteral)
-	{
-		tuint16 index = m_func->addConst(MNObject::String(m_current.str));
-		code() << cmd_load_this;
-		code() << cmd_load_const << index;
-		advance();
-	}
-
+	tuint16 index = m_func->addConst(MNObject::String(m_current.str));
+	advance();
+	code() << cmd_load_this;
+	code() << cmd_load_const << index;
 	
+	if (!check('{')) compile_error("class needs body");
+	advance();
+
+	tuint16 nfield = 0;
+	while (!check('}') && _class_field()) nfield += 1;
+	advance();
+
+	code() << cmd_new_class << nfield;
+}
+
+bool MNCompiler::_class_field()
+{
+	tboolean ret = false;
+	if (ret = check(tok_var))
+	{
+		advance();
+		tuint16 idx = m_func->addConst(MNObject::String(m_current.str));
+		advance();
+		code() << cmd_load_const << idx;
+		if (check('='))
+		{
+			advance();
+			_exp();
+		}
+		else if (check(';')) code() << cmd_push_null;
+	}
+	else if (ret = check(tok_func))
+	{
+		advance();
+		tuint16 idx = m_func->addConst(MNObject::String(m_current.str));
+		advance();
+		code() << cmd_load_const << idx;
+		_func_content();
+	}
+	else compile_error("unknown field type");
+
+	if (ret && !check(';')) compile_error("class field desclaration needs ';'");
+	if (ret) while (check(';')) advance();
+	return ret;
 }
 
 void MNCompiler::_load(MNExp& e)
