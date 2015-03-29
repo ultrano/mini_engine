@@ -112,7 +112,9 @@ enum TObjectType : tuint8
 	Table    = (10<<1) | Referrer,
 	Array    = (11<<1) | Referrer,
 	Function = (12<<1) | Referrer,
-	UserData = (13<<1) | Referrer,
+	UserData = (13 << 1) | Referrer,
+	Class    = (14 << 1) | Referrer,
+	Instance = (15 << 1) | Referrer,
 };
 
 enum TObjectProp

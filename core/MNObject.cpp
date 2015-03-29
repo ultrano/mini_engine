@@ -8,6 +8,8 @@
 #include "MNFunction.h"
 #include "MNFiber.h"
 #include "MNUserData.h"
+#include "MNClass.h"
+#include "MNInstance.h"
 
 #include <stdarg.h>
 
@@ -48,6 +50,8 @@ MNObject MNObject::Referrer(MNReferrer* ref)
 	else if (rtti == MNString::getRtti())   type = TObjectType::String;
 	else if (rtti == MNFiber::getRtti())    type = TObjectType::Fiber;
 	else if (rtti == MNUserData::getRtti()) type = TObjectType::UserData;
+	else if (rtti == MNClass::getRtti())    type = TObjectType::Class;
+	else if (rtti == MNInstance::getRtti()) type = TObjectType::Instance;
 
 	return MNObject(type, ref);
 }
@@ -192,6 +196,16 @@ bool MNObject::isUserData() const
 	return isReferrer() && (getType() == TObjectType::UserData);
 }
 
+bool MNObject::isClass() const
+{
+	return isReferrer() && (getType() == TObjectType::Class);
+}
+
+bool MNObject::isInstance() const
+{
+	return isReferrer() && (getType() == TObjectType::Instance);
+}
+
 void*       MNObject::toRaw() const
 {
 	return val._pointer;
@@ -281,4 +295,17 @@ MNUserData* MNObject::toUserData() const
 {
 	if (isReferrer()) return mnrtti_cast<MNUserData>(toCountable());
 	return NULL;
+}
+
+MNClass*    MNObject::toClass() const
+{
+	if (isReferrer()) return mnrtti_cast<MNClass>(toCountable());
+	return NULL;
+}
+
+MNInstance* MNObject::toInstance() const
+{
+	if (isReferrer()) return mnrtti_cast<MNInstance>(toCountable());
+	return NULL;
+
 }

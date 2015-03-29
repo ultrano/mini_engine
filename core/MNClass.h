@@ -11,9 +11,9 @@ public:
 
 	enum Prop
 	{
-		Static   = 1<<0,
-		Variable = 1<<1,
-		Function = 1<<2,
+		Static = 1<<0,
+		Field  = 1<<1,
+		Method = 1<<2,
 	};
 	struct Member
 	{
@@ -22,15 +22,16 @@ public:
 			tint32 _int;
 			struct { tflag8 prop; tuint16 index; };
 		};
+		Member() :_int(0) {}
 	};
 
-	MNClass(tsize nmembers, MNClass* super);
+	MNClass(tsize nmembers, const MNObject& super);
 	~MNClass();
 
-	tboolean insert(const MNObject& key, const MNObject& mem);
-	tboolean tryGet(const MNObject& key, MNObject& mem) const;
-	tboolean hasKey(const MNObject& key);
-	tboolean iterate(tsize& itor, MNObject& key, MNObject& mem) const;
+	void     newInstance(MNObject& ret);
+	tboolean addField(const MNObject& key, MNObject& initVal);
+	tboolean addMethod(const MNObject& key, MNObject& methodVal);
+	tboolean tryGet(const MNObject& key, Member& mem) const;
 
 private:
 
@@ -40,7 +41,8 @@ private:
 
 	MNClass* m_super;
 	MNTable* m_members;
-
+	tarray<MNObject> m_initVals;
+	tarray<MNObject> m_methods;
 };
 
 #endif

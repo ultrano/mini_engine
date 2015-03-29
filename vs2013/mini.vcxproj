@@ -59,7 +59,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../openlib</AdditionalLibraryDirectories>
       <AdditionalDependencies>glut32.lib;glut.lib;glu32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,20 +79,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>../openlib</AdditionalLibraryDirectories>
       <AdditionalDependencies>glut32.lib;glut.lib;glu32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\app\App.h" />
-    <ClInclude Include="..\app\OpenGL.h" />
-    <ClInclude Include="..\app\stb_image.h" />
-    <ClInclude Include="..\app\TMatrix4x4.h" />
-    <ClInclude Include="..\app\TQuaternion.h" />
-    <ClInclude Include="..\app\TVector3f.h" />
     <ClInclude Include="..\core\MNArray.h" />
+    <ClInclude Include="..\core\MNClass.h" />
     <ClInclude Include="..\core\MNClassBond.h" />
     <ClInclude Include="..\core\MNClosure.h" />
     <ClInclude Include="..\core\MNCollectable.h" />
@@ -103,6 +96,7 @@
     <ClInclude Include="..\core\MNFiber.h" />
     <ClInclude Include="..\core\MNFunction.h" />
     <ClInclude Include="..\core\MNGlobal.h" />
+    <ClInclude Include="..\core\MNInstance.h" />
     <ClInclude Include="..\core\MNLexer.h" />
     <ClInclude Include="..\core\MNList.h" />
     <ClInclude Include="..\core\MNMemory.h" />
@@ -117,14 +111,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\app\App.cpp" />
     <ClCompile Include="..\app\MiniEngine.cpp" />
-    <ClCompile Include="..\app\OpenGL.cpp" />
-    <ClCompile Include="..\app\stb_image.c" />
-    <ClCompile Include="..\app\TMatrix4x4.cpp" />
-    <ClCompile Include="..\app\TQuaternion.cpp" />
-    <ClCompile Include="..\app\TVector3f.cpp" />
     <ClCompile Include="..\core\MNArray.cpp" />
+    <ClCompile Include="..\core\MNClass.cpp" />
     <ClCompile Include="..\core\MNClosure.cpp" />
     <ClCompile Include="..\core\MNCollectable.cpp" />
     <ClCompile Include="..\core\MNCommand.cpp" />
@@ -133,6 +122,7 @@
     <ClCompile Include="..\core\MNFiber.cpp" />
     <ClCompile Include="..\core\MNFunction.cpp" />
     <ClCompile Include="..\core\MNGlobal.cpp" />
+    <ClCompile Include="..\core\MNInstance.cpp" />
     <ClCompile Include="..\core\MNLexer.cpp" />
     <ClCompile Include="..\core\MNMemory.cpp" />
     <ClCompile Include="..\core\MNObject.cpp" />

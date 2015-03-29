@@ -8,6 +8,7 @@
 #include "MNFunction.h"
 #include "MNCompiler.h"
 #include "MNUserData.h"
+#include "MNInstance.h"
 
 void unaryOp(MNFiber* fiber, const tstring& opStr, const MNObject& val, MNObject& ret)
 {
@@ -346,6 +347,7 @@ bool MNFiber::load_raw_field()
 	{
 	case TObjectType::Table: ret = obj.toTable()->tryGet(key, val); break;
 	case TObjectType::Array: ret = obj.toArray()->tryGet(key, val); break;
+	case TObjectType::Instance: ret = true; obj.toInstance()->tryGet(key, val); break;
 	}
 	pop(2);
 	push(val);
@@ -362,10 +364,11 @@ tboolean MNFiber::store_raw_field(tboolean insert)
 	switch (obj.getType())
 	{
 	case TObjectType::Table: 
-		if (insert) ret = obj.toTable()->insert(key, val); 
+		if (insert) ret = obj.toTable()->insert(key, val);
 		else ret = obj.toTable()->trySet(key, val); 
 		break;
 	case TObjectType::Array: ret = obj.toArray()->trySet(key, val); break;
+	case TObjectType::Instance: ret = true; obj.toInstance()->trySet(key, val); break;
 	}
 	pop(3);
 	return ret;
@@ -382,6 +385,7 @@ void MNFiber::load_field()
 	{
 	case TObjectType::Table: ret = obj.toTable()->tryGet(key, val); break;
 	case TObjectType::Array: ret = obj.toArray()->tryGet(key, val); break;
+	case TObjectType::Instance: ret = true; obj.toInstance()->tryGet(key, val); break;
 	}
 
 	MNCollectable* collectable = obj.toCollectable();
@@ -432,6 +436,7 @@ void MNFiber::store_field(tboolean insert)
 		else ret = obj.toTable()->trySet(key, val); 
 		break;
 	case TObjectType::Array: ret = obj.toArray()->trySet(key, val); break;
+	case TObjectType::Instance: ret = true; obj.toInstance()->trySet(key, val); break;
 	}
 
 	MNCollectable* collectable = obj.toCollectable();
