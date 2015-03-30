@@ -35,10 +35,11 @@ public:
 
 private:
 
+	virtual void finalize();
 	virtual void travelMark();
 
 private:
-
+	friend class MNInstance;
 	MNClass* m_super;
 	MNTable* m_members;
 	tarray<MNObject> m_initVals;

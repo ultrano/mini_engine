@@ -5,6 +5,8 @@ MNInstance::MNInstance(const MNObject& _class)
 {
 	m_class = _class.toClass();
 	setMeta(_class);
+
+	m_fields = m_class->m_initVals;
 }
 
 MNInstance::~MNInstance()
@@ -25,8 +27,22 @@ tboolean MNInstance::tryGet(const MNObject& key, MNObject& val) const
 {
 	MNClass::Member mem;
 	if (!m_class->tryGet(key, mem)) return false;
-	val = m_fields[mem.index];
+	if (mem.prop.get(MNClass::Field))
+	{
+		val = m_fields[mem.index];
+	}
+	else if (mem.prop.get(MNClass::Method))
+	{
+		val = m_class->m_methods[mem.index];
+	}
 	return true;
+}
+
+void MNInstance::finalize()
+{
+	m_fields.clear();
+
+	__super::finalize();
 }
 
 void MNInstance::travelMark()

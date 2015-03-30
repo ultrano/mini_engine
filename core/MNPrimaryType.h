@@ -158,6 +158,7 @@ enum TCommand : tbyte
 	cmd_push_table,
 	cmd_push_array,
 	cmd_new_class,
+	cmd_new_inst,
 	cmd_pop1,
 	cmd_pop2,
 	cmd_popn,//! >> tbyte

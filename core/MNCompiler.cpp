@@ -478,6 +478,7 @@ void MNCompiler::_class()
 	advance();
 
 	code() << cmd_new_class << nfield;
+	code() << cmd_insert_field;
 }
 
 bool MNCompiler::_class_field()
@@ -499,6 +500,13 @@ bool MNCompiler::_class_field()
 	else if (ret = check(tok_func))
 	{
 		advance();
+		tuint16 idx = m_func->addConst(MNObject::String(m_current.str));
+		advance();
+		code() << cmd_load_const << idx;
+		_func_content();
+	}
+	else if (ret = check(tok_this))
+	{
 		tuint16 idx = m_func->addConst(MNObject::String(m_current.str));
 		advance();
 		code() << cmd_load_const << idx;
@@ -803,6 +811,13 @@ void MNCompiler::_exp_primary(MNExp& e)
 		code() << cmd_push_float << num;
 		e.type = MNExp::exp_loaded;
 		advance();
+	}
+	else if (check(tok_new))
+	{
+		advance();
+		_exp();
+		code() << cmd_new_inst;
+		e.type = MNExp::exp_loaded;
 	}
 	else if (check('{'))
 	{

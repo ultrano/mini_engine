@@ -615,6 +615,8 @@ void MNFiber::tostring()
 	MNObject str = MNObject::String("[null:null]");
 	switch (object.getType())
 	{
+	case TObjectType::Class    : str = MNObject::Format("[class: %p]", object.toRaw()); break;
+	case TObjectType::Instance : str = MNObject::Format("[instance: %p]", object.toRaw()); break;
 	case TObjectType::Array    : str = MNObject::Format("[array: %p]", object.toArray()); break;
 	case TObjectType::Table    : str = MNObject::Format("[table: %p]", object.toTable()); break;
 	case TObjectType::Pointer  : str = MNObject::Format("[pointer: %p]", object.toPointer()); break;
@@ -1068,6 +1070,19 @@ tint32 MNFiber::excuteCall()
 					for (tuint16 i = 1; i <= nfield; ++i) _class->addField(get(-(i*2)), get(-(i*2)+1));
 					pop(nfield*2);
 					push(MNObject::Referrer(_class->getReferrer()));
+				}
+				break;
+			case cmd_new_inst:
+				{
+					MNObject holder = get(-1);
+					pop(1);
+					MNClass* _class = holder.toClass();
+					if (!_class) push_null();
+					else
+					{
+						MNInstance* _inst = new MNInstance(holder);
+						push(MNObject::Referrer(_inst->getReferrer()));
+					}
 				}
 				break;
 			case cmd_pop1: pop(1); break;

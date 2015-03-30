@@ -63,6 +63,14 @@ tboolean MNClass::tryGet(const MNObject& key, Member& mem) const
 	return ret;
 }
 
+void MNClass::finalize()
+{
+	if (m_members) m_members->finalize();
+	m_members = NULL;
+
+	__super::finalize();
+}
+
 void MNClass::travelMark()
 {
 	if (m_super != NULL) m_super->mark();

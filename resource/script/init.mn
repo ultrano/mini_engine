@@ -1,9 +1,18 @@
 
 class Test
 {
-	var a = 0;
-	var b;
+	var name = "";
 	func test()
 	{
+		::print("name: ", name);
 	};
 };
+
+var t1 = new Test;
+var t2 = new Test;
+
+t1.name = "test1";
+t1.test();
+
+t2.name = "test2";
+t2.test();

@@ -57,7 +57,7 @@ enum tok_type
 	tok_return     = 147,
 	tok_yield      = 148,
 	tok_class      = 149,
-	tok_temp2      = 150,
+	tok_new        = 150,
 	tok_temp3      = 151,
 	tok_add_assign = 152,
 	tok_sub_assign = 153,
@@ -101,6 +101,7 @@ inline void reservedWords(MNLexer::Token& tok)
 	static const thashstring _return("return");
 	static const thashstring _yield("yield");
 	static const thashstring _class("class");
+	static const thashstring _new("new");
 
 	if (tok.str == _var)           tok.type = tok_var;
 	else if (tok.str == _func)     tok.type = tok_func;
@@ -119,6 +120,7 @@ inline void reservedWords(MNLexer::Token& tok)
 	else if (tok.str == _continue) tok.type = tok_continue;
 	else if (tok.str == _yield)    tok.type = tok_yield;
 	else if (tok.str == _class)    tok.type = tok_class;
+	else if (tok.str == _new)      tok.type = tok_new;
 }
 
 #endif

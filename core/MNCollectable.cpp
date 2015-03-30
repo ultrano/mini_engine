@@ -18,7 +18,7 @@ MNCollectable::~MNCollectable()
 	if (m_next) m_next->m_prev = m_prev;
 	if (m_prev) m_prev->m_next = m_next;
 
-	if (m_global->m_heap == this) m_global->m_heap = m_next;
+	if (m_global && m_global->m_heap == this) m_global->m_heap = m_next;
 }
 
 MNGlobal* MNCollectable::global() const

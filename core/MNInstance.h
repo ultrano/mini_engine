@@ -19,6 +19,7 @@ public:
 
 protected:
 
+	virtual void finalize();
 	virtual void travelMark();
 
 private:
