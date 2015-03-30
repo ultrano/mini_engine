@@ -389,8 +389,8 @@ void MNFiber::load_field()
 	case TObjectType::Instance: ret = true; obj.toInstance()->tryGet(key, val); break;
 	}
 
-	MNCollectable* collectable = obj.toCollectable();
-	if (!ret && collectable)
+	MNCollectable* collectable = NULL;
+	if (!ret && (collectable = obj.toCollectable()))
 	{
 		MNObject meta  = collectable->getMeta();
 		MNObject field = MNObject::String("->");
@@ -440,8 +440,8 @@ void MNFiber::store_field(tboolean insert)
 	case TObjectType::Instance: ret = true; obj.toInstance()->trySet(key, val); break;
 	}
 
-	MNCollectable* collectable = obj.toCollectable();
-	if (!ret && collectable)
+	MNCollectable* collectable = NULL;
+	if (!ret && (collectable = obj.toCollectable()))
 	{
 		MNObject meta  = collectable->getMeta();
 		MNObject field = MNObject::String("-<");
