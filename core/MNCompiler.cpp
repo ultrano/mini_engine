@@ -470,6 +470,13 @@ void MNCompiler::_class()
 	code() << cmd_load_this;
 	code() << cmd_load_const << index;
 	
+	if (check(':')) //! expands?
+	{
+		advance();
+		_exp();
+	}
+	else code() << cmd_push_null;
+
 	if (!check('{')) compile_error("class needs body");
 	advance();
 
@@ -815,8 +822,9 @@ void MNCompiler::_exp_primary(MNExp& e)
 	else if (check(tok_new))
 	{
 		advance();
-		_exp();
-		code() << cmd_new_inst;
+		_exp_term(e);
+		if (e.type != MNExp::exp_call) compile_error("missing constructor call");
+		code() << cmd_new_inst << e.index;
 		e.type = MNExp::exp_loaded;
 	}
 	else if (check('{'))

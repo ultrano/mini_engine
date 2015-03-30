@@ -386,6 +386,7 @@ void MNFiber::load_field()
 	{
 	case TObjectType::Table: ret = obj.toTable()->tryGet(key, val); break;
 	case TObjectType::Array: ret = obj.toArray()->tryGet(key, val); break;
+	case TObjectType::Class: ret = true; obj.toClass()->tryGet(key, val); break;
 	case TObjectType::Instance: ret = true; obj.toInstance()->tryGet(key, val); break;
 	}
 
@@ -1066,22 +1067,34 @@ tint32 MNFiber::excuteCall()
 					tuint16 nfield = 0;
 					code >> nfield;
 
-					MNClass* _class = new MNClass(nfield, MNObject::Null());
+					MNObject _super = get(-(nfield*2 + 1));
+					MNClass* _class = new MNClass(nfield, _super);
 					for (tuint16 i = 1; i <= nfield; ++i) _class->addField(get(-(i*2)), get(-(i*2)+1));
-					pop(nfield*2);
+					pop(nfield*2 + 1);
 					push(MNObject::Referrer(_class->getReferrer()));
 				}
 				break;
 			case cmd_new_inst:
 				{
-					MNObject holder = get(-1);
-					pop(1);
-					MNClass* _class = holder.toClass();
-					if (!_class) push_null();
+					tuint16 nargs = 0;
+					code >> nargs;
+					MNObject classObj = get(-(nargs+1));
+					if (classObj.isClass())
+					{
+						MNObject instObj = MNObject::Referrer((new MNInstance(classObj))->getReferrer());
+						push(classObj);
+						push_string("this");
+						load_field();
+						MNObject constructor = get(-1); pop(1);
+						set(-(nargs+1), constructor);
+						set(-nargs, instObj);
+						call(nargs, false);
+						push(instObj);
+					}
 					else
 					{
-						MNInstance* _inst = new MNInstance(holder);
-						push(MNObject::Referrer(_inst->getReferrer()));
+						pop(nargs+1);
+						push_null();
 					}
 				}
 				break;
@@ -1273,6 +1286,11 @@ tint32 MNFiber::excuteCall()
 				push_null();
 			case cmd_yield:
 				return MNFiber::Suspend;
+			case cmd_break_point:
+				{
+					int a = 0;
+				}
+				break;
 			}
 		}
 	}

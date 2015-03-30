@@ -1,18 +1,24 @@
 
-class Test
+class Base
 {
-	var name = "";
-	func test()
+	var id = 1;
+	func foo()
 	{
 		::print("name: ", name);
 	};
 };
 
-var t1 = new Test;
-var t2 = new Test;
+class Test : Base
+{
+	var name = "just born";
+	this(arg)
+	{
+		::print(name, arg);
+	};
+};
 
-t1.name = "test1";
-t1.test();
+var tbl = { _class: ::Test };
 
-t2.name = "test2";
-t2.test();
+var t1 = new tbl._class(" do you know kimchi?");
+t1.foo();
+print(t1.id);

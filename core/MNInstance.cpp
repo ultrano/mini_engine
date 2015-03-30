@@ -17,7 +17,7 @@ MNInstance::~MNInstance()
 tboolean MNInstance::trySet(const MNObject& key, const MNObject& val)
 {
 	MNClass::Member mem;
-	if (!m_class->tryGet(key, mem)) return false;
+	if (!m_class->queryMember(key, mem)) return false;
 	if (!mem.prop.get(MNClass::Field)) return false;
 	m_fields[mem.index] = val;
 	return true;
@@ -26,7 +26,7 @@ tboolean MNInstance::trySet(const MNObject& key, const MNObject& val)
 tboolean MNInstance::tryGet(const MNObject& key, MNObject& val) const
 {
 	MNClass::Member mem;
-	if (!m_class->tryGet(key, mem)) return false;
+	if (!m_class->queryMember(key, mem)) return false;
 	if (mem.prop.get(MNClass::Field))
 	{
 		val = m_fields[mem.index];

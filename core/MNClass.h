@@ -31,8 +31,8 @@ public:
 	void     newInstance(MNObject& ret);
 	tboolean addField(const MNObject& key, const MNObject& initVal);
 	tboolean addMethod(const MNObject& key, const MNObject& methodVal);
-	tboolean tryGet(const MNObject& key, Member& mem) const;
-
+	tboolean queryMember(const MNObject& key, Member& mem) const;
+	tboolean tryGet(const MNObject& key, MNObject& val);
 private:
 
 	virtual void finalize();

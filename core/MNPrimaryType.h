@@ -205,6 +205,7 @@ enum TCommand : tbyte
 	cmd_yield,
 	cmd_yield_void,
 	cmd_close_links, //! >> tuint16
+	cmd_break_point,
 };
 
 class MNFiber;

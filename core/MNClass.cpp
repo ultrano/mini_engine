@@ -50,17 +50,33 @@ tboolean MNClass::addMethod(const MNObject& key, const MNObject& methodVal)
 	if (!methodVal.isClosure()) return addField(key, methodVal);
 	Member mem;
 	mem.prop.set(Prop::Method, true);
-	mem.index = m_initVals.size();
+	mem.index = m_methods.size();
 	m_methods.push_back(methodVal);
 	return m_members->insert(key, MNObject::Int(mem._int));
 }
 
-tboolean MNClass::tryGet(const MNObject& key, Member& mem) const
+tboolean MNClass::queryMember(const MNObject& key, Member& mem) const
 {
 	MNObject obj;
 	bool ret = m_members->tryGet(key, obj);
 	mem._int = obj.toInt();
 	return ret;
+}
+
+tboolean MNClass::tryGet(const MNObject& key, MNObject& val)
+{
+	MNClass::Member mem;
+	if (!queryMember(key, mem)) return false;
+	if (mem.prop.get(MNClass::Field))
+	{
+		val = m_initVals[mem.index];
+	}
+	else if (mem.prop.get(MNClass::Method))
+	{
+		val = m_methods[mem.index];
+	}
+	else return false;
+	return true;
 }
 
 void MNClass::finalize()
