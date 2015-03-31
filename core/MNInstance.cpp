@@ -1,12 +1,13 @@
 #include "MNInstance.h"
 #include "MNClass.h"
 
-MNInstance::MNInstance(const MNObject& _class)
+MNInstance::MNInstance(const MNObject& _classObj)
 {
-	m_class = _class.toClass();
-	setMeta(_class);
+	m_class = _classObj;
+	MNClass* _class = _classObj.toClass();
+	setMeta(_class->getMeta());
 
-	m_fields = m_class->m_initVals;
+	m_fields = _class->m_initVals;
 }
 
 MNInstance::~MNInstance()
@@ -16,8 +17,9 @@ MNInstance::~MNInstance()
 
 tboolean MNInstance::trySet(const MNObject& key, const MNObject& val)
 {
+	MNClass* _class = m_class.toClass();
 	MNClass::Member mem;
-	if (!m_class->queryMember(key, mem)) return false;
+	if (!_class->queryMember(key, mem)) return false;
 	if (!mem.prop.get(MNClass::Field)) return false;
 	m_fields[mem.index] = val;
 	return true;
@@ -25,15 +27,16 @@ tboolean MNInstance::trySet(const MNObject& key, const MNObject& val)
 
 tboolean MNInstance::tryGet(const MNObject& key, MNObject& val) const
 {
+	MNClass* _class = m_class.toClass();
 	MNClass::Member mem;
-	if (!m_class->queryMember(key, mem)) return false;
+	if (!_class->queryMember(key, mem)) return false;
 	if (mem.prop.get(MNClass::Field))
 	{
 		val = m_fields[mem.index];
 	}
 	else if (mem.prop.get(MNClass::Method))
 	{
-		val = m_class->m_methods[mem.index];
+		val = _class->m_methods[mem.index];
 	}
 	return true;
 }
@@ -47,5 +50,6 @@ void MNInstance::finalize()
 
 void MNInstance::travelMark()
 {
-	m_class->mark();
+	MNClass* _class = m_class.toClass();
+	_class->mark();
 }

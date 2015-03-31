@@ -1079,7 +1079,7 @@ tint32 MNFiber::excuteCall()
 					tuint16 nargs = 0;
 					code >> nargs;
 					MNObject classObj = get(-(nargs+1));
-					if (classObj.isClass())
+					if (MNClass* _class = classObj.toClass())
 					{
 						MNObject instObj = MNObject::Referrer((new MNInstance(classObj))->getReferrer());
 						push(classObj);
@@ -1266,6 +1266,9 @@ tint32 MNFiber::excuteCall()
 				{
 					tbyte nargs;
 					code >> nargs;
+					tint32 selfIdx = -tint32(nargs);
+					const MNObject& self = get(selfIdx);
+					if (self.isClass()) set(selfIdx, get(0));
 					if (CallInfo* newCall = enterCall(nargs, cmd_call == cmd)) info = newCall;
 				}
 				break;

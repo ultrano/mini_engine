@@ -11,7 +11,7 @@ class MNInstance : public MNCollectable
 
 public:
 
-	MNInstance(const MNObject& _class);
+	MNInstance(const MNObject& _classObj);
 	~MNInstance();
 
 	tboolean trySet(const MNObject& key, const MNObject& val);
@@ -25,7 +25,7 @@ protected:
 private:
 
 	tarray<MNObject> m_fields;
-	MNClass* m_class;
+	MNObject m_class;
 };
 
 #endif

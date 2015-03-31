@@ -697,17 +697,14 @@ void MNCompiler::_exp_postfix(MNExp& e)
 		if (check('('))
 		{
 			advance();
-			if (e.type == MNExp::exp_field)
-			{
-				code() << cmd_load_method; //! [object key] -> [closure object]
-			}
-			else if (e.type != MNExp::exp_loaded)
+			if (e.type == MNExp::exp_none) compile_error("postfix compile is failed");
+			else if (e.type == MNExp::exp_field) code() << cmd_load_method; //! [object key] -> [closure object]
+			else
 			{
 				_load(e); //! [closure]
 				code() << cmd_load_this;  //! [closure object]
 			}
-			else if (e.type == MNExp::exp_none) compile_error("postfix compile is failed");
-
+			
 			e.index = 1;
 			if (!check(')')) while (true)
 			{
@@ -747,7 +744,7 @@ void MNCompiler::_exp_postfix(MNExp& e)
 void MNCompiler::_exp_primary(MNExp& e)
 {
 	//*
-	if (check(tok_identify) || check(tok_this))
+	if (check(tok_identify))
 	{
 		m_func->findLocal(m_current.str, e);
 		if (e.type == MNExp::exp_none)
@@ -759,6 +756,18 @@ void MNCompiler::_exp_primary(MNExp& e)
 			e.type = MNExp::exp_field;
 		}
 		advance();
+	}
+	else if (check(tok_this))
+	{
+		advance();
+		e.type  = MNExp::exp_local;
+		e.index = 0;
+	}
+	else if (check(tok_base))
+	{
+		advance();
+		code() << cmd_load_this << cmd_get_meta;
+		e.type = MNExp::exp_loaded;
 	}
 	else if (check(tok_global))
 	{

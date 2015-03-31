@@ -4,21 +4,32 @@ class Base
 	var id = 1;
 	func foo()
 	{
-		::print("name: ", name);
+		::print(this);
+		::print("Base ", name);
 	};
+};
+
+var t = 
+{
+	foo : func()
+	{
+		::print("table");
+	}
 };
 
 class Test : Base
 {
 	var name = "just born";
-	this(arg)
+	func foo()
 	{
-		::print(name, arg);
+		::print(this);
+		::print("Test");
+	};
+	func foo2()
+	{
+		base.foo();
 	};
 };
 
-var tbl = { _class: ::Test };
-
-var t1 = new tbl._class(" do you know kimchi?");
-t1.foo();
-print(t1.id);
+var t1 = new Test(" do you know kimchi?");
+t1.foo2();
