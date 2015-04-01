@@ -465,6 +465,10 @@ void MNCompiler::_class()
 
 	if (!check(tok_identify)) compile_error("class needs name");
 
+	MNFuncBuilder* prevFunc = m_func;
+	MNFuncBuilder* newFunc = new MNFuncBuilder(NULL);
+	m_func = newFunc;
+
 	tuint16 index = m_func->addConst(MNObject::String(m_current.str));
 	advance();
 	code() << cmd_load_this;
@@ -486,6 +490,14 @@ void MNCompiler::_class()
 
 	code() << cmd_new_class << nfield;
 	code() << cmd_insert_field;
+	code() << cmd_return_void;
+
+	m_func = prevFunc;
+	tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, newFunc->func->getReferrer()));
+	code() << cmd_push_closure << funcIndex << tuint16(0);
+	code() << cmd_load_this;
+	code() << cmd_call << tbyte(1);
+	delete newFunc;
 }
 
 bool MNCompiler::_class_field()
