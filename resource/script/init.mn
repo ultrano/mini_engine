@@ -5,12 +5,11 @@ class Base
 	var name = "i'm base";
 	constructor()
 	{
-		::print("base ", name);
+		::print("base constructor");
 	};
 	func foo()
 	{
-		::print(this);
-		::print("Base ", name);
+		::print(name);
 	};
 };
 
@@ -20,19 +19,14 @@ class Test : Base
 	constructor()
 	{
 		base.constructor();
-		::print("test ", name);
-	};
-	func foo()
-	{
-		::print(name);
-		::print(base.foo());
+		::print("test constructor");
 	};
 };
 
-var t0 = 
-{
-	name : "i'm table"
-};
+GC();
 
-setmeta(t0, Base);
+var t0 = setmeta({ name : "i'm table" }, Base);
 t0.foo();
+
+var inst = new Test();
+inst.foo();

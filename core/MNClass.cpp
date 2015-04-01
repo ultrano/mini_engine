@@ -73,12 +73,28 @@ tboolean MNClass::queryMember(const MNObject& key, Member& mem) const
 	return ret;
 }
 
-tboolean MNClass::tryGet(const MNObject& key, MNObject& val)
+tboolean MNClass::trySet(const MNObject& key, const MNObject& val)
 {
 	MNClass::Member mem;
 	if (!queryMember(key, mem)) return false;
+	else if (mem.prop.get(MNClass::Static))
+	{
+		m_statics[mem.index] = val;
+	}
+	else return false;
+	return true;
+}
 
-	if (mem.prop.get(MNClass::Field))
+tboolean MNClass::tryGet(const MNObject& key, MNObject& val)
+{
+	val = MNObject::Null();
+	MNClass::Member mem;
+	if (!queryMember(key, mem)) return false;
+	else if (mem.prop.get(MNClass::Static))
+	{
+		val = m_statics[mem.index];
+	}
+	else if (mem.prop.get(MNClass::Field))
 	{
 		val = m_initVals[mem.index];
 	}
@@ -86,11 +102,7 @@ tboolean MNClass::tryGet(const MNObject& key, MNObject& val)
 	{
 		val = m_methods[mem.index];
 	}
-	else
-	{
-		val = MNObject::Null();
-		return false;
-	}
+	else return false;
 	return true;
 }
 
@@ -99,6 +111,10 @@ void MNClass::finalize()
 	if (m_members) m_members->finalize();
 	m_members = NULL;
 
+	m_initVals.clear();
+	m_methods.clear();
+	m_statics.clear();
+
 	__super::finalize();
 }
 
@@ -106,4 +122,22 @@ void MNClass::travelMark()
 {
 	if (m_super != NULL) m_super->mark();
 	m_members->mark();
+
+	for (tsize i = 0; i < m_initVals.size(); ++i)
+	{
+		MNCollectable* col = m_initVals[i].toCollectable();
+		if (col) col->mark();
+	}
+
+	for (tsize i = 0; i < m_methods.size(); ++i)
+	{
+		MNCollectable* col = m_methods[i].toCollectable();
+		if (col) col->mark();
+	}
+
+	for (tsize i = 0; i < m_statics.size(); ++i)
+	{
+		MNCollectable* col = m_statics[i].toCollectable();
+		if (col) col->mark();
+	}
 }

@@ -15,24 +15,24 @@ void unaryOp(MNFiber* fiber, const tstring& opStr, const MNObject& val, MNObject
 {
 	MNObject meta  = val.toCollectable()->getMeta();
 	MNObject field = MNObject::String(opStr);
-	while (MNTable* metaTable = meta.toTable())
+	while (meta.toCollectable())
 	{
-		MNObject op;
-		if (metaTable->tryGet(field, op))
+		fiber->push(meta);
+		fiber->push(field);
+		bool success = fiber->load_raw_field();
+		MNObject op = fiber->get(-1); fiber->pop(1);
+		if (success && op.isClosure())
 		{
-			if (op.isClosure())
-			{
-				//! prepare dangling reference by expanding stack in "push"
-				MNObject v = val;
-				fiber->push(op);
-				fiber->push(v);
-				fiber->call(1, true);
-				ret = fiber->get(-1);
-				fiber->pop(1);
-				break;
-			}
+			//! prepare dangling reference by expanding stack in "push"
+			MNObject v = val;
+			fiber->push(op);
+			fiber->push(v);
+			fiber->call(1, true);
+			ret = fiber->get(-1);
+			fiber->pop(1);
+			break;
 		}
-		meta = metaTable->getMeta();
+		meta = meta.toCollectable()->getMeta();
 	}
 }
 
@@ -41,26 +41,26 @@ void binaryOp(MNFiber* fiber, const tstring& opStr, const MNObject& left, const 
 	MNCollectable* collectable = left.toCollectable();
 	MNObject meta  = collectable->getMeta();
 	MNObject field = MNObject::String(opStr);
-	while (MNTable* metaTable = meta.toTable())
+	while (meta.toCollectable())
 	{
-		MNObject op;
-		if (metaTable->tryGet(field, op))
+		fiber->push(meta);
+		fiber->push(field);
+		bool success = fiber->load_raw_field();
+		MNObject op = fiber->get(-1); fiber->pop(1);
+		if (success && op.isClosure())
 		{
-			if (op.isClosure())
-			{
-				//! prepare dangling reference by expanding stack in "push"
-				MNObject l = left;
-				MNObject r = right;
-				fiber->push(op);
-				fiber->push(l);
-				fiber->push(r);
-				fiber->call(2, true);
-				ret = fiber->get(-1);
-				fiber->pop(1);
-				break;
-			}
+			//! prepare dangling reference by expanding stack in "push"
+			MNObject l = left;
+			MNObject r = right;
+			fiber->push(op);
+			fiber->push(l);
+			fiber->push(r);
+			fiber->call(2, true);
+			ret = fiber->get(-1);
+			fiber->pop(1);
+			break;
 		}
-		meta = metaTable->getMeta();
+		meta = meta.toCollectable()->getMeta();
 	}
 }
 
@@ -348,8 +348,8 @@ bool MNFiber::load_raw_field()
 	{
 	case TObjectType::Table: ret = obj.toTable()->tryGet(key, val); break;
 	case TObjectType::Array: ret = obj.toArray()->tryGet(key, val); break;
-	case TObjectType::Class: ret = true; obj.toClass()->tryGet(key, val); break;
-	case TObjectType::Instance: ret = true; obj.toInstance()->tryGet(key, val); break;
+	case TObjectType::Class: ret = obj.toClass()->tryGet(key, val); break;
+	case TObjectType::Instance: ret = obj.toInstance()->tryGet(key, val); break;
 	}
 	pop(2);
 	push(val);
@@ -370,7 +370,7 @@ tboolean MNFiber::store_raw_field(tboolean insert)
 		else ret = obj.toTable()->trySet(key, val); 
 		break;
 	case TObjectType::Array: ret = obj.toArray()->trySet(key, val); break;
-	case TObjectType::Instance: ret = true; obj.toInstance()->trySet(key, val); break;
+	case TObjectType::Instance: ret = obj.toInstance()->trySet(key, val); break;
 	}
 	pop(3);
 	return ret;
@@ -402,12 +402,7 @@ void MNFiber::load_field()
 			push(field);
 			load_raw_field();
 			MNObject op = get(-1); pop(1);
-			if (op.isTable())
-			{
-				MNTable* table = op.toTable();
-				if (table->tryGet(key, val)) break;
-			}
-			else if (op.isClosure())
+			if (op.isClosure())
 			{
 				push(op);
 				push(obj);
@@ -416,6 +411,14 @@ void MNFiber::load_field()
 				val = get(-1);
 				pop(1);
 				break;
+			}
+			else
+			{
+				push(op);
+				push(key);
+				bool success = load_raw_field();
+				val = get(-1); pop(1);
+				if (success) break;
 			}
 			meta = meta.toCollectable()->getMeta();
 		}
@@ -453,12 +456,7 @@ void MNFiber::store_field(tboolean insert)
 			push(field);
 			load_raw_field();
 			MNObject op = get(-1); pop(1);
-			if (op.isTable())
-			{
-				MNTable* metaTable = meta.toTable();
-				if (metaTable->trySet(key, val)) break;
-			}
-			else if (op.isClosure())
+			if (op.isClosure())
 			{
 				push(op);
 				push(obj);
@@ -466,6 +464,13 @@ void MNFiber::store_field(tboolean insert)
 				push(val);
 				call(3, false);
 				break;
+			}
+			else
+			{
+				push(op);
+				push(key);
+				push(val);
+				if (store_raw_field(false)) break;
 			}
 			meta = meta.toCollectable()->getMeta();
 		}
@@ -1069,8 +1074,9 @@ tint32 MNFiber::excuteCall()
 
 					MNObject _super = get(-(nfield*2 + 1));
 					MNClass* _class = new MNClass(nfield, _super);
+					_class->link(global());
 					MNObject classObj = MNObject::Referrer(_class->getReferrer());
-					_class->addField(MNObject::String("->"), classObj); //! default setting
+					_class->addStatic(MNObject::String("->"), classObj); //! default setting
 					for (tuint16 i = 1; i <= nfield; ++i) _class->addField(get(-(i*2)), get(-(i*2)+1));
 					pop(nfield*2 + 1);
 					push(classObj);
@@ -1083,7 +1089,9 @@ tint32 MNFiber::excuteCall()
 					MNObject classObj = get(-(nargs+1));
 					if (MNClass* _class = classObj.toClass())
 					{
-						MNObject instObj = MNObject::Referrer((new MNInstance(classObj))->getReferrer());
+						MNInstance* inst = new MNInstance(classObj);
+						inst->link(global());
+						MNObject instObj = MNObject::Referrer(inst->getReferrer());
 						push(classObj);
 						push_string("constructor");
 						load_field();

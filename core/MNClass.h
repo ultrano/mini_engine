@@ -33,6 +33,7 @@ public:
 	tboolean addMethod(const MNObject& key, const MNObject& methodVal);
 	tboolean addStatic(const MNObject& key, const MNObject& val);
 	tboolean queryMember(const MNObject& key, Member& mem) const;
+	tboolean trySet(const MNObject& key, const MNObject& val);
 	tboolean tryGet(const MNObject& key, MNObject& val);
 private:
 
