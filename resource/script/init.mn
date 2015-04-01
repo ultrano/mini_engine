@@ -2,6 +2,11 @@
 class Base
 {
 	var id = 1;
+	var name = "i'm base";
+	constructor()
+	{
+		::print("base ", name);
+	};
 	func foo()
 	{
 		::print(this);
@@ -9,27 +14,21 @@ class Base
 	};
 };
 
-var t = 
-{
-	foo : func()
-	{
-		::print("table");
-	}
-};
-
 class Test : Base
 {
-	var name = "just born";
+	var name = "i'm test";
+	constructor()
+	{
+		base.constructor();
+		::print("test ", name);
+	};
 	func foo()
 	{
-		::print(this);
-		::print("Test");
-	};
-	func foo2()
-	{
-		base.foo();
+		::print(name);
+
+		::print(base.foo());
 	};
 };
 
 var t1 = new Test(" do you know kimchi?");
-t1.foo2();
+t1.foo();

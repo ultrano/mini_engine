@@ -490,6 +490,7 @@ void MNCompiler::_class()
 
 bool MNCompiler::_class_field()
 {
+	static const thashstring _constructor = "constructor";
 	tboolean ret = false;
 	if (ret = check(tok_var))
 	{
@@ -512,9 +513,9 @@ bool MNCompiler::_class_field()
 		code() << cmd_load_const << idx;
 		_func_content();
 	}
-	else if (ret = check(tok_this))
+	else if (ret = (check(tok_identify) && m_current.str == _constructor))
 	{
-		tuint16 idx = m_func->addConst(MNObject::String(m_current.str));
+		tuint16 idx = m_func->addConst(MNObject::String(_constructor));
 		advance();
 		code() << cmd_load_const << idx;
 		_func_content();

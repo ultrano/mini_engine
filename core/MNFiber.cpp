@@ -1083,7 +1083,7 @@ tint32 MNFiber::excuteCall()
 					{
 						MNObject instObj = MNObject::Referrer((new MNInstance(classObj))->getReferrer());
 						push(classObj);
-						push_string("this");
+						push_string("constructor");
 						load_field();
 						MNObject constructor = get(-1); pop(1);
 						set(-(nargs+1), constructor);

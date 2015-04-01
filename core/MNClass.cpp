@@ -67,7 +67,7 @@ tboolean MNClass::tryGet(const MNObject& key, MNObject& val)
 {
 	MNClass::Member mem;
 	if (!queryMember(key, mem)) return false;
-	if (mem.prop.get(MNClass::Field))
+	if (mem.prop.get(MNClass::Field) && mem.prop.get(MNClass::Static))
 	{
 		val = m_initVals[mem.index];
 	}
@@ -75,7 +75,11 @@ tboolean MNClass::tryGet(const MNObject& key, MNObject& val)
 	{
 		val = m_methods[mem.index];
 	}
-	else return false;
+	else
+	{
+		val = MNObject::Null();
+		return false;
+	}
 	return true;
 }
 
