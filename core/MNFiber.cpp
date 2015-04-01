@@ -348,6 +348,7 @@ bool MNFiber::load_raw_field()
 	{
 	case TObjectType::Table: ret = obj.toTable()->tryGet(key, val); break;
 	case TObjectType::Array: ret = obj.toArray()->tryGet(key, val); break;
+	case TObjectType::Class: ret = true; obj.toClass()->tryGet(key, val); break;
 	case TObjectType::Instance: ret = true; obj.toInstance()->tryGet(key, val); break;
 	}
 	pop(2);
@@ -395,28 +396,28 @@ void MNFiber::load_field()
 	{
 		MNObject meta  = collectable->getMeta();
 		MNObject field = MNObject::String("->");
-		while (MNTable* metaTable = meta.toTable())
+		while (meta.toCollectable())
 		{
-			MNObject op;
-			if (metaTable->tryGet(field, op))
+			push(meta);
+			push(field);
+			load_raw_field();
+			MNObject op = get(-1); pop(1);
+			if (op.isTable())
 			{
-				if (op.isTable())
-				{
-					MNTable* table = op.toTable();
-					if (table->tryGet(key, val)) break;
-				}
-				else if (op.isClosure())
-				{
-					push(op);
-					push(obj);
-					push(key);
-					call(2, true);
-					val = get(-1);
-					pop(1);
-					break;
-				}
+				MNTable* table = op.toTable();
+				if (table->tryGet(key, val)) break;
 			}
-			meta = metaTable->getMeta();
+			else if (op.isClosure())
+			{
+				push(op);
+				push(obj);
+				push(key);
+				call(2, true);
+				val = get(-1);
+				pop(1);
+				break;
+			}
+			meta = meta.toCollectable()->getMeta();
 		}
 	}
 
@@ -446,28 +447,27 @@ void MNFiber::store_field(tboolean insert)
 	{
 		MNObject meta  = collectable->getMeta();
 		MNObject field = MNObject::String("-<");
-		while (MNTable* metaTable = meta.toTable())
+		while (meta.toCollectable())
 		{
-			MNObject op;
-			if (metaTable->tryGet(field, op))
+			push(meta);
+			push(field);
+			load_raw_field();
+			MNObject op = get(-1); pop(1);
+			if (op.isTable())
 			{
-				if (op.isTable())
-				{
-					MNTable* metaTable = meta.toTable();
-					if (metaTable->trySet(key, val)) break;
-				}
-				else if (op.isClosure())
-				{
-					push(op);
-					push(obj);
-					push(key);
-					push(val);
-					call(3, false);
-					break;
-				}
+				MNTable* metaTable = meta.toTable();
+				if (metaTable->trySet(key, val)) break;
 			}
-
-			meta = metaTable->getMeta();
+			else if (op.isClosure())
+			{
+				push(op);
+				push(obj);
+				push(key);
+				push(val);
+				call(3, false);
+				break;
+			}
+			meta = meta.toCollectable()->getMeta();
 		}
 	}
 	pop(3);
@@ -1069,9 +1069,11 @@ tint32 MNFiber::excuteCall()
 
 					MNObject _super = get(-(nfield*2 + 1));
 					MNClass* _class = new MNClass(nfield, _super);
+					MNObject classObj = MNObject::Referrer(_class->getReferrer());
+					_class->addField(MNObject::String("->"), classObj); //! default setting
 					for (tuint16 i = 1; i <= nfield; ++i) _class->addField(get(-(i*2)), get(-(i*2)+1));
 					pop(nfield*2 + 1);
-					push(MNObject::Referrer(_class->getReferrer()));
+					push(classObj);
 				}
 				break;
 			case cmd_new_inst:

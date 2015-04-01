@@ -11,9 +11,9 @@ public:
 
 	enum Prop
 	{
-		Static = 1<<0,
-		Field  = 1<<1,
-		Method = 1<<2,
+		Static = 0,
+		Field  = 1,
+		Method = 2,
 	};
 	struct Member
 	{
@@ -31,6 +31,7 @@ public:
 	void     newInstance(MNObject& ret);
 	tboolean addField(const MNObject& key, const MNObject& initVal);
 	tboolean addMethod(const MNObject& key, const MNObject& methodVal);
+	tboolean addStatic(const MNObject& key, const MNObject& val);
 	tboolean queryMember(const MNObject& key, Member& mem) const;
 	tboolean tryGet(const MNObject& key, MNObject& val);
 private:
@@ -44,6 +45,7 @@ private:
 	MNTable* m_members;
 	tarray<MNObject> m_initVals;
 	tarray<MNObject> m_methods;
+	tarray<MNObject> m_statics;
 };
 
 #endif

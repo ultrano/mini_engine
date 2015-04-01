@@ -55,6 +55,16 @@ tboolean MNClass::addMethod(const MNObject& key, const MNObject& methodVal)
 	return m_members->insert(key, MNObject::Int(mem._int));
 }
 
+tboolean MNClass::addStatic(const MNObject& key, const MNObject& val)
+{
+	Member mem;
+	mem.prop.set(val.isClosure() ? Prop::Method : Prop::Field, true);
+	mem.prop.set(Prop::Static, true);
+	mem.index = m_statics.size();
+	m_statics.push_back(val);
+	return m_members->insert(key, MNObject::Int(mem._int));
+}
+
 tboolean MNClass::queryMember(const MNObject& key, Member& mem) const
 {
 	MNObject obj;
@@ -67,7 +77,8 @@ tboolean MNClass::tryGet(const MNObject& key, MNObject& val)
 {
 	MNClass::Member mem;
 	if (!queryMember(key, mem)) return false;
-	if (mem.prop.get(MNClass::Field) && mem.prop.get(MNClass::Static))
+
+	if (mem.prop.get(MNClass::Field))
 	{
 		val = m_initVals[mem.index];
 	}

@@ -13,8 +13,7 @@ class Base
 		::print("Base ", name);
 	};
 };
-print(Base);
-var name = "i'm local var!'";
+
 class Test : Base
 {
 	var name = "i'm test";
@@ -30,5 +29,10 @@ class Test : Base
 	};
 };
 
-var t1 = new Test(" do you know kimchi?");
-t1.foo();
+var t0 = 
+{
+	name : "i'm table"
+};
+
+setmeta(t0, Base);
+t0.foo();
