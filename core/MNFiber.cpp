@@ -1157,7 +1157,6 @@ tint32 MNFiber::excuteCall()
 				}
 				break;
 			case cmd_load_this : load_stack(0); break;
-			case cmd_load_stack_x2: load_stack(-2); break;
 			case cmd_load_stack:
 				{
 					tuint16 index;

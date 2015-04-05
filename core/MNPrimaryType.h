@@ -168,7 +168,6 @@ enum TCommand : tbyte
 	cmd_load_method, //! [object key] -> [closure object]
 	cmd_load_this,   //! load_stack(0)
 	cmd_load_stack,  //! >> tuint16
-	cmd_load_stack_x2,
 	cmd_store_stack, //! >> tuint16
 	cmd_load_field,
 	cmd_store_field,
