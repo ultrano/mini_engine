@@ -465,44 +465,53 @@ void MNCompiler::_class()
 
 	if (!check(tok_identify)) compile_error("class needs name");
 
+	thashstring className = m_current.str;
+	advance();
+
+	tuint16 nfield = 0;
+	
+	code() << cmd_load_this;
+
+	//! expands?
+	if (check(':')) { advance(); _exp(); }
+	else code() << cmd_push_null;
+	tsize pos = (code() << cmd_new_class).cursor;
+	code() << nfield;
+
+	//! class builder
 	MNFuncBuilder* prevFunc = m_func;
 	MNFuncBuilder* newFunc = new MNFuncBuilder(NULL);
 	m_func = newFunc;
-
-	tuint16 index = m_func->addConst(MNObject::String(m_current.str));
-	advance();
-	code() << cmd_load_this;
-	code() << cmd_load_const << index;
-	
-	if (check(':')) //! expands?
-	{
-		advance();
-		_exp();
-	}
-	else code() << cmd_push_null;
+	m_func->addLocal(className);
 
 	if (!check('{')) compile_error("class needs body");
 	advance();
 
-	tuint16 nfield = 0;
 	while (!check('}') && _class_field()) nfield += 1;
 	advance();
 
-	code() << cmd_new_class << nfield;
+	tuint16 index = m_func->addConst(MNObject::String(className));
+	code() << cmd_load_this;
+	code() << cmd_load_const << index;
+	code() << cmd_load_stack << tuint16(1);
 	code() << cmd_insert_field;
 	code() << cmd_return_void;
 
 	m_func = prevFunc;
 	tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, newFunc->func->getReferrer()));
 	code() << cmd_push_closure << funcIndex << tuint16(0);
-	code() << cmd_load_this;
-	code() << cmd_call << tbyte(1);
+	code() << cmd_up1_x2 << cmd_pop1;
+	code() << cmd_call << tbyte(2);
+	code().modify(pos, nfield);
+
 	delete newFunc;
 }
 
 bool MNCompiler::_class_field()
 {
 	static const thashstring _constructor = "constructor";
+
+	code() << cmd_up1;
 	tboolean ret = false;
 	if (ret = check(tok_var))
 	{
@@ -510,11 +519,7 @@ bool MNCompiler::_class_field()
 		tuint16 idx = m_func->addConst(MNObject::String(m_current.str));
 		advance();
 		code() << cmd_load_const << idx;
-		if (check('='))
-		{
-			advance();
-			_exp();
-		}
+		if (check('=')) { advance(); _exp(); }
 		else if (check(';')) code() << cmd_push_null;
 	}
 	else if (ret = check(tok_func))
@@ -533,6 +538,8 @@ bool MNCompiler::_class_field()
 		_func_content();
 	}
 	else compile_error("unknown field type");
+
+	code() << cmd_add_class_field;
 
 	if (ret && !check(';')) compile_error("class field desclaration needs ';'");
 	if (ret) while (check(';')) advance();

@@ -1,32 +1,17 @@
 
-class Base
+class Test
 {
-	var id = 1;
-	var name = "i'm base";
-	constructor()
-	{
-		::print("base constructor");
-	};
 	func foo()
 	{
-		::print(name);
+		::print("foo");
+		Test.foo2();
 	};
-};
-
-class Test : Base
-{
-	var name = "i'm test";
-	constructor()
+	func foo2()
 	{
-		base.constructor();
-		::print("test constructor");
+		::print("foo2");
 	};
 };
 
-GC();
-
-var t0 = setmeta({ name : "i'm table" }, Base);
-t0.foo();
-
-var inst = new Test();
-inst.foo();
+var t = new Test();
+Test = null;
+t.foo();

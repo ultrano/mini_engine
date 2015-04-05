@@ -1072,14 +1072,23 @@ tint32 MNFiber::excuteCall()
 					tuint16 nfield = 0;
 					code >> nfield;
 
-					MNObject _super = get(-(nfield*2 + 1));
+					MNObject _super = get(-1); pop(1);
 					MNClass* _class = new MNClass(nfield, _super);
-					_class->link(global());
-					MNObject classObj = MNObject::Referrer(_class->getReferrer());
+					MNObject classObj = MNObject::Referrer(_class->link(global())->getReferrer());
 					_class->addStatic(MNObject::String("->"), classObj); //! default setting
-					for (tuint16 i = 1; i <= nfield; ++i) _class->addField(get(-(i*2)), get(-(i*2)+1));
-					pop(nfield*2 + 1);
 					push(classObj);
+				}
+				break;
+			case cmd_add_class_static:
+			case cmd_add_class_field:
+				{
+					MNObject classObj = get(-3);
+					MNObject name     = get(-2);
+					MNObject val      = get(-1);
+					MNClass* _class   = classObj.toClass();
+					if (cmd == cmd_add_class_field) _class->addField(name, val);
+					else _class->addStatic(name, val);
+					pop(3);
 				}
 				break;
 			case cmd_new_inst:
@@ -1148,6 +1157,7 @@ tint32 MNFiber::excuteCall()
 				}
 				break;
 			case cmd_load_this : load_stack(0); break;
+			case cmd_load_stack_x2: load_stack(-2); break;
 			case cmd_load_stack:
 				{
 					tuint16 index;
