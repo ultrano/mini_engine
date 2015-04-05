@@ -12,7 +12,7 @@ MNInstance::MNInstance(const MNObject& _classObj)
 
 MNInstance::~MNInstance()
 {
-
+	m_fields.clear();
 }
 
 tboolean MNInstance::trySet(const MNObject& key, const MNObject& val)
@@ -52,13 +52,6 @@ tboolean MNInstance::tryGet(const MNObject& key, MNObject& val) const
 	}
 	else return false;
 	return true;
-}
-
-void MNInstance::finalize()
-{
-	m_fields.clear();
-
-	__super::finalize();
 }
 
 void MNInstance::travelMark()

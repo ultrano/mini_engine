@@ -72,12 +72,7 @@ void MNCollectable::finalize()
 {
 	if (m_mark == Finalized) return;
 	m_mark = Finalized;
-/*
-	if (getMeta().isObject())
-	{
-		MNValue __finalizer = getMeta().get((MNGCObject*)m_state->newString("__finalizer"));
-		if (__finalizer.to<MNClosure>()) __finalizer.call(this);
-	}*/
+
 	if (m_meta.isTable())
 	{
 		MNFiber* fiber = global()->m_root;

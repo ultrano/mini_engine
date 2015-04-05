@@ -27,6 +27,10 @@ MNClass::~MNClass()
 {
 	if (m_members) m_members->finalize();
 	m_members = NULL;
+
+	m_initVals.clear();
+	m_methods.clear();
+	m_statics.clear();
 }
 
 void     MNClass::newInstance(MNObject& ret)
@@ -104,18 +108,6 @@ tboolean MNClass::tryGet(const MNObject& key, MNObject& val)
 	}
 	else return false;
 	return true;
-}
-
-void MNClass::finalize()
-{
-	if (m_members) m_members->finalize();
-	m_members = NULL;
-
-	m_initVals.clear();
-	m_methods.clear();
-	m_statics.clear();
-
-	__super::finalize();
 }
 
 void MNClass::travelMark()

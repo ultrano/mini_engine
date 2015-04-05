@@ -37,7 +37,6 @@ public:
 	tboolean tryGet(const MNObject& key, MNObject& val);
 private:
 
-	virtual void finalize();
 	virtual void travelMark();
 
 private:
