@@ -4,7 +4,7 @@ class Test
 	func foo()
 	{
 		::print("foo");
-		Test.foo2();
+		this.foo2();
 	};
 	func foo2()
 	{
@@ -15,3 +15,6 @@ class Test
 var t = new Test();
 Test = null;
 t.foo();
+
+var v = math.sqrt(3*3);
+print(v);
