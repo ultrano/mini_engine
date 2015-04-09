@@ -1,2 +1,53 @@
+var shaderStr = 
+"
+    uniform   mat4 MATRIX_MVP;
+    uniform sampler2D TEXTURE_0;
+    
+    varying   vec2 v_tex;
 
-dofile("../resource/script/vector2.mn");
+    #ifdef VERTEX_SHADER
+    
+    attribute vec4 pos;
+    attribute vec2 tex;
+    
+    void main()
+    {
+       gl_Position = MATRIX_MVP * pos;
+       v_tex = tex;
+    }
+    
+    #endif
+    
+    #ifdef FRAGMENT_SHADER
+    #ifdef GL_ES
+    precision mediump float;
+    #endif
+    
+    void main()
+    {
+       gl_FragColor = texture2D( TEXTURE_0, v_tex );
+    }
+    
+    #endif
+";
+
+class Shader
+{
+	var m_programID;
+	var m_uniforms;
+	var m_attribs;
+	constructor(source)
+	{
+		if (::typeof(source) != "string") return;
+		m_programID = ::GL.LoadProgram(source);
+		m_uniforms  = ::GL.GetActiveUniforms(m_programID);
+		m_attribs   = ::GL.GetActiveAttribs(m_programID);
+	};
+
+};
+
+var shader = new Shader(shaderStr);
+print("programID: ", shader.m_programID);
+shader.m_uniforms.iterate(func(k,v){::print(v.name, ":", v.loc);});
+shader.m_attribs.iterate(func(k,v){::print(v.name, ":", v.loc);});
+

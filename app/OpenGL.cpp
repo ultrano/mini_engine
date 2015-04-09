@@ -2,6 +2,7 @@
 #include "MNFiber.h"
 #include "MNString.h"
 #include "MNUserData.h"
+#include "MNArray.h"
 #include "stb_image.h"
 
 #define glLog printf
@@ -258,6 +259,92 @@ struct GL
 		return false;
 	}
 
+	static bool GetActiveUniforms(MNFiber* f)
+	{
+		tint bufSize = 0;
+		tint count = 0;
+		tint programID = f->get(1).toInt();
+		
+		glGetProgramiv(programID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &bufSize);
+		glGetProgramiv(programID, GL_ACTIVE_UNIFORMS, &count);
+
+		f->push_array(count);
+		MNObject arrObj = f->get(-1);
+		MNArray* arr = arrObj.toArray();
+
+		tstring name;
+		name.resize(bufSize);
+		while (count--)
+		{
+			GLint sz = 0;
+			GLenum type = GL_NONE;
+			GLint len = 0;
+			glGetActiveUniform(programID, count, bufSize, &len, &sz, &type, &name[0]);
+			tint loc = glGetUniformLocation(programID, &name[0]);
+
+			f->push_table(2);
+			f->load_stack(-1);
+			MNObject tbl = f->get(-1);
+			
+			f->push_string("name");
+			f->push_string(name);
+			f->store_raw_field();
+
+			f->push_string("loc");
+			f->push_int(loc);
+			f->store_raw_field();
+
+			f->push(arrObj);
+			f->push_int(count);
+			f->push(tbl);
+			f->store_raw_field();
+		}
+		f->push(arrObj);
+		return true;
+	}
+
+	static bool GetActiveAttribs(MNFiber* f)
+	{
+		tint bufSize = 0;
+		tint count = 0;
+		tint programID = f->get(1).toInt();
+		glGetProgramiv(programID, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &bufSize);
+		glGetProgramiv(programID, GL_ACTIVE_ATTRIBUTES, &count);
+
+		tstring name;
+		name.resize(bufSize);
+
+		f->push_array(count);
+		MNObject arrObj = f->get(-1);
+		for (int i = 0; i < count; ++i)
+		{
+			GLint sz = 0;
+			GLenum type = GL_NONE;
+			GLint len = 0;
+			glGetActiveAttrib(programID, i, bufSize, &len, &sz, &type, &name[0]);
+			tint loc = glGetAttribLocation(programID, &name[0]);
+
+			f->push_table(2);
+			f->load_stack(-1);
+			MNObject tbl = f->get(-1);
+
+			f->push_string("name");
+			f->push_string(name);
+			f->store_raw_field();
+
+			f->push_string("loc");
+			f->push_int(loc);
+			f->store_raw_field();
+
+			f->push(arrObj);
+			f->push_int(i);
+			f->push(tbl);
+			f->store_raw_field();
+		}
+		f->push(arrObj);
+		return true;
+	}
+
 	static bool MatrixMode(MNFiber* f) { glMatrixMode(f->get(1).toInt()); return false; };
 
 	static bool UseProgram(MNFiber* f)
@@ -428,6 +515,16 @@ void exposeGL(MNFiber* fiber)
 	fiber->up(1, 0);
 	fiber->push_string("LinkProgram");
 	fiber->push_closure(GL::LinkProgram);
+	fiber->store_field();
+
+	fiber->up(1, 0);
+	fiber->push_string("GetActiveUniforms");
+	fiber->push_closure(GL::GetActiveUniforms);
+	fiber->store_field();
+
+	fiber->up(1, 0);
+	fiber->push_string("GetActiveAttribs");
+	fiber->push_closure(GL::GetActiveAttribs);
 	fiber->store_field();
 
 	fiber->up(1, 0);
