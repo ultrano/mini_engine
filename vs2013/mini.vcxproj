@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\core\MNArray.h" />
+    <ClInclude Include="..\core\MNBasicLib.h" />
     <ClInclude Include="..\core\MNClass.h" />
     <ClInclude Include="..\core\MNClassBond.h" />
     <ClInclude Include="..\core\MNClosure.h" />
@@ -113,6 +114,7 @@
   <ItemGroup>
     <ClCompile Include="..\app\MiniEngine.cpp" />
     <ClCompile Include="..\core\MNArray.cpp" />
+    <ClCompile Include="..\core\MNBasicLib.cpp" />
     <ClCompile Include="..\core\MNClass.cpp" />
     <ClCompile Include="..\core\MNClosure.cpp" />
     <ClCompile Include="..\core\MNCollectable.cpp" />
