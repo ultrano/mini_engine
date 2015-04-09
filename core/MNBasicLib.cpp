@@ -181,6 +181,13 @@ struct MathLib
 		return true;
 	}
 
+	static bool pow(MNFiber* fiber)
+	{
+		float a = powf(fiber->get(1).toFloat(), fiber->get(2).toFloat());
+		fiber->push_float(a);
+		return true;
+	}
+
 	static void expose(MNFiber* fiber)
 	{
 		fiber->push_string("math");
@@ -189,6 +196,11 @@ struct MathLib
 			fiber->load_stack(-1);
 			fiber->push_string("sqrt");
 			fiber->push_closure(sqrt);
+			fiber->store_field();
+
+			fiber->load_stack(-1);
+			fiber->push_string("pow");
+			fiber->push_closure(pow);
 			fiber->store_field();
 		}
 		fiber->store_global();
