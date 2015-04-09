@@ -85,6 +85,8 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\app\OpenGL.h" />
+    <ClInclude Include="..\app\stb_image.h" />
     <ClInclude Include="..\core\MNArray.h" />
     <ClInclude Include="..\core\MNBasicLib.h" />
     <ClInclude Include="..\core\MNClass.h" />
@@ -113,6 +115,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\app\MiniEngine.cpp" />
+    <ClCompile Include="..\app\OpenGL.cpp" />
+    <ClCompile Include="..\app\stb_image.c" />
     <ClCompile Include="..\core\MNArray.cpp" />
     <ClCompile Include="..\core\MNBasicLib.cpp" />
     <ClCompile Include="..\core\MNClass.cpp" />

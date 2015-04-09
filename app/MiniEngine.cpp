@@ -11,6 +11,7 @@
 #include "MNLexer.h"
 #include "MNCompiler.h"
 #include "MNUserData.h"
+#include "OpenGL.h"
 
 MNFiber* mainFiber()
 {
@@ -24,6 +25,7 @@ int main()
 
 	//! set global field
 	{
+		exposeGL(fiber);
 	}
 
 	//! compile test
