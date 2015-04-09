@@ -483,14 +483,24 @@ void MNCompiler::_class()
 	MNFuncBuilder* newFunc = new MNFuncBuilder(NULL);
 	m_func = newFunc;
 	m_func->addLocal(className);
+	tuint16 index = m_func->addConst(MNObject::String(className));
 
 	if (!check('{')) compile_error("class needs body");
 	advance();
 
+	code() << cmd_load_stack << tuint16(1);
+	code() << cmd_load_const << m_func->addConst(MNObject::String("type"));
+	code() << cmd_load_const << index;
+	code() << cmd_add_class_static;
+
+	code() << cmd_load_stack << tuint16(1);
+	code() << cmd_load_const << m_func->addConst(MNObject::String("->"));
+	code() << cmd_load_stack << tuint16(1);
+	code() << cmd_add_class_static;
+
 	while (!check('}') && _class_field()) nfield += 1;
 	advance();
 
-	tuint16 index = m_func->addConst(MNObject::String(className));
 	code() << cmd_load_this;
 	code() << cmd_load_const << index;
 	code() << cmd_load_stack << tuint16(1);

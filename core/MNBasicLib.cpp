@@ -57,7 +57,7 @@ struct CommonLib
 		return true;
 	}
 
-	static bool type(MNFiber* fiber)
+	static bool typeof(MNFiber* fiber)
 	{
 		const MNObject& val = fiber->get(1);
 		switch (val.getType())
@@ -146,8 +146,8 @@ struct CommonLib
 		fiber->push_closure(allocate);
 		fiber->store_global();
 
-		fiber->push_string("type");
-		fiber->push_closure(type);
+		fiber->push_string("typeof");
+		fiber->push_closure(typeof);
 		fiber->store_global();
 
 		fiber->push_string("dofile");
