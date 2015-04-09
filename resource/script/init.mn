@@ -43,11 +43,47 @@ class Shader
 		m_uniforms  = ::GL.GetActiveUniforms(m_programID);
 		m_attribs   = ::GL.GetActiveAttribs(m_programID);
 	};
+	func getUniformLocation(name)
+	{
+		if (m_uniforms.has(name) == false) return null;
+		return m_uniforms[name];
+	};
+	func getAttribLocation(name)
+	{
+		if (m_attribs.has(name) == false) return null;
+		return m_attribs[name];
+	};
+};
 
+class Texture
+{
+	var id;
+	var width;
+	var height;
+};
+
+class Material
+{
+	constructor(shader)
+	{
+		m_shader = shader;
+		m_values = {};
+	};
+	func setTexture(name, texture)
+	{
+		if (::typeof(texture) != ::Texture.type) return;
+		var loc = m_shader.getUniformLocation(name);
+		if (loc == null) return;
+		m_values.insert(loc, texture);
+	};
+	var m_shader;
+	var m_values;
 };
 
 var shader = new Shader(shaderStr);
-print("programID: ", shader.m_programID);
-shader.m_uniforms.iterate(func(k,v){::print(v.name, ":", v.loc);});
-shader.m_attribs.iterate(func(k,v){::print(v.name, ":", v.loc);});
+var material = new Material(shader);
+var texture = new Texture();
+
+material.setTexture("TEXTURE_0", texture);
+material.m_values.iterate(func(k,v){::print(k,v);});
 

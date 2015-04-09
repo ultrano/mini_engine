@@ -469,6 +469,15 @@ struct ArrayLib
 
 struct TableLib
 {
+	static bool has(MNFiber* fiber)
+	{
+		const MNObject& obj = fiber->get(0);
+		MNTable* tbl = obj.toTable();
+		if (!tbl) return false;
+		fiber->push_bool(tbl->hasKey(fiber->get(1)));
+		return true;
+	}
+
 	static bool count(MNFiber* fiber)
 	{
 		const MNObject& obj = fiber->get(0);
@@ -525,6 +534,11 @@ struct TableLib
 			fiber->load_stack(-1);
 			fiber->push_string("type");
 			fiber->push_string("table");
+			fiber->store_field();
+
+			fiber->load_stack(-1);
+			fiber->push_string("has");
+			fiber->push_closure(has);
 			fiber->store_field();
 
 			fiber->load_stack(-1);

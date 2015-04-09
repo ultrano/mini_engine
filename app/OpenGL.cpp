@@ -268,9 +268,7 @@ struct GL
 		glGetProgramiv(programID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &bufSize);
 		glGetProgramiv(programID, GL_ACTIVE_UNIFORMS, &count);
 
-		f->push_array(count);
-		MNObject arrObj = f->get(-1);
-		MNArray* arr = arrObj.toArray();
+		f->push_table(count);
 
 		tstring name;
 		name.resize(bufSize);
@@ -282,24 +280,11 @@ struct GL
 			glGetActiveUniform(programID, count, bufSize, &len, &sz, &type, &name[0]);
 			tint loc = glGetUniformLocation(programID, &name[0]);
 
-			f->push_table(2);
 			f->load_stack(-1);
-			MNObject tbl = f->get(-1);
-			
-			f->push_string("name");
-			f->push_string(name);
-			f->store_raw_field();
-
-			f->push_string("loc");
+			f->push_string(name.substr(0,len));
 			f->push_int(loc);
 			f->store_raw_field();
-
-			f->push(arrObj);
-			f->push_int(count);
-			f->push(tbl);
-			f->store_raw_field();
 		}
-		f->push(arrObj);
 		return true;
 	}
 
@@ -314,8 +299,7 @@ struct GL
 		tstring name;
 		name.resize(bufSize);
 
-		f->push_array(count);
-		MNObject arrObj = f->get(-1);
+		f->push_table(count);
 		for (int i = 0; i < count; ++i)
 		{
 			GLint sz = 0;
@@ -324,24 +308,11 @@ struct GL
 			glGetActiveAttrib(programID, i, bufSize, &len, &sz, &type, &name[0]);
 			tint loc = glGetAttribLocation(programID, &name[0]);
 
-			f->push_table(2);
 			f->load_stack(-1);
-			MNObject tbl = f->get(-1);
-
-			f->push_string("name");
-			f->push_string(name);
-			f->store_raw_field();
-
-			f->push_string("loc");
+			f->push_string(name.substr(0,len));
 			f->push_int(loc);
 			f->store_raw_field();
-
-			f->push(arrObj);
-			f->push_int(i);
-			f->push(tbl);
-			f->store_raw_field();
 		}
-		f->push(arrObj);
 		return true;
 	}
 
