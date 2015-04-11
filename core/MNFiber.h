@@ -93,8 +93,8 @@ public:
 		
 	void equals();
 	void less_than();
-	void and();
-	void or();
+	void and_with();
+	void or_with();
 
 	void tostring();
 

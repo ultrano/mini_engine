@@ -4,6 +4,7 @@
 #include "MNMemory.h"
 #include "MNPrimaryType.h"
 
+class MNCountable;
 class MNReferrer : public MNMemory
 {
 	friend class MNCountable;

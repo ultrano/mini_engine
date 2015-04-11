@@ -16,7 +16,7 @@ public:
 	FileScanner(const tstring& filePath)
 		: m_file(NULL)
 	{
-		fopen_s(&m_file, filePath.c_str(), "rb");
+		m_file = fopen(filePath.c_str(), "rb");
 	}
 	~FileScanner()
 	{
@@ -167,7 +167,7 @@ void MNLexer::scan(Token& tok)
 		else
 		{
 			tchar buf[4] = {0,0,0,0};
-			itoa((int)m_char, &buf[0], 10);
+            sprintf(&buf[0], "%d", (int)m_char);
 			tok.type = tok_integer;
 			tok.str = &buf[0];
 			advance();
