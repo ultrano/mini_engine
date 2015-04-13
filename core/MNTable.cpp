@@ -52,7 +52,7 @@ tboolean MNTable::insert(const MNObject& key, const MNObject& val)
 	tsize   index;
 	m_used += 1;
 
-	thash32 hash = key.getHash();
+	thashtype hash = key.getHash();
 	index = hash % m_size;
 	Node* head1 = &(m_nodes[index]);
 	if (head1->key.isNull())
@@ -179,7 +179,7 @@ MNTable::Node* MNTable::findNode(const MNObject& key) const
 {
 	if (m_size == 0) return NULL;
 
-	thash32 hash = key.getHash();
+	thashtype hash = key.getHash();
 	tsize index = hash % m_size;
 	
 	Node* node = &(m_nodes[index]);

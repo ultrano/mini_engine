@@ -20,8 +20,8 @@ class MNObject : public MNMemory
 {
 public:
 	static const MNObject& Null() { static MNObject obj(TObjectType::Null); return obj; }
-	static MNObject Int(tint32 i) { MNObject obj(TObjectType::Int); obj.val._int = i; return obj; }
-	static MNObject Float(tfloat f) { MNObject obj(TObjectType::Float); obj.val._float = f; return obj; }
+	static MNObject Int(tinteger i) { MNObject obj(TObjectType::Int); obj.val._int = i; return obj; }
+	static MNObject Float(treal f) { MNObject obj(TObjectType::Float); obj.val._float = f; return obj; }
 	static MNObject Bool(bool b) { MNObject obj(TObjectType::Boolean); obj.val._bool = b; return obj; }
 	static MNObject Pointer(void* p) { MNObject obj(TObjectType::Pointer); obj.val._pointer = p; return obj; }
 	static MNObject CFunction(TCFunction cfunc)  { MNObject obj(TObjectType::CFunction); obj.val._func = cfunc; return obj; }
@@ -41,7 +41,7 @@ public:
 	MNObject& operator = (const MNObject& right) { return assign(right); }
 
 	tint getType() const;
-	thash32 getHash() const;
+	thashtype getHash() const;
 
 	bool isNull() const;
 	bool isPointer() const;
@@ -62,8 +62,8 @@ public:
 
 	void*       toRaw() const;
 	void*       toPointer() const;
-	tint32      toInt(tint32 def = 0) const;
-	tfloat      toFloat(tfloat def = 0.0f) const;
+	tinteger    toInt(tinteger def = 0) const;
+	treal       toFloat(treal def = 0.0f) const;
 	tboolean    toBool(bool def = false) const;
 	TCFunction  toCFunction() const;
 	MNString*   toString() const;
@@ -82,8 +82,8 @@ private:
 
 	union
 	{
-		tint32 _int;
-		tfloat _float;
+		tinteger _int;
+		treal _float;
 		tboolean _bool;
 		void* _pointer;
 		TCFunction _func;

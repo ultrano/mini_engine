@@ -212,12 +212,12 @@ void MNFiber::push_null()
 	push(MNObject::Null());
 }
 
-void MNFiber::push_int(tint32 val)
+void MNFiber::push_integer(tinteger val)
 {
 	push(MNObject::Int(val));
 }
 
-void MNFiber::push_float(tfloat val)
+void MNFiber::push_real(treal val)
 {
 	push(MNObject::Float(val));
 }
@@ -1026,14 +1026,14 @@ tint32 MNFiber::excuteCall()
 				{
 					float _float;
 					code >> _float;
-					push_float(_float);
+					push_real(_float);
 				}
 				break;
 			case cmd_push_int:
 				{
 					tint32 _int;
 					code >> _int;
-					push_int(_int);
+					push_integer(_int);
 				}
 				break;
 			case cmd_push_table:

@@ -41,9 +41,16 @@ typedef tushort        tuint16;
 typedef tuint          tuint32;
 typedef unsigned long long int tuint64;
 
-typedef tuint64        thash32;
+typedef tuint32        thash32;
 typedef tuint64        thash64;
-typedef tint           thash;
+
+typedef tint32         tinteger;
+typedef tfloat         treal;
+typedef thash32        thashtype;
+
+//typedef tint64         tinteger;
+//typedef tdouble        treal;
+//typedef thash64        thashtype;
 
 #define tlist  std::list
 #define tset   std::set

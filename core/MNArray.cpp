@@ -29,7 +29,7 @@ tboolean MNArray::add(const MNObject& val)
 tboolean MNArray::tryGet(const MNObject& key, MNObject& val) const
 {
 	if (!key.isInt() && !key.isFloat()) return false;
-	tsize idx = key.toInt();
+	tsize idx = (tsize)key.toInt();
 	tboolean ret = (idx < m_arr.size());
 	if (ret) val = m_arr[idx];
 	return ret;
@@ -38,7 +38,7 @@ tboolean MNArray::tryGet(const MNObject& key, MNObject& val) const
 tboolean MNArray::trySet(const MNObject& key, const MNObject& val)
 {
 	if (!key.isInt() && !key.isFloat()) return false;
-	tsize idx = key.toInt();
+	tsize idx = (tsize)key.toInt();
 	tboolean ret = (idx < m_arr.size());
 	if (ret) m_arr[idx] = val;
 	return ret;

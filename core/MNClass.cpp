@@ -73,7 +73,7 @@ tboolean MNClass::queryMember(const MNObject& key, Member& mem) const
 {
 	MNObject obj;
 	bool ret = m_members->tryGet(key, obj);
-	mem._int = obj.toInt();
+	mem._int = (tint32)obj.toInt();
 	return ret;
 }
 

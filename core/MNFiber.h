@@ -60,8 +60,8 @@ public:
 
 	//! command methods.
 	void  push_null();
-	void  push_int(tint32 val);
-	void  push_float(tfloat val);
+	void  push_integer(tinteger val);
+	void  push_real(treal val);
 	void  push_string(const tstring& val);
 	void  push_pointer(void* val);
 	void  push_bool(tboolean val);

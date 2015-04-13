@@ -51,9 +51,9 @@ void callbackMouse(int button, int state, int x, int y)
 	fiber->push_string("inputCallback");
 	fiber->load_global();
 	fiber->load_stack(0);
-	fiber->push_int(state);
-	fiber->push_int(x);
-	fiber->push_int(y);
+	fiber->push_integer(state);
+	fiber->push_integer(x);
+	fiber->push_integer(y);
 	fiber->call(4, 0);
 }
 
@@ -63,9 +63,9 @@ void callbackMouseMove(int x, int y)
 	fiber->push_string("inputCallback");
 	fiber->load_global();
 	fiber->load_stack(0);
-	fiber->push_int(2);
-	fiber->push_int(x);
-	fiber->push_int(y);
+	fiber->push_integer(2);
+	fiber->push_integer(x);
+	fiber->push_integer(y);
 	fiber->call(4, 0);
 }
 

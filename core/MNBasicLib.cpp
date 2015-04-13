@@ -39,13 +39,13 @@ struct CommonLib
 
 	static bool castFloat(MNFiber* fiber)
 	{
-		fiber->push_float(fiber->get(1).toFloat());
+		fiber->push_real(fiber->get(1).toFloat());
 		return true;
 	}
 
 	static bool castInt(MNFiber* fiber)
 	{
-		fiber->push_int(fiber->get(1).toInt());
+		fiber->push_integer(fiber->get(1).toInt());
 		return true;
 	}
 
@@ -53,7 +53,7 @@ struct CommonLib
 	{
 		const MNObject& size = fiber->get(1);
 		if (!size.isInt()) return false;
-		fiber->push_userdata(size.toInt());
+		fiber->push_userdata((tsize)size.toInt());
 		return true;
 	}
 
@@ -93,7 +93,7 @@ struct CommonLib
 
 	static bool garbageCollect(MNFiber* fiber)
 	{
-		fiber->push_int(fiber->global()->GC());
+		fiber->push_integer(fiber->global()->GC());
 		return true;
 	}
 
@@ -176,15 +176,15 @@ struct MathLib
 {
 	static bool sqrt(MNFiber* fiber)
 	{
-		float a = sqrtf(fiber->get(1).toFloat());
-		fiber->push_float(a);
+		float a = sqrtf((tfloat)fiber->get(1).toFloat());
+		fiber->push_real(a);
 		return true;
 	}
 
 	static bool pow(MNFiber* fiber)
 	{
-		float a = powf(fiber->get(1).toFloat(), fiber->get(2).toFloat());
-		fiber->push_float(a);
+		float a = powf((tfloat)fiber->get(1).toFloat(), (tfloat)fiber->get(2).toFloat());
+		fiber->push_real(a);
 		return true;
 	}
 
@@ -369,7 +369,7 @@ struct ArrayLib
 		const MNObject& obj = fiber->get(0);
 		MNArray* arr = obj.toArray();
 		if (!arr) return false;
-		fiber->push_int(arr->count());
+		fiber->push_integer(arr->count());
 		return true;
 	}
 
@@ -413,7 +413,7 @@ struct ArrayLib
 		{
 			fiber->load_stack(1);
 			fiber->load_stack(0);
-			fiber->push_int(itor - 1);
+			fiber->push_integer(itor - 1);
 			fiber->push(val);
 			fiber->call(3, true);
 			bool ret = fiber->get(-1).toBool(true);
@@ -483,7 +483,7 @@ struct TableLib
 		const MNObject& obj = fiber->get(0);
 		MNTable* tbl = obj.toTable();
 		if (!tbl) return false;
-		fiber->push_int(tbl->count());
+		fiber->push_integer(tbl->count());
 		return true;
 	}
 
@@ -498,7 +498,7 @@ struct TableLib
 		const MNObject& obj = fiber->get(0);
 		MNTable* tbl = obj.toTable();
 		if (!tbl) return false;
-		fiber->push_int(tbl->total());
+		fiber->push_integer(tbl->total());
 		return true;
 	}
 

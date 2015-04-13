@@ -115,7 +115,7 @@ tint MNObject::getType() const
 	return valType;
 }
 
-thash32 MNObject::getHash() const
+thashtype MNObject::getHash() const
 {
 	switch (getType())
 	{
@@ -217,17 +217,17 @@ void*       MNObject::toPointer() const
 	return NULL;
 }
 
-tint32      MNObject::toInt(tint32 def) const
+tinteger      MNObject::toInt(tinteger def) const
 {
 	if (isInt()) return val._int;
-	if (isFloat()) return (tint32)val._float;
+	if (isFloat()) return (tinteger)val._float;
 	return def;
 }
 
-tfloat      MNObject::toFloat(tfloat def) const
+treal      MNObject::toFloat(treal def) const
 {
 	if (isFloat()) return val._float;
-	if (isInt()) return (tfloat)val._int;
+	if (isInt()) return (treal)val._int;
 	return def;
 }
 

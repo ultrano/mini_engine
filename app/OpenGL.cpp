@@ -192,7 +192,7 @@ struct GL
 
 		tuint programID = glLoadProgram(str->ss().c_str());
 		if (programID == 0) return false;
-		f->push_int(programID);
+		f->push_integer(programID);
 		return true;
 	};
 
@@ -219,7 +219,7 @@ struct GL
 		MNString* str = f->get(2).toString();
 		if (!str) return false;
 		int loc = glGetAttribLocation(programID, str->ss().c_str());
-		f->push_int(loc);
+		f->push_integer(loc);
 		return true;
 	};
 
@@ -229,7 +229,7 @@ struct GL
 		MNString* str = f->get(2).toString();
 		if (!str) return false;
 		int loc = glGetUniformLocation(programID, str->ss().c_str());
-		f->push_int(loc);
+		f->push_integer(loc);
 		return true;
 	};
 
@@ -282,7 +282,7 @@ struct GL
 
 			f->load_stack(-1);
 			f->push_string(name.substr(0,len));
-			f->push_int(loc);
+			f->push_integer(loc);
 			f->store_raw_field();
 		}
 		return true;
@@ -310,7 +310,7 @@ struct GL
 
 			f->load_stack(-1);
 			f->push_string(name.substr(0,len));
-			f->push_int(loc);
+			f->push_integer(loc);
 			f->store_raw_field();
 		}
 		return true;
@@ -338,17 +338,17 @@ struct GL
 
 		f->up(1, 0);
 		f->push_string("id");
-		f->push_int(id);
+		f->push_integer(id);
 		f->store_field();
 
 		f->up(1, 0);
 		f->push_string("width");
-		f->push_int(width);
+		f->push_integer(width);
 		f->store_field();
 
 		f->up(1, 0);
 		f->push_string("height");
-		f->push_int(height);
+		f->push_integer(height);
 		f->store_field();
 		return true;
 	}
@@ -565,12 +565,12 @@ void exposeGL(MNFiber* fiber)
 
 	fiber->up(1, 0);
 	fiber->push_string("MODELVIEW");
-	fiber->push_int(GL_MODELVIEW);
+	fiber->push_integer(GL_MODELVIEW);
 	fiber->store_field();
 
 	fiber->up(1, 0);
 	fiber->push_string("MODELVIEW_MATRIX");
-	fiber->push_int(GL_MODELVIEW_MATRIX);
+	fiber->push_integer(GL_MODELVIEW_MATRIX);
 	fiber->store_field();
 
 	fiber->pop(1);
