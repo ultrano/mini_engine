@@ -39,7 +39,7 @@ struct CommonLib
 
 	static bool castFloat(MNFiber* fiber)
 	{
-		fiber->push_real(fiber->get(1).toFloat());
+		fiber->push_real(fiber->get(1).toReal());
 		return true;
 	}
 
@@ -64,7 +64,7 @@ struct CommonLib
 		{
 		case TObjectType::Int      : fiber->push_string("int"); break;
 		case TObjectType::Null     : fiber->push_string("null"); break;
-		case TObjectType::Float    : fiber->push_string("float"); break;
+		case TObjectType::Real     : fiber->push_string("float"); break;
 		case TObjectType::String   : fiber->push_string("string"); break;
 		case TObjectType::Pointer  : fiber->push_string("pointer"); break;
 		case TObjectType::Function : fiber->push_string("function"); break;
@@ -176,14 +176,14 @@ struct MathLib
 {
 	static bool sqrt(MNFiber* fiber)
 	{
-		float a = sqrtf((tfloat)fiber->get(1).toFloat());
+		float a = sqrtf((tfloat)fiber->get(1).toReal());
 		fiber->push_real(a);
 		return true;
 	}
 
 	static bool pow(MNFiber* fiber)
 	{
-		float a = powf((tfloat)fiber->get(1).toFloat(), (tfloat)fiber->get(2).toFloat());
+		float a = powf((tfloat)fiber->get(1).toReal(), (tfloat)fiber->get(2).toReal());
 		fiber->push_real(a);
 		return true;
 	}

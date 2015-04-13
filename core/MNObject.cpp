@@ -141,9 +141,9 @@ bool MNObject::isInt() const
 	return (getType() == TObjectType::Int);
 }
 
-bool MNObject::isFloat() const
+bool MNObject::isReal() const
 {
-	return (getType() == TObjectType::Float);
+	return (getType() == TObjectType::Real);
 }
 
 bool MNObject::isBool() const
@@ -220,13 +220,13 @@ void*       MNObject::toPointer() const
 tinteger      MNObject::toInt(tinteger def) const
 {
 	if (isInt()) return val._int;
-	if (isFloat()) return (tinteger)val._float;
+	if (isReal()) return (tinteger)val._float;
 	return def;
 }
 
-treal      MNObject::toFloat(treal def) const
+treal      MNObject::toReal(treal def) const
 {
-	if (isFloat()) return val._float;
+	if (isReal()) return val._float;
 	if (isInt()) return (treal)val._int;
 	return def;
 }

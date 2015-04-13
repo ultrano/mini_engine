@@ -219,7 +219,7 @@ void MNFiber::push_integer(tinteger val)
 
 void MNFiber::push_real(treal val)
 {
-	push(MNObject::Float(val));
+	push(MNObject::Real(val));
 }
 
 void MNFiber::push_string(const tstring& val)
@@ -552,12 +552,12 @@ void MNFiber::equals()
 	case TObjectType::Int:
 		{
 			if (right.isInt()) ret = (left.toInt() == right.toInt());
-			else if (right.isFloat()) ret = (left.toFloat() == right.toFloat());
+			else if (right.isReal()) ret = (left.toReal() == right.toReal());
 		}
 		break;
-	case TObjectType::Float:
+	case TObjectType::Real:
 		{
-			ret = (left.toFloat() == right.toFloat());
+			ret = (left.toReal() == right.toReal());
 		}
 		break;
 	case TObjectType::UserData:
@@ -582,10 +582,10 @@ void MNFiber::less_than()
 	switch (left.getType())
 	{
 	case TObjectType::Int:
-	case TObjectType::Float:
+	case TObjectType::Real:
 		{
 			if (right.isInt()) ret = MNObject::Bool(left.toInt() < right.toInt());
-			else if (right.isFloat()) ret = MNObject::Bool(left.toFloat() < right.toFloat());
+			else if (right.isReal()) ret = MNObject::Bool(left.toReal() < right.toReal());
 		}
 		break;
 	case TObjectType::UserData:
@@ -633,7 +633,7 @@ void MNFiber::tostring()
 	case TObjectType::Closure  : str = MNObject::Format("[closure: %p]", object.toClosure()); break;
 	case TObjectType::String   : str = object; break;
 	case TObjectType::Int      : str = MNObject::Format("%d", object.toInt()); break;
-	case TObjectType::Float    : str = MNObject::Format("%f", object.toFloat()); break;
+	case TObjectType::Real     : str = MNObject::Format("%f", object.toReal()); break;
 	case TObjectType::Boolean  : str = MNObject::Format("%s", object.toBool() ? "true" : "false"); break;
 	case TObjectType::UserData : 
 		{
@@ -664,7 +664,7 @@ void MNFiber::neg()
 	switch (val.getType())
 	{
 	case TObjectType::Int   : ret = MNObject::Int(-val.toInt()); break;
-	case TObjectType::Float : ret = MNObject::Float(-val.toFloat());  break;
+	case TObjectType::Real  : ret = MNObject::Real(-val.toReal());  break;
 	case TObjectType::UserData :
 	case  TObjectType::Table: unaryOp(this, "-", val, ret); break;
 	}
@@ -683,10 +683,10 @@ void MNFiber::add()
 	case TObjectType::Int:
 	{
 		if (right.isInt())   ret = MNObject::Int(left.toInt() + right.toInt());
-		if (right.isFloat()) ret = MNObject::Float(left.toFloat() + right.toFloat());
+		if (right.isReal()) ret = MNObject::Real(left.toReal() + right.toReal());
 	}
 	break;
-	case TObjectType::Float : if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() + right.toFloat()); break;
+	case TObjectType::Real: if (right.isReal() || right.isInt()) ret = MNObject::Real(left.toReal() + right.toReal()); break;
 	case TObjectType::String:
 	{
 		tostring();
@@ -720,10 +720,10 @@ void MNFiber::sub()
 	case TObjectType::Int:
 	{
 		if (right.isInt())   ret = MNObject::Int(left.toInt() - right.toInt());
-		if (right.isFloat()) ret = MNObject::Float(left.toFloat() - right.toFloat());
+		if (right.isReal()) ret = MNObject::Real(left.toReal() - right.toReal());
 	}
 	break;
-	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() - right.toFloat()); break;
+	case TObjectType::Real: if (right.isReal() || right.isInt()) ret = MNObject::Real(left.toReal() - right.toReal()); break;
 	case TObjectType::UserData :
 	case TObjectType::Table:
 	{
@@ -747,10 +747,10 @@ void MNFiber::mul()
 	case TObjectType::Int:
 	{
 		if (right.isInt())   ret = MNObject::Int(left.toInt() * right.toInt());
-		if (right.isFloat()) ret = MNObject::Float(left.toFloat() * right.toFloat());
+		if (right.isReal()) ret = MNObject::Real(left.toReal() * right.toReal());
 	}
 	break;
-	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() * right.toFloat()); break;
+	case TObjectType::Real: if (right.isReal() || right.isInt()) ret = MNObject::Real(left.toReal() * right.toReal()); break;
 	case TObjectType::UserData :
 	case TObjectType::Table:
 	{
@@ -774,14 +774,14 @@ void MNFiber::div()
 	case TObjectType::Int:
 	{
 		if (right.isInt()   && right.toInt() != 0)   ret = MNObject::Int(left.toInt() / right.toInt());
-		if (right.isFloat() && right.toFloat() != 0) ret = MNObject::Float(left.toFloat() / right.toFloat());
+		if (right.isReal() && right.toReal() != 0) ret = MNObject::Real(left.toReal() / right.toReal());
 	}
 	break;
-	case TObjectType::Float:
+	case TObjectType::Real:
 	{
-		if (right.isFloat() || right.isInt())
+		if (right.isReal() || right.isInt())
 		{
-			if (right.toFloat() != 0.0f) ret = MNObject::Float(left.toFloat() / right.toFloat());
+			if (right.toReal() != 0.0f) ret = MNObject::Real(left.toReal() / right.toReal());
 		}
 	}
 	break;
@@ -808,14 +808,14 @@ void MNFiber::mod()
 	case TObjectType::Int:
 	{
 		if (right.isInt() && right.toInt() != 0)   ret = MNObject::Int(left.toInt() % right.toInt());
-		if (right.isFloat() && right.toFloat() != 0) ret = MNObject::Float(fmod(left.toFloat(), right.toFloat()));
+		if (right.isReal() && right.toReal() != 0) ret = MNObject::Real(fmod(left.toReal(), right.toReal()));
 	}
 	break;
-	case TObjectType::Float:
+	case TObjectType::Real:
 	{
-		if (right.isFloat() || right.isInt())
+		if (right.isReal() || right.isInt())
 		{
-			if (right.toFloat() != 0.0f) ret = MNObject::Float(fmod(left.toFloat(), right.toFloat()));
+			if (right.toReal() != 0.0f) ret = MNObject::Real(fmod(left.toReal(), right.toReal()));
 		}
 	}
 	break;

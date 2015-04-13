@@ -108,7 +108,7 @@ enum TObjectType : tuint8
 	Null      = (1<<1),
 	Pointer   = (2<<1),
 	Int       = (3<<1),
-	Float     = (4<<1),
+	Real      = (4<<1),
 	Boolean   = (5<<1),
 	CFunction = (6<<1),
 

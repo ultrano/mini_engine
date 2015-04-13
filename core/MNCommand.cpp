@@ -121,7 +121,7 @@
 //tfloat       MNCommand::to_float(tint32 idx, tfloat def)
 //{
 //	const MNObject& obj = m_fiber->get(idx);
-//	return obj.toFloat(def);
+//	return obj.toReal(def);
 //}
 //
 //const tchar* MNCommand::to_string(tint32 idx, const tchar* def)
@@ -330,7 +330,7 @@
 //	case TObjectType::Int: case TObjectType::Float:
 //	{
 //		if (right.isInt()) ret = MNObject::Bool(left.toInt() == right.toInt());
-//		else if (right.isFloat()) ret = MNObject::Bool(left.toFloat() == right.toFloat());
+//		else if (right.isReal()) ret = MNObject::Bool(left.toReal() == right.toReal());
 //	}
 //	break;
 //	case TObjectType::Table:
@@ -355,7 +355,7 @@
 //	case TObjectType::Function: str = MNObject::Format("[cfunction: %p]", object.toFunction()); break;
 //	case TObjectType::String  : str = object; break;
 //	case TObjectType::Int     : str = MNObject::Format("%d", object.toInt()); break;
-//	case TObjectType::Float   : str = MNObject::Format("%f", object.toFloat()); break;
+//	case TObjectType::Float   : str = MNObject::Format("%f", object.toReal()); break;
 //	}
 //
 //	m_fiber->push(str);
@@ -370,8 +370,8 @@
 //	MNObject ret;
 //	switch (left.getType())
 //	{
-//	case TObjectType::Int  : if (right.isFloat() || right.isInt()) ret = MNObject::Int(left.toInt() + right.toInt()); break;
-//	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() + right.toFloat()); break;
+//	case TObjectType::Int  : if (right.isReal() || right.isInt()) ret = MNObject::Int(left.toInt() + right.toInt()); break;
+//	case TObjectType::Float: if (right.isReal() || right.isInt()) ret = MNObject::Float(left.toReal() + right.toReal()); break;
 //	case TObjectType::String:
 //	{
 //		m_fiber->push(right);
@@ -403,8 +403,8 @@
 //	MNObject ret;
 //	switch (left.getType())
 //	{
-//	case TObjectType::Int  : if (right.isFloat() || right.isInt()) ret = MNObject::Int(left.toInt() - right.toInt()); break;
-//	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() - right.toFloat()); break;
+//	case TObjectType::Int  : if (right.isReal() || right.isInt()) ret = MNObject::Int(left.toInt() - right.toInt()); break;
+//	case TObjectType::Float: if (right.isReal() || right.isInt()) ret = MNObject::Float(left.toReal() - right.toReal()); break;
 //	case TObjectType::Table:
 //	{
 //		binomalOp(m_fiber, "-", left, right, ret);
@@ -424,8 +424,8 @@
 //	MNObject ret;
 //	switch (left.getType())
 //	{
-//	case TObjectType::Int: if (right.isFloat() || right.isInt()) ret = MNObject::Int(left.toInt() * right.toInt()); break;
-//	case TObjectType::Float: if (right.isFloat() || right.isInt()) ret = MNObject::Float(left.toFloat() * right.toFloat()); break;
+//	case TObjectType::Int: if (right.isReal() || right.isInt()) ret = MNObject::Int(left.toInt() * right.toInt()); break;
+//	case TObjectType::Float: if (right.isReal() || right.isInt()) ret = MNObject::Float(left.toReal() * right.toReal()); break;
 //	case TObjectType::Table:
 //	{
 //		binomalOp(m_fiber, "*", left, right, ret);
@@ -447,7 +447,7 @@
 //	{
 //	case TObjectType::Int:
 //	{
-//		if (right.isFloat() || right.isInt())
+//		if (right.isReal() || right.isInt())
 //		{
 //			if (right.toInt() != 0) ret = MNObject::Int(left.toInt() / right.toInt());
 //		}
@@ -455,9 +455,9 @@
 //	break;
 //	case TObjectType::Float:
 //	{
-//		if (right.isFloat() || right.isInt())
+//		if (right.isReal() || right.isInt())
 //		{
-//			if (right.toFloat() != 0.0f) ret = MNObject::Float(left.toFloat() / right.toFloat());
+//			if (right.toReal() != 0.0f) ret = MNObject::Float(left.toReal() / right.toReal());
 //		}
 //	}
 //	break;
@@ -482,7 +482,7 @@
 //	{
 //	case TObjectType::Int:
 //	{
-//		if (right.isFloat() || right.isInt())
+//		if (right.isReal() || right.isInt())
 //		{
 //			if (right.toInt() != 0) ret = MNObject::Int(left.toInt() % right.toInt());
 //		}
@@ -490,9 +490,9 @@
 //	break;
 //	case TObjectType::Float:
 //	{
-//		if (right.isFloat() || right.isInt())
+//		if (right.isReal() || right.isInt())
 //		{
-//			if (right.toFloat() != 0.0f) ret = MNObject::Float(fmod(left.toFloat(), right.toFloat()));
+//			if (right.toReal() != 0.0f) ret = MNObject::Float(fmod(left.toReal(), right.toReal()));
 //		}
 //	}
 //	break;

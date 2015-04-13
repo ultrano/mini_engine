@@ -21,7 +21,7 @@ class MNObject : public MNMemory
 public:
 	static const MNObject& Null() { static MNObject obj(TObjectType::Null); return obj; }
 	static MNObject Int(tinteger i) { MNObject obj(TObjectType::Int); obj.val._int = i; return obj; }
-	static MNObject Float(treal f) { MNObject obj(TObjectType::Float); obj.val._float = f; return obj; }
+	static MNObject Real(treal f) { MNObject obj(TObjectType::Real); obj.val._float = f; return obj; }
 	static MNObject Bool(bool b) { MNObject obj(TObjectType::Boolean); obj.val._bool = b; return obj; }
 	static MNObject Pointer(void* p) { MNObject obj(TObjectType::Pointer); obj.val._pointer = p; return obj; }
 	static MNObject CFunction(TCFunction cfunc)  { MNObject obj(TObjectType::CFunction); obj.val._func = cfunc; return obj; }
@@ -46,7 +46,7 @@ public:
 	bool isNull() const;
 	bool isPointer() const;
 	bool isInt() const;
-	bool isFloat() const;
+	bool isReal() const;
 	bool isBool() const;
 	bool isCFunction() const;
 	bool isReferrer() const;
@@ -63,7 +63,7 @@ public:
 	void*       toRaw() const;
 	void*       toPointer() const;
 	tinteger    toInt(tinteger def = 0) const;
-	treal       toFloat(treal def = 0.0f) const;
+	treal       toReal(treal def = 0.0f) const;
 	tboolean    toBool(bool def = false) const;
 	TCFunction  toCFunction() const;
 	MNString*   toString() const;

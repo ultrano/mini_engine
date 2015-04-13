@@ -166,10 +166,10 @@ struct GL
 {
 	static bool ClearColor(MNFiber* f)
 	{
-		float r = f->get(1).toFloat();
-		float g = f->get(2).toFloat();
-		float b = f->get(3).toFloat();
-		float a = f->get(4).toFloat();
+		float r = f->get(1).toReal();
+		float g = f->get(2).toReal();
+		float b = f->get(3).toReal();
+		float a = f->get(4).toReal();
 		glClearColor(r, g, b, a);
 		return false;
 	};
@@ -379,17 +379,17 @@ struct GL
 	}
 	static bool Translate(MNFiber* f)
 	{
-		glTranslatef(f->get(1).toFloat(), f->get(2).toFloat(), f->get(3).toFloat());
+		glTranslatef(f->get(1).toReal(), f->get(2).toReal(), f->get(3).toReal());
 		return false;
 	}
 	static bool Rotate(MNFiber* f)
 	{
-		glRotatef(f->get(1).toFloat(), f->get(2).toFloat(), f->get(3).toFloat(), f->get(4).toFloat());
+		glRotatef(f->get(1).toReal(), f->get(2).toReal(), f->get(3).toReal(), f->get(4).toReal());
 		return false;
 	}
 	static bool Scale(MNFiber* f)
 	{
-		glScalef(f->get(1).toFloat(), f->get(2).toFloat(), f->get(3).toFloat());
+		glScalef(f->get(1).toReal(), f->get(2).toReal(), f->get(3).toReal());
 		return false;
 	}
 	static bool Ortho(MNFiber* fi)
