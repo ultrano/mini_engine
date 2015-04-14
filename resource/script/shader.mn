@@ -1,0 +1,24 @@
+
+class Shader
+{
+	var m_programID;
+	var m_uniforms;
+	var m_attribs;
+	constructor(source)
+	{
+		if (::typeof(source) != "string") return;
+		m_programID = ::GL.LoadProgram(source);
+		m_uniforms  = ::GL.GetActiveUniforms(m_programID);
+		m_attribs   = ::GL.GetActiveAttribs(m_programID);
+	};
+	func getUniformLocation(name)
+	{
+		if (m_uniforms.has(name) == false) return null;
+		return m_uniforms[name];
+	};
+	func getAttribLocation(name)
+	{
+		if (m_attribs.has(name) == false) return null;
+		return m_attribs[name];
+	};
+};

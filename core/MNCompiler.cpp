@@ -498,7 +498,7 @@ void MNCompiler::_class()
 	code() << cmd_load_stack << tuint16(1);
 	code() << cmd_add_class_static;
 
-	while (!check('}') && _class_field()) nfield += 1;
+	while (!check('}') && _class_field(className)) nfield += 1;
 	advance();
 
 	code() << cmd_load_this;
@@ -517,9 +517,10 @@ void MNCompiler::_class()
 	delete newFunc;
 }
 
-bool MNCompiler::_class_field()
+bool MNCompiler::_class_field(const thashstring& className)
 {
 	static const thashstring _constructor = tstring("constructor");
+	static const thashstring _native  = tstring("native");
 
 	code() << cmd_up1;
 	tboolean ret = false;
@@ -546,6 +547,23 @@ bool MNCompiler::_class_field()
 		advance();
 		code() << cmd_load_const << idx;
 		_func_content();
+	}
+	else if (ret = (check(tok_identify) && m_current.str == _native))
+	{
+		advance();
+		if (ret = check(tok_func))
+		{
+			advance();
+			const tsize bufSize = 256;
+			tchar tempBuf[bufSize] = { 0 };
+			thashstring methodName = m_current.str;
+			sprintf(&tempBuf[0], "Mini_%s_%s", className.c_str(), methodName.c_str());
+			tuint16 idx1 = m_func->addConst(MNObject::String(methodName));
+			tuint16 idx2 = m_func->addConst(MNObject::String(tstring(&tempBuf[0])));
+			advance();
+			code() << cmd_load_const << idx1;
+			code() << cmd_load_global << idx2;
+		}
 	}
 	else compile_error("unknown field type");
 

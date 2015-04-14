@@ -84,6 +84,17 @@ void callbackKeyboardUp(unsigned char key, int x, int y)
 	//SW_GC.onKeyChange( key, false );
 }
 
+bool Mini_Native_print(MNFiber* fiber)
+{
+	fiber->load_stack(0);
+	fiber->push_string("name");
+	fiber->load_field();
+	MNString* name = fiber->get(-1).toString();
+	
+	printf("Mini_Native_print : %s\n", name->ss().c_str());
+	return false;
+}
+
 int main()
 {
 	MNFiber* fiber = mainFiber();
@@ -113,6 +124,9 @@ int main()
 		glutKeyboardUpFunc(callbackKeyboardUp);
 		glewInit();
 		exposeGL(fiber);
+		fiber->push_string("Mini_Native_print");
+		fiber->push_closure(Mini_Native_print);
+		fiber->store_global();
 	}
 
 	//! compile test

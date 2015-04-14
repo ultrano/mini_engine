@@ -1,0 +1,45 @@
+
+dofile("../resource/script/shader.mn");
+dofile("../resource/script/material.mn");
+dofile("../resource/script/texture.mn");
+
+var shaderStr = 
+"
+    uniform   mat4 MATRIX_MVP;
+    uniform sampler2D TEXTURE_0;
+    
+    varying   vec2 v_tex;
+
+    #ifdef VERTEX_SHADER
+    
+    attribute vec4 pos;
+    attribute vec2 tex;
+    
+    void main()
+    {
+       gl_Position = MATRIX_MVP * pos;
+       v_tex = tex;
+    }
+    
+    #endif
+    
+    #ifdef FRAGMENT_SHADER
+    #ifdef GL_ES
+    precision mediump float;
+    #endif
+    
+    void main()
+    {
+       gl_FragColor = texture2D( TEXTURE_0, v_tex );
+    }
+    
+    #endif
+";
+
+var shader = new Shader(shaderStr);
+var material = new Material(shader);
+var texture = new Texture();
+
+material.setTexture("TEXTURE_0", texture);
+material.m_values.iterate(func(k,v){::print(k,v);});
+

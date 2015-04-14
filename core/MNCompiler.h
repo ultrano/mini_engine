@@ -115,7 +115,7 @@ public:
 	void _func_content();
 	void _return();
 	void _class();
-	bool _class_field();
+	bool _class_field(const thashstring& className);
 
 	void _load(MNExp& e);
 	void _assign(MNExp& e, tboolean leftVal);
