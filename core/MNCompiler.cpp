@@ -563,6 +563,20 @@ bool MNCompiler::_class_field(const thashstring& className)
 			advance();
 			code() << cmd_load_const << idx1;
 			code() << cmd_load_global << idx2;
+			//! function parameter
+			{
+				if (!check('(')) compile_error("function needs arguments statement");
+				advance();
+
+				if (!check(')')) while (true)
+				{
+					if (check(tok_identify)) advance();
+					else if (check(',')) advance();
+					else if (check(')')) break;
+					else compile_error("it's wrong function parameter");
+				}
+				advance();
+			}
 		}
 	}
 	else compile_error("unknown field type");

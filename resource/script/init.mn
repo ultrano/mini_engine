@@ -7,7 +7,7 @@ dofile("../resource/script/opengl_test.mn");
 class Native
 {
 	var name = "i'm native!!'";
-	native func print;
+	native func print();
 };
 
 var test = new Native();
