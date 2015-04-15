@@ -520,7 +520,6 @@ void MNCompiler::_class()
 bool MNCompiler::_class_field(const thashstring& className)
 {
 	static const thashstring _constructor = tstring("constructor");
-	static const thashstring _native  = tstring("native");
 
 	code() << cmd_up1;
 	tboolean ret = false;
@@ -541,14 +540,14 @@ bool MNCompiler::_class_field(const thashstring& className)
 		code() << cmd_load_const << idx;
 		_func_content();
 	}
-	else if (ret = (check(tok_identify) && m_current.str == _constructor))
+	else if (ret = check(tok_constructor))
 	{
 		tuint16 idx = m_func->addConst(MNObject::String(_constructor));
 		advance();
 		code() << cmd_load_const << idx;
 		_func_content();
 	}
-	else if (ret = (check(tok_identify) && m_current.str == _native))
+	else if (ret = check(tok_native))
 	{
 		advance();
 		if (ret = check(tok_func))
@@ -557,26 +556,39 @@ bool MNCompiler::_class_field(const thashstring& className)
 			const tsize bufSize = 256;
 			tchar tempBuf[bufSize] = { 0 };
 			thashstring methodName = m_current.str;
+			advance();
 			sprintf(&tempBuf[0], "Mini_%s_%s", className.c_str(), methodName.c_str());
 			tuint16 idx1 = m_func->addConst(MNObject::String(methodName));
 			tuint16 idx2 = m_func->addConst(MNObject::String(tstring(&tempBuf[0])));
-			advance();
 			code() << cmd_load_const << idx1;
 			code() << cmd_load_global << idx2;
-			//! function parameter
-			{
-				if (!check('(')) compile_error("function needs arguments statement");
-				advance();
+		}
+		else if (ret = check(tok_constructor))
+		{
+			advance();
+			const tsize bufSize = 256;
+			tchar tempBuf[bufSize] = { 0 };
+			sprintf(&tempBuf[0], "Mini_%s_%s", className.c_str(), _constructor.c_str());
+			tuint16 idx1 = m_func->addConst(MNObject::String(_constructor));
+			tuint16 idx2 = m_func->addConst(MNObject::String(tstring(&tempBuf[0])));
+			code() << cmd_load_const << idx1;
+			code() << cmd_load_global << idx2;
+		}
+		else compile_error("unknown native method type");
 
-				if (!check(')')) while (true)
-				{
-					if (check(tok_identify)) advance();
-					else if (check(',')) advance();
-					else if (check(')')) break;
-					else compile_error("it's wrong function parameter");
-				}
-				advance();
+		//! function parameter
+		{
+			if (!check('(')) compile_error("function needs arguments statement");
+			advance();
+
+			if (!check(')')) while (true)
+			{
+				if (check(tok_identify)) advance();
+				else if (check(',')) advance();
+				else if (check(')')) break;
+				else compile_error("it's wrong function parameter");
 			}
+			advance();
 		}
 	}
 	else compile_error("unknown field type");

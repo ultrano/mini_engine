@@ -7,6 +7,11 @@ dofile("../resource/script/opengl_test.mn");
 class Native
 {
 	var name = "i'm native!!'";
+
+	//! return: null
+	native constructor();
+
+	//! return: null
 	native func print();
 };
 

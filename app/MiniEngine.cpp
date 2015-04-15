@@ -95,6 +95,15 @@ bool Mini_Native_print(MNFiber* fiber)
 	return false;
 }
 
+bool Mini_Native_constructor(MNFiber* fiber)
+{
+	fiber->load_stack(0);
+	fiber->push_string("name");
+	fiber->push_string("i'm new native!!");
+	fiber->store_field();
+	return false;
+}
+
 int main()
 {
 	MNFiber* fiber = mainFiber();
@@ -124,6 +133,9 @@ int main()
 		glutKeyboardUpFunc(callbackKeyboardUp);
 		glewInit();
 		exposeGL(fiber);
+		fiber->push_string("Mini_Native_constructor");
+		fiber->push_closure(Mini_Native_constructor);
+		fiber->store_global();
 		fiber->push_string("Mini_Native_print");
 		fiber->push_closure(Mini_Native_print);
 		fiber->store_global();

@@ -73,6 +73,8 @@ enum tok_type
 	tok_pull       = 163,
 	tok_and        = 164,
 	tok_or         = 165,
+	tok_native     = 167,
+	tok_constructor = 166,
 
 	tok_error  = 254,
 	tok_eos    = 255,
@@ -103,6 +105,8 @@ inline void reservedWords(MNLexer::Token& tok)
 	static const thashstring _class("class");
 	static const thashstring _new("new");
 	static const thashstring _base("base");
+	static const thashstring _native("native");
+	static const thashstring _constructor("constructor");
 
 	if (tok.str == _var)           tok.type = tok_var;
 	else if (tok.str == _func)     tok.type = tok_func;
@@ -123,6 +127,8 @@ inline void reservedWords(MNLexer::Token& tok)
 	else if (tok.str == _class)    tok.type = tok_class;
 	else if (tok.str == _new)      tok.type = tok_new;
 	else if (tok.str == _base)     tok.type = tok_base;
+	else if (tok.str == _native)     tok.type = tok_native;
+	else if (tok.str == _constructor) tok.type = tok_constructor;
 }
 
 #endif
