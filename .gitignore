@@ -26,3 +26,4 @@
 *.lastbuildstate
 *.rc
 *.cache
+/vs2015/*.opendb
