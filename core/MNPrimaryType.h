@@ -46,7 +46,7 @@ typedef tuint64        thash64;
 
 typedef tint32         tinteger;
 typedef tfloat         treal;
-typedef thash32        thashtype;
+typedef thash64        thashtype;
 
 //typedef tint64         tinteger;
 //typedef tdouble        treal;
