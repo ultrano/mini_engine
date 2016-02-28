@@ -1,0 +1,382 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BE6291521C8365C600EE28C2 /* MiniEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291251C8365C600EE28C2 /* MiniEngine.cpp */; };
+		BE6291531C8365C600EE28C2 /* MNArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291271C8365C600EE28C2 /* MNArray.cpp */; };
+		BE6291541C8365C600EE28C2 /* MNBasicLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291291C8365C600EE28C2 /* MNBasicLib.cpp */; };
+		BE6291551C8365C600EE28C2 /* MNClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62912B1C8365C600EE28C2 /* MNClass.cpp */; };
+		BE6291561C8365C600EE28C2 /* MNClosure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62912E1C8365C600EE28C2 /* MNClosure.cpp */; };
+		BE6291571C8365C600EE28C2 /* MNCollectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291301C8365C600EE28C2 /* MNCollectable.cpp */; };
+		BE6291581C8365C600EE28C2 /* MNCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291321C8365C600EE28C2 /* MNCommand.cpp */; };
+		BE6291591C8365C600EE28C2 /* MNCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291341C8365C600EE28C2 /* MNCompiler.cpp */; };
+		BE62915A1C8365C600EE28C2 /* MNCountable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291361C8365C600EE28C2 /* MNCountable.cpp */; };
+		BE62915B1C8365C600EE28C2 /* MNFiber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291381C8365C600EE28C2 /* MNFiber.cpp */; };
+		BE62915C1C8365C600EE28C2 /* MNFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62913A1C8365C600EE28C2 /* MNFunction.cpp */; };
+		BE62915D1C8365C600EE28C2 /* MNGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62913C1C8365C600EE28C2 /* MNGlobal.cpp */; };
+		BE62915E1C8365C600EE28C2 /* MNInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62913E1C8365C600EE28C2 /* MNInstance.cpp */; };
+		BE62915F1C8365C600EE28C2 /* MNLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291401C8365C600EE28C2 /* MNLexer.cpp */; };
+		BE6291601C8365C600EE28C2 /* MNMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291431C8365C600EE28C2 /* MNMemory.cpp */; };
+		BE6291611C8365C600EE28C2 /* MNObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291451C8365C600EE28C2 /* MNObject.cpp */; };
+		BE6291621C8365C600EE28C2 /* MNPrimaryType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291471C8365C600EE28C2 /* MNPrimaryType.cpp */; };
+		BE6291631C8365C600EE28C2 /* MNReferrer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291491C8365C600EE28C2 /* MNReferrer.cpp */; };
+		BE6291641C8365C600EE28C2 /* MNString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62914C1C8365C600EE28C2 /* MNString.cpp */; };
+		BE6291651C8365C600EE28C2 /* MNTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62914E1C8365C600EE28C2 /* MNTable.cpp */; };
+		BE6291661C8365C600EE28C2 /* MNUserData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6291501C8365C600EE28C2 /* MNUserData.cpp */; };
+		BE6291671C8365CF00EE28C2 /* MiniEngine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BE6291261C8365C600EE28C2 /* MiniEngine.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BE74C46C1C835DF600FAAFCF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = include;
+			dstSubfolderSpec = 16;
+			files = (
+				BE6291671C8365CF00EE28C2 /* MiniEngine.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		BE6291251C8365C600EE28C2 /* MiniEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MiniEngine.cpp; sourceTree = "<group>"; };
+		BE6291261C8365C600EE28C2 /* MiniEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiniEngine.h; sourceTree = "<group>"; };
+		BE6291271C8365C600EE28C2 /* MNArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNArray.cpp; sourceTree = "<group>"; };
+		BE6291281C8365C600EE28C2 /* MNArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNArray.h; sourceTree = "<group>"; };
+		BE6291291C8365C600EE28C2 /* MNBasicLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNBasicLib.cpp; sourceTree = "<group>"; };
+		BE62912A1C8365C600EE28C2 /* MNBasicLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNBasicLib.h; sourceTree = "<group>"; };
+		BE62912B1C8365C600EE28C2 /* MNClass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNClass.cpp; sourceTree = "<group>"; };
+		BE62912C1C8365C600EE28C2 /* MNClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClass.h; sourceTree = "<group>"; };
+		BE62912D1C8365C600EE28C2 /* MNClassBond.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClassBond.h; sourceTree = "<group>"; };
+		BE62912E1C8365C600EE28C2 /* MNClosure.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNClosure.cpp; sourceTree = "<group>"; };
+		BE62912F1C8365C600EE28C2 /* MNClosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClosure.h; sourceTree = "<group>"; };
+		BE6291301C8365C600EE28C2 /* MNCollectable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCollectable.cpp; sourceTree = "<group>"; };
+		BE6291311C8365C600EE28C2 /* MNCollectable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCollectable.h; sourceTree = "<group>"; };
+		BE6291321C8365C600EE28C2 /* MNCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCommand.cpp; sourceTree = "<group>"; };
+		BE6291331C8365C600EE28C2 /* MNCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCommand.h; sourceTree = "<group>"; };
+		BE6291341C8365C600EE28C2 /* MNCompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCompiler.cpp; sourceTree = "<group>"; };
+		BE6291351C8365C600EE28C2 /* MNCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCompiler.h; sourceTree = "<group>"; };
+		BE6291361C8365C600EE28C2 /* MNCountable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCountable.cpp; sourceTree = "<group>"; };
+		BE6291371C8365C600EE28C2 /* MNCountable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCountable.h; sourceTree = "<group>"; };
+		BE6291381C8365C600EE28C2 /* MNFiber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNFiber.cpp; sourceTree = "<group>"; };
+		BE6291391C8365C600EE28C2 /* MNFiber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFiber.h; sourceTree = "<group>"; };
+		BE62913A1C8365C600EE28C2 /* MNFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNFunction.cpp; sourceTree = "<group>"; };
+		BE62913B1C8365C600EE28C2 /* MNFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFunction.h; sourceTree = "<group>"; };
+		BE62913C1C8365C600EE28C2 /* MNGlobal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNGlobal.cpp; sourceTree = "<group>"; };
+		BE62913D1C8365C600EE28C2 /* MNGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNGlobal.h; sourceTree = "<group>"; };
+		BE62913E1C8365C600EE28C2 /* MNInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNInstance.cpp; sourceTree = "<group>"; };
+		BE62913F1C8365C600EE28C2 /* MNInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNInstance.h; sourceTree = "<group>"; };
+		BE6291401C8365C600EE28C2 /* MNLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNLexer.cpp; sourceTree = "<group>"; };
+		BE6291411C8365C600EE28C2 /* MNLexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNLexer.h; sourceTree = "<group>"; };
+		BE6291421C8365C600EE28C2 /* MNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNList.h; sourceTree = "<group>"; };
+		BE6291431C8365C600EE28C2 /* MNMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNMemory.cpp; sourceTree = "<group>"; };
+		BE6291441C8365C600EE28C2 /* MNMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNMemory.h; sourceTree = "<group>"; };
+		BE6291451C8365C600EE28C2 /* MNObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNObject.cpp; sourceTree = "<group>"; };
+		BE6291461C8365C600EE28C2 /* MNObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNObject.h; sourceTree = "<group>"; };
+		BE6291471C8365C600EE28C2 /* MNPrimaryType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNPrimaryType.cpp; sourceTree = "<group>"; };
+		BE6291481C8365C600EE28C2 /* MNPrimaryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNPrimaryType.h; sourceTree = "<group>"; };
+		BE6291491C8365C600EE28C2 /* MNReferrer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNReferrer.cpp; sourceTree = "<group>"; };
+		BE62914A1C8365C600EE28C2 /* MNReferrer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNReferrer.h; sourceTree = "<group>"; };
+		BE62914B1C8365C600EE28C2 /* MNRtti.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNRtti.h; sourceTree = "<group>"; };
+		BE62914C1C8365C600EE28C2 /* MNString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNString.cpp; sourceTree = "<group>"; };
+		BE62914D1C8365C600EE28C2 /* MNString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNString.h; sourceTree = "<group>"; };
+		BE62914E1C8365C600EE28C2 /* MNTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNTable.cpp; sourceTree = "<group>"; };
+		BE62914F1C8365C600EE28C2 /* MNTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNTable.h; sourceTree = "<group>"; };
+		BE6291501C8365C600EE28C2 /* MNUserData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNUserData.cpp; sourceTree = "<group>"; };
+		BE6291511C8365C600EE28C2 /* MNUserData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNUserData.h; sourceTree = "<group>"; };
+		BE74C46E1C835DF600FAAFCF /* libmini.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmini.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BE74C46B1C835DF600FAAFCF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BE6291241C8365C600EE28C2 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				BE6291251C8365C600EE28C2 /* MiniEngine.cpp */,
+				BE6291261C8365C600EE28C2 /* MiniEngine.h */,
+				BE6291271C8365C600EE28C2 /* MNArray.cpp */,
+				BE6291281C8365C600EE28C2 /* MNArray.h */,
+				BE6291291C8365C600EE28C2 /* MNBasicLib.cpp */,
+				BE62912A1C8365C600EE28C2 /* MNBasicLib.h */,
+				BE62912B1C8365C600EE28C2 /* MNClass.cpp */,
+				BE62912C1C8365C600EE28C2 /* MNClass.h */,
+				BE62912D1C8365C600EE28C2 /* MNClassBond.h */,
+				BE62912E1C8365C600EE28C2 /* MNClosure.cpp */,
+				BE62912F1C8365C600EE28C2 /* MNClosure.h */,
+				BE6291301C8365C600EE28C2 /* MNCollectable.cpp */,
+				BE6291311C8365C600EE28C2 /* MNCollectable.h */,
+				BE6291321C8365C600EE28C2 /* MNCommand.cpp */,
+				BE6291331C8365C600EE28C2 /* MNCommand.h */,
+				BE6291341C8365C600EE28C2 /* MNCompiler.cpp */,
+				BE6291351C8365C600EE28C2 /* MNCompiler.h */,
+				BE6291361C8365C600EE28C2 /* MNCountable.cpp */,
+				BE6291371C8365C600EE28C2 /* MNCountable.h */,
+				BE6291381C8365C600EE28C2 /* MNFiber.cpp */,
+				BE6291391C8365C600EE28C2 /* MNFiber.h */,
+				BE62913A1C8365C600EE28C2 /* MNFunction.cpp */,
+				BE62913B1C8365C600EE28C2 /* MNFunction.h */,
+				BE62913C1C8365C600EE28C2 /* MNGlobal.cpp */,
+				BE62913D1C8365C600EE28C2 /* MNGlobal.h */,
+				BE62913E1C8365C600EE28C2 /* MNInstance.cpp */,
+				BE62913F1C8365C600EE28C2 /* MNInstance.h */,
+				BE6291401C8365C600EE28C2 /* MNLexer.cpp */,
+				BE6291411C8365C600EE28C2 /* MNLexer.h */,
+				BE6291421C8365C600EE28C2 /* MNList.h */,
+				BE6291431C8365C600EE28C2 /* MNMemory.cpp */,
+				BE6291441C8365C600EE28C2 /* MNMemory.h */,
+				BE6291451C8365C600EE28C2 /* MNObject.cpp */,
+				BE6291461C8365C600EE28C2 /* MNObject.h */,
+				BE6291471C8365C600EE28C2 /* MNPrimaryType.cpp */,
+				BE6291481C8365C600EE28C2 /* MNPrimaryType.h */,
+				BE6291491C8365C600EE28C2 /* MNReferrer.cpp */,
+				BE62914A1C8365C600EE28C2 /* MNReferrer.h */,
+				BE62914B1C8365C600EE28C2 /* MNRtti.h */,
+				BE62914C1C8365C600EE28C2 /* MNString.cpp */,
+				BE62914D1C8365C600EE28C2 /* MNString.h */,
+				BE62914E1C8365C600EE28C2 /* MNTable.cpp */,
+				BE62914F1C8365C600EE28C2 /* MNTable.h */,
+				BE6291501C8365C600EE28C2 /* MNUserData.cpp */,
+				BE6291511C8365C600EE28C2 /* MNUserData.h */,
+			);
+			name = core;
+			path = ../../core;
+			sourceTree = "<group>";
+		};
+		BE74C4651C835DF600FAAFCF = {
+			isa = PBXGroup;
+			children = (
+				BE6291241C8365C600EE28C2 /* core */,
+				BE74C46F1C835DF600FAAFCF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BE74C46F1C835DF600FAAFCF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BE74C46E1C835DF600FAAFCF /* libmini.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BE74C46D1C835DF600FAAFCF /* mini */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE74C4771C835DF600FAAFCF /* Build configuration list for PBXNativeTarget "mini" */;
+			buildPhases = (
+				BE74C46A1C835DF600FAAFCF /* Sources */,
+				BE74C46B1C835DF600FAAFCF /* Frameworks */,
+				BE74C46C1C835DF600FAAFCF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mini;
+			productName = mini;
+			productReference = BE74C46E1C835DF600FAAFCF /* libmini.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BE74C4661C835DF600FAAFCF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = hahasasa;
+				TargetAttributes = {
+					BE74C46D1C835DF600FAAFCF = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 3L9AHJ47T4;
+					};
+				};
+			};
+			buildConfigurationList = BE74C4691C835DF600FAAFCF /* Build configuration list for PBXProject "mini" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BE74C4651C835DF600FAAFCF;
+			productRefGroup = BE74C46F1C835DF600FAAFCF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BE74C46D1C835DF600FAAFCF /* mini */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BE74C46A1C835DF600FAAFCF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE62915A1C8365C600EE28C2 /* MNCountable.cpp in Sources */,
+				BE6291581C8365C600EE28C2 /* MNCommand.cpp in Sources */,
+				BE62915C1C8365C600EE28C2 /* MNFunction.cpp in Sources */,
+				BE6291531C8365C600EE28C2 /* MNArray.cpp in Sources */,
+				BE62915E1C8365C600EE28C2 /* MNInstance.cpp in Sources */,
+				BE62915F1C8365C600EE28C2 /* MNLexer.cpp in Sources */,
+				BE6291551C8365C600EE28C2 /* MNClass.cpp in Sources */,
+				BE6291631C8365C600EE28C2 /* MNReferrer.cpp in Sources */,
+				BE6291601C8365C600EE28C2 /* MNMemory.cpp in Sources */,
+				BE6291621C8365C600EE28C2 /* MNPrimaryType.cpp in Sources */,
+				BE6291561C8365C600EE28C2 /* MNClosure.cpp in Sources */,
+				BE6291541C8365C600EE28C2 /* MNBasicLib.cpp in Sources */,
+				BE6291591C8365C600EE28C2 /* MNCompiler.cpp in Sources */,
+				BE62915B1C8365C600EE28C2 /* MNFiber.cpp in Sources */,
+				BE62915D1C8365C600EE28C2 /* MNGlobal.cpp in Sources */,
+				BE6291521C8365C600EE28C2 /* MiniEngine.cpp in Sources */,
+				BE6291641C8365C600EE28C2 /* MNString.cpp in Sources */,
+				BE6291571C8365C600EE28C2 /* MNCollectable.cpp in Sources */,
+				BE6291611C8365C600EE28C2 /* MNObject.cpp in Sources */,
+				BE6291661C8365C600EE28C2 /* MNUserData.cpp in Sources */,
+				BE6291651C8365C600EE28C2 /* MNTable.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BE74C4751C835DF600FAAFCF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		BE74C4761C835DF600FAAFCF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BE74C4781C835DF600FAAFCF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		BE74C4791C835DF600FAAFCF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BE74C4691C835DF600FAAFCF /* Build configuration list for PBXProject "mini" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE74C4751C835DF600FAAFCF /* Debug */,
+				BE74C4761C835DF600FAAFCF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BE74C4771C835DF600FAAFCF /* Build configuration list for PBXNativeTarget "mini" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE74C4781C835DF600FAAFCF /* Debug */,
+				BE74C4791C835DF600FAAFCF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BE74C4661C835DF600FAAFCF /* Project object */;
+}
