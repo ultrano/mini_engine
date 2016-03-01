@@ -1,0 +1,628 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BE62920F1C85B05A00EE28C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BE62920E1C85B05A00EE28C2 /* AppDelegate.m */; };
+		BE6292121C85B05A00EE28C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6292111C85B05A00EE28C2 /* main.m */; };
+		BE6292151C85B05A00EE28C2 /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6292141C85B05A00EE28C2 /* GameView.m */; };
+		BE6292181C85B05A00EE28C2 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6292171C85B05A00EE28C2 /* GameViewController.m */; };
+		BE6292631C85B1D600EE28C2 /* MiniEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292361C85B1D600EE28C2 /* MiniEngine.cpp */; };
+		BE6292641C85B1D600EE28C2 /* MiniEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292371C85B1D600EE28C2 /* MiniEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BE6292651C85B1D600EE28C2 /* MNArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292381C85B1D600EE28C2 /* MNArray.cpp */; };
+		BE6292661C85B1D600EE28C2 /* MNArray.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292391C85B1D600EE28C2 /* MNArray.h */; };
+		BE6292671C85B1D600EE28C2 /* MNBasicLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62923A1C85B1D600EE28C2 /* MNBasicLib.cpp */; };
+		BE6292681C85B1D600EE28C2 /* MNBasicLib.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62923B1C85B1D600EE28C2 /* MNBasicLib.h */; };
+		BE6292691C85B1D600EE28C2 /* MNClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62923C1C85B1D600EE28C2 /* MNClass.cpp */; };
+		BE62926A1C85B1D600EE28C2 /* MNClass.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62923D1C85B1D600EE28C2 /* MNClass.h */; };
+		BE62926B1C85B1D600EE28C2 /* MNClassBond.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62923E1C85B1D600EE28C2 /* MNClassBond.h */; };
+		BE62926C1C85B1D600EE28C2 /* MNClosure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62923F1C85B1D600EE28C2 /* MNClosure.cpp */; };
+		BE62926D1C85B1D600EE28C2 /* MNClosure.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292401C85B1D600EE28C2 /* MNClosure.h */; };
+		BE62926E1C85B1D600EE28C2 /* MNCollectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292411C85B1D600EE28C2 /* MNCollectable.cpp */; };
+		BE62926F1C85B1D600EE28C2 /* MNCollectable.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292421C85B1D600EE28C2 /* MNCollectable.h */; };
+		BE6292701C85B1D600EE28C2 /* MNCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292431C85B1D600EE28C2 /* MNCommand.cpp */; };
+		BE6292711C85B1D600EE28C2 /* MNCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292441C85B1D600EE28C2 /* MNCommand.h */; };
+		BE6292721C85B1D600EE28C2 /* MNCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292451C85B1D600EE28C2 /* MNCompiler.cpp */; };
+		BE6292731C85B1D600EE28C2 /* MNCompiler.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292461C85B1D600EE28C2 /* MNCompiler.h */; };
+		BE6292741C85B1D600EE28C2 /* MNCountable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292471C85B1D600EE28C2 /* MNCountable.cpp */; };
+		BE6292751C85B1D600EE28C2 /* MNCountable.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292481C85B1D600EE28C2 /* MNCountable.h */; };
+		BE6292761C85B1D600EE28C2 /* MNFiber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292491C85B1D600EE28C2 /* MNFiber.cpp */; };
+		BE6292771C85B1D600EE28C2 /* MNFiber.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62924A1C85B1D600EE28C2 /* MNFiber.h */; };
+		BE6292781C85B1D600EE28C2 /* MNFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62924B1C85B1D600EE28C2 /* MNFunction.cpp */; };
+		BE6292791C85B1D600EE28C2 /* MNFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62924C1C85B1D600EE28C2 /* MNFunction.h */; };
+		BE62927A1C85B1D600EE28C2 /* MNGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62924D1C85B1D600EE28C2 /* MNGlobal.cpp */; };
+		BE62927B1C85B1D600EE28C2 /* MNGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62924E1C85B1D600EE28C2 /* MNGlobal.h */; };
+		BE62927C1C85B1D600EE28C2 /* MNInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62924F1C85B1D600EE28C2 /* MNInstance.cpp */; };
+		BE62927D1C85B1D600EE28C2 /* MNInstance.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292501C85B1D600EE28C2 /* MNInstance.h */; };
+		BE62927E1C85B1D600EE28C2 /* MNLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292511C85B1D600EE28C2 /* MNLexer.cpp */; };
+		BE62927F1C85B1D600EE28C2 /* MNLexer.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292521C85B1D600EE28C2 /* MNLexer.h */; };
+		BE6292801C85B1D600EE28C2 /* MNList.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292531C85B1D600EE28C2 /* MNList.h */; };
+		BE6292811C85B1D600EE28C2 /* MNMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292541C85B1D600EE28C2 /* MNMemory.cpp */; };
+		BE6292821C85B1D600EE28C2 /* MNMemory.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292551C85B1D600EE28C2 /* MNMemory.h */; };
+		BE6292831C85B1D600EE28C2 /* MNObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292561C85B1D600EE28C2 /* MNObject.cpp */; };
+		BE6292841C85B1D600EE28C2 /* MNObject.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292571C85B1D600EE28C2 /* MNObject.h */; };
+		BE6292851C85B1D600EE28C2 /* MNPrimaryType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292581C85B1D600EE28C2 /* MNPrimaryType.cpp */; };
+		BE6292861C85B1D600EE28C2 /* MNPrimaryType.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292591C85B1D600EE28C2 /* MNPrimaryType.h */; };
+		BE6292871C85B1D600EE28C2 /* MNReferrer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62925A1C85B1D600EE28C2 /* MNReferrer.cpp */; };
+		BE6292881C85B1D600EE28C2 /* MNReferrer.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62925B1C85B1D600EE28C2 /* MNReferrer.h */; };
+		BE6292891C85B1D600EE28C2 /* MNRtti.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62925C1C85B1D600EE28C2 /* MNRtti.h */; };
+		BE62928A1C85B1D600EE28C2 /* MNString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62925D1C85B1D600EE28C2 /* MNString.cpp */; };
+		BE62928B1C85B1D600EE28C2 /* MNString.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62925E1C85B1D600EE28C2 /* MNString.h */; };
+		BE62928C1C85B1D600EE28C2 /* MNTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62925F1C85B1D600EE28C2 /* MNTable.cpp */; };
+		BE62928D1C85B1D600EE28C2 /* MNTable.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292601C85B1D600EE28C2 /* MNTable.h */; };
+		BE62928E1C85B1D600EE28C2 /* MNUserData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292611C85B1D600EE28C2 /* MNUserData.cpp */; };
+		BE62928F1C85B1D600EE28C2 /* MNUserData.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292621C85B1D600EE28C2 /* MNUserData.h */; };
+		BE6292921C85B22900EE28C2 /* libme_osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE62922A1C85B1A500EE28C2 /* libme_osx.a */; };
+		BE6292951C85B34E00EE28C2 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6292931C85B34E00EE28C2 /* libstdc++.6.0.9.tbd */; };
+		BE6292961C85B34E00EE28C2 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6292941C85B34E00EE28C2 /* libstdc++.tbd */; };
+		BE6292A31C85BB0700EE28C2 /* resource in Resources */ = {isa = PBXBuildFile; fileRef = BE6292A21C85BB0700EE28C2 /* resource */; };
+		BED78AB41C85F5DA0034100E /* MNPlatformDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = BED78AB31C85F5DA0034100E /* MNPlatformDefine.h */; };
+		BED78AB61C85FA170034100E /* MNFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = BED78AB51C85FA170034100E /* MNFileSystem.h */; };
+		BED78AB81C85FB020034100E /* MNFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BED78AB71C85FB020034100E /* MNFileSystem.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BE6292901C85B21D00EE28C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BE6292021C85B05A00EE28C2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BE6292291C85B1A500EE28C2;
+			remoteInfo = me_osx;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		BE62920A1C85B05A00EE28C2 /* me_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = me_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE62920D1C85B05A00EE28C2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BE62920E1C85B05A00EE28C2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BE6292111C85B05A00EE28C2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BE6292131C85B05A00EE28C2 /* GameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameView.h; sourceTree = "<group>"; };
+		BE6292141C85B05A00EE28C2 /* GameView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
+		BE6292161C85B05A00EE28C2 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		BE6292171C85B05A00EE28C2 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		BE6292191C85B05A00EE28C2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		BE62921B1C85B05A00EE28C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BE62921E1C85B05A00EE28C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		BE6292201C85B05A00EE28C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE62922A1C85B1A500EE28C2 /* libme_osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libme_osx.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE6292361C85B1D600EE28C2 /* MiniEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MiniEngine.cpp; sourceTree = "<group>"; };
+		BE6292371C85B1D600EE28C2 /* MiniEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiniEngine.h; sourceTree = "<group>"; };
+		BE6292381C85B1D600EE28C2 /* MNArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNArray.cpp; sourceTree = "<group>"; };
+		BE6292391C85B1D600EE28C2 /* MNArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNArray.h; sourceTree = "<group>"; };
+		BE62923A1C85B1D600EE28C2 /* MNBasicLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNBasicLib.cpp; sourceTree = "<group>"; };
+		BE62923B1C85B1D600EE28C2 /* MNBasicLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNBasicLib.h; sourceTree = "<group>"; };
+		BE62923C1C85B1D600EE28C2 /* MNClass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNClass.cpp; sourceTree = "<group>"; };
+		BE62923D1C85B1D600EE28C2 /* MNClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClass.h; sourceTree = "<group>"; };
+		BE62923E1C85B1D600EE28C2 /* MNClassBond.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClassBond.h; sourceTree = "<group>"; };
+		BE62923F1C85B1D600EE28C2 /* MNClosure.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNClosure.cpp; sourceTree = "<group>"; };
+		BE6292401C85B1D600EE28C2 /* MNClosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClosure.h; sourceTree = "<group>"; };
+		BE6292411C85B1D600EE28C2 /* MNCollectable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCollectable.cpp; sourceTree = "<group>"; };
+		BE6292421C85B1D600EE28C2 /* MNCollectable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCollectable.h; sourceTree = "<group>"; };
+		BE6292431C85B1D600EE28C2 /* MNCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCommand.cpp; sourceTree = "<group>"; };
+		BE6292441C85B1D600EE28C2 /* MNCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCommand.h; sourceTree = "<group>"; };
+		BE6292451C85B1D600EE28C2 /* MNCompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCompiler.cpp; sourceTree = "<group>"; };
+		BE6292461C85B1D600EE28C2 /* MNCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCompiler.h; sourceTree = "<group>"; };
+		BE6292471C85B1D600EE28C2 /* MNCountable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCountable.cpp; sourceTree = "<group>"; };
+		BE6292481C85B1D600EE28C2 /* MNCountable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCountable.h; sourceTree = "<group>"; };
+		BE6292491C85B1D600EE28C2 /* MNFiber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNFiber.cpp; sourceTree = "<group>"; };
+		BE62924A1C85B1D600EE28C2 /* MNFiber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFiber.h; sourceTree = "<group>"; };
+		BE62924B1C85B1D600EE28C2 /* MNFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNFunction.cpp; sourceTree = "<group>"; };
+		BE62924C1C85B1D600EE28C2 /* MNFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFunction.h; sourceTree = "<group>"; };
+		BE62924D1C85B1D600EE28C2 /* MNGlobal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNGlobal.cpp; sourceTree = "<group>"; };
+		BE62924E1C85B1D600EE28C2 /* MNGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNGlobal.h; sourceTree = "<group>"; };
+		BE62924F1C85B1D600EE28C2 /* MNInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNInstance.cpp; sourceTree = "<group>"; };
+		BE6292501C85B1D600EE28C2 /* MNInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNInstance.h; sourceTree = "<group>"; };
+		BE6292511C85B1D600EE28C2 /* MNLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNLexer.cpp; sourceTree = "<group>"; };
+		BE6292521C85B1D600EE28C2 /* MNLexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNLexer.h; sourceTree = "<group>"; };
+		BE6292531C85B1D600EE28C2 /* MNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNList.h; sourceTree = "<group>"; };
+		BE6292541C85B1D600EE28C2 /* MNMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNMemory.cpp; sourceTree = "<group>"; };
+		BE6292551C85B1D600EE28C2 /* MNMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNMemory.h; sourceTree = "<group>"; };
+		BE6292561C85B1D600EE28C2 /* MNObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNObject.cpp; sourceTree = "<group>"; };
+		BE6292571C85B1D600EE28C2 /* MNObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNObject.h; sourceTree = "<group>"; };
+		BE6292581C85B1D600EE28C2 /* MNPrimaryType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNPrimaryType.cpp; sourceTree = "<group>"; };
+		BE6292591C85B1D600EE28C2 /* MNPrimaryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNPrimaryType.h; sourceTree = "<group>"; };
+		BE62925A1C85B1D600EE28C2 /* MNReferrer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNReferrer.cpp; sourceTree = "<group>"; };
+		BE62925B1C85B1D600EE28C2 /* MNReferrer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNReferrer.h; sourceTree = "<group>"; };
+		BE62925C1C85B1D600EE28C2 /* MNRtti.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNRtti.h; sourceTree = "<group>"; };
+		BE62925D1C85B1D600EE28C2 /* MNString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNString.cpp; sourceTree = "<group>"; };
+		BE62925E1C85B1D600EE28C2 /* MNString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNString.h; sourceTree = "<group>"; };
+		BE62925F1C85B1D600EE28C2 /* MNTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNTable.cpp; sourceTree = "<group>"; };
+		BE6292601C85B1D600EE28C2 /* MNTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNTable.h; sourceTree = "<group>"; };
+		BE6292611C85B1D600EE28C2 /* MNUserData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNUserData.cpp; sourceTree = "<group>"; };
+		BE6292621C85B1D600EE28C2 /* MNUserData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNUserData.h; sourceTree = "<group>"; };
+		BE6292931C85B34E00EE28C2 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
+		BE6292941C85B34E00EE28C2 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		BE6292A21C85BB0700EE28C2 /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../resource; sourceTree = "<group>"; };
+		BED78AB31C85F5DA0034100E /* MNPlatformDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNPlatformDefine.h; sourceTree = "<group>"; };
+		BED78AB51C85FA170034100E /* MNFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFileSystem.h; sourceTree = "<group>"; };
+		BED78AB71C85FB020034100E /* MNFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNFileSystem.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BE6292071C85B05A00EE28C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE6292951C85B34E00EE28C2 /* libstdc++.6.0.9.tbd in Frameworks */,
+				BE6292961C85B34E00EE28C2 /* libstdc++.tbd in Frameworks */,
+				BE6292921C85B22900EE28C2 /* libme_osx.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE6292271C85B1A500EE28C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BE6292011C85B05A00EE28C2 = {
+			isa = PBXGroup;
+			children = (
+				BE6292A21C85BB0700EE28C2 /* resource */,
+				BE6292931C85B34E00EE28C2 /* libstdc++.6.0.9.tbd */,
+				BE6292941C85B34E00EE28C2 /* libstdc++.tbd */,
+				BE62920C1C85B05A00EE28C2 /* me_app */,
+				BE62922B1C85B1A500EE28C2 /* me_osx */,
+				BE62920B1C85B05A00EE28C2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BE62920B1C85B05A00EE28C2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BE62920A1C85B05A00EE28C2 /* me_app.app */,
+				BE62922A1C85B1A500EE28C2 /* libme_osx.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BE62920C1C85B05A00EE28C2 /* me_app */ = {
+			isa = PBXGroup;
+			children = (
+				BE62920D1C85B05A00EE28C2 /* AppDelegate.h */,
+				BE62920E1C85B05A00EE28C2 /* AppDelegate.m */,
+				BE6292131C85B05A00EE28C2 /* GameView.h */,
+				BE6292141C85B05A00EE28C2 /* GameView.m */,
+				BE6292161C85B05A00EE28C2 /* GameViewController.h */,
+				BE6292171C85B05A00EE28C2 /* GameViewController.m */,
+				BE6292191C85B05A00EE28C2 /* art.scnassets */,
+				BE62921B1C85B05A00EE28C2 /* Assets.xcassets */,
+				BE62921D1C85B05A00EE28C2 /* MainMenu.xib */,
+				BE6292201C85B05A00EE28C2 /* Info.plist */,
+				BE6292101C85B05A00EE28C2 /* Supporting Files */,
+			);
+			path = me_app;
+			sourceTree = "<group>";
+		};
+		BE6292101C85B05A00EE28C2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BE6292111C85B05A00EE28C2 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BE62922B1C85B1A500EE28C2 /* me_osx */ = {
+			isa = PBXGroup;
+			children = (
+				BE6292351C85B1D600EE28C2 /* source */,
+			);
+			path = me_osx;
+			sourceTree = "<group>";
+		};
+		BE6292351C85B1D600EE28C2 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				BE6292361C85B1D600EE28C2 /* MiniEngine.cpp */,
+				BE6292371C85B1D600EE28C2 /* MiniEngine.h */,
+				BE6292381C85B1D600EE28C2 /* MNArray.cpp */,
+				BE6292391C85B1D600EE28C2 /* MNArray.h */,
+				BE62923A1C85B1D600EE28C2 /* MNBasicLib.cpp */,
+				BE62923B1C85B1D600EE28C2 /* MNBasicLib.h */,
+				BE62923C1C85B1D600EE28C2 /* MNClass.cpp */,
+				BE62923D1C85B1D600EE28C2 /* MNClass.h */,
+				BE62923E1C85B1D600EE28C2 /* MNClassBond.h */,
+				BE62923F1C85B1D600EE28C2 /* MNClosure.cpp */,
+				BE6292401C85B1D600EE28C2 /* MNClosure.h */,
+				BE6292411C85B1D600EE28C2 /* MNCollectable.cpp */,
+				BE6292421C85B1D600EE28C2 /* MNCollectable.h */,
+				BE6292431C85B1D600EE28C2 /* MNCommand.cpp */,
+				BE6292441C85B1D600EE28C2 /* MNCommand.h */,
+				BE6292451C85B1D600EE28C2 /* MNCompiler.cpp */,
+				BE6292461C85B1D600EE28C2 /* MNCompiler.h */,
+				BE6292471C85B1D600EE28C2 /* MNCountable.cpp */,
+				BE6292481C85B1D600EE28C2 /* MNCountable.h */,
+				BE6292491C85B1D600EE28C2 /* MNFiber.cpp */,
+				BE62924A1C85B1D600EE28C2 /* MNFiber.h */,
+				BE62924B1C85B1D600EE28C2 /* MNFunction.cpp */,
+				BE62924C1C85B1D600EE28C2 /* MNFunction.h */,
+				BE62924D1C85B1D600EE28C2 /* MNGlobal.cpp */,
+				BE62924E1C85B1D600EE28C2 /* MNGlobal.h */,
+				BE62924F1C85B1D600EE28C2 /* MNInstance.cpp */,
+				BE6292501C85B1D600EE28C2 /* MNInstance.h */,
+				BE6292511C85B1D600EE28C2 /* MNLexer.cpp */,
+				BE6292521C85B1D600EE28C2 /* MNLexer.h */,
+				BE6292531C85B1D600EE28C2 /* MNList.h */,
+				BE6292541C85B1D600EE28C2 /* MNMemory.cpp */,
+				BE6292551C85B1D600EE28C2 /* MNMemory.h */,
+				BE6292561C85B1D600EE28C2 /* MNObject.cpp */,
+				BE6292571C85B1D600EE28C2 /* MNObject.h */,
+				BE6292581C85B1D600EE28C2 /* MNPrimaryType.cpp */,
+				BE6292591C85B1D600EE28C2 /* MNPrimaryType.h */,
+				BE62925A1C85B1D600EE28C2 /* MNReferrer.cpp */,
+				BE62925B1C85B1D600EE28C2 /* MNReferrer.h */,
+				BE62925C1C85B1D600EE28C2 /* MNRtti.h */,
+				BE62925D1C85B1D600EE28C2 /* MNString.cpp */,
+				BE62925E1C85B1D600EE28C2 /* MNString.h */,
+				BE62925F1C85B1D600EE28C2 /* MNTable.cpp */,
+				BE6292601C85B1D600EE28C2 /* MNTable.h */,
+				BE6292611C85B1D600EE28C2 /* MNUserData.cpp */,
+				BE6292621C85B1D600EE28C2 /* MNUserData.h */,
+				BED78AB31C85F5DA0034100E /* MNPlatformDefine.h */,
+				BED78AB51C85FA170034100E /* MNFileSystem.h */,
+				BED78AB71C85FB020034100E /* MNFileSystem.cpp */,
+			);
+			name = source;
+			path = ../../../source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BE6292281C85B1A500EE28C2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE6292641C85B1D600EE28C2 /* MiniEngine.h in Headers */,
+				BE62927F1C85B1D600EE28C2 /* MNLexer.h in Headers */,
+				BE62928F1C85B1D600EE28C2 /* MNUserData.h in Headers */,
+				BE6292891C85B1D600EE28C2 /* MNRtti.h in Headers */,
+				BE6292881C85B1D600EE28C2 /* MNReferrer.h in Headers */,
+				BE6292861C85B1D600EE28C2 /* MNPrimaryType.h in Headers */,
+				BE6292841C85B1D600EE28C2 /* MNObject.h in Headers */,
+				BE62926D1C85B1D600EE28C2 /* MNClosure.h in Headers */,
+				BE6292821C85B1D600EE28C2 /* MNMemory.h in Headers */,
+				BED78AB41C85F5DA0034100E /* MNPlatformDefine.h in Headers */,
+				BE62927D1C85B1D600EE28C2 /* MNInstance.h in Headers */,
+				BE62926B1C85B1D600EE28C2 /* MNClassBond.h in Headers */,
+				BE6292791C85B1D600EE28C2 /* MNFunction.h in Headers */,
+				BE6292751C85B1D600EE28C2 /* MNCountable.h in Headers */,
+				BE6292681C85B1D600EE28C2 /* MNBasicLib.h in Headers */,
+				BE6292661C85B1D600EE28C2 /* MNArray.h in Headers */,
+				BED78AB61C85FA170034100E /* MNFileSystem.h in Headers */,
+				BE6292801C85B1D600EE28C2 /* MNList.h in Headers */,
+				BE6292711C85B1D600EE28C2 /* MNCommand.h in Headers */,
+				BE62927B1C85B1D600EE28C2 /* MNGlobal.h in Headers */,
+				BE62928B1C85B1D600EE28C2 /* MNString.h in Headers */,
+				BE6292771C85B1D600EE28C2 /* MNFiber.h in Headers */,
+				BE62928D1C85B1D600EE28C2 /* MNTable.h in Headers */,
+				BE6292731C85B1D600EE28C2 /* MNCompiler.h in Headers */,
+				BE62926A1C85B1D600EE28C2 /* MNClass.h in Headers */,
+				BE62926F1C85B1D600EE28C2 /* MNCollectable.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		BE6292091C85B05A00EE28C2 /* me_app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE6292231C85B05A00EE28C2 /* Build configuration list for PBXNativeTarget "me_app" */;
+			buildPhases = (
+				BE6292061C85B05A00EE28C2 /* Sources */,
+				BE6292071C85B05A00EE28C2 /* Frameworks */,
+				BE6292081C85B05A00EE28C2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BE6292911C85B21D00EE28C2 /* PBXTargetDependency */,
+			);
+			name = me_app;
+			productName = me_app;
+			productReference = BE62920A1C85B05A00EE28C2 /* me_app.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BE6292291C85B1A500EE28C2 /* me_osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE6292321C85B1A500EE28C2 /* Build configuration list for PBXNativeTarget "me_osx" */;
+			buildPhases = (
+				BE6292261C85B1A500EE28C2 /* Sources */,
+				BE6292271C85B1A500EE28C2 /* Frameworks */,
+				BE6292281C85B1A500EE28C2 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = me_osx;
+			productName = me_osx;
+			productReference = BE62922A1C85B1A500EE28C2 /* libme_osx.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BE6292021C85B05A00EE28C2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = hahasasa;
+				TargetAttributes = {
+					BE6292091C85B05A00EE28C2 = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+					BE6292291C85B1A500EE28C2 = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+				};
+			};
+			buildConfigurationList = BE6292051C85B05A00EE28C2 /* Build configuration list for PBXProject "me_app" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BE6292011C85B05A00EE28C2;
+			productRefGroup = BE62920B1C85B05A00EE28C2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BE6292091C85B05A00EE28C2 /* me_app */,
+				BE6292291C85B1A500EE28C2 /* me_osx */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BE6292081C85B05A00EE28C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE6292A31C85BB0700EE28C2 /* resource in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BE6292061C85B05A00EE28C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE6292181C85B05A00EE28C2 /* GameViewController.m in Sources */,
+				BE6292151C85B05A00EE28C2 /* GameView.m in Sources */,
+				BE6292121C85B05A00EE28C2 /* main.m in Sources */,
+				BE62920F1C85B05A00EE28C2 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE6292261C85B1A500EE28C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE62927A1C85B1D600EE28C2 /* MNGlobal.cpp in Sources */,
+				BE6292811C85B1D600EE28C2 /* MNMemory.cpp in Sources */,
+				BE6292701C85B1D600EE28C2 /* MNCommand.cpp in Sources */,
+				BE6292851C85B1D600EE28C2 /* MNPrimaryType.cpp in Sources */,
+				BE62926C1C85B1D600EE28C2 /* MNClosure.cpp in Sources */,
+				BED78AB81C85FB020034100E /* MNFileSystem.cpp in Sources */,
+				BE6292721C85B1D600EE28C2 /* MNCompiler.cpp in Sources */,
+				BE6292651C85B1D600EE28C2 /* MNArray.cpp in Sources */,
+				BE6292741C85B1D600EE28C2 /* MNCountable.cpp in Sources */,
+				BE6292631C85B1D600EE28C2 /* MiniEngine.cpp in Sources */,
+				BE62928E1C85B1D600EE28C2 /* MNUserData.cpp in Sources */,
+				BE62927E1C85B1D600EE28C2 /* MNLexer.cpp in Sources */,
+				BE62926E1C85B1D600EE28C2 /* MNCollectable.cpp in Sources */,
+				BE62928C1C85B1D600EE28C2 /* MNTable.cpp in Sources */,
+				BE6292781C85B1D600EE28C2 /* MNFunction.cpp in Sources */,
+				BE6292671C85B1D600EE28C2 /* MNBasicLib.cpp in Sources */,
+				BE62927C1C85B1D600EE28C2 /* MNInstance.cpp in Sources */,
+				BE62928A1C85B1D600EE28C2 /* MNString.cpp in Sources */,
+				BE6292831C85B1D600EE28C2 /* MNObject.cpp in Sources */,
+				BE6292871C85B1D600EE28C2 /* MNReferrer.cpp in Sources */,
+				BE6292691C85B1D600EE28C2 /* MNClass.cpp in Sources */,
+				BE6292761C85B1D600EE28C2 /* MNFiber.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BE6292911C85B21D00EE28C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BE6292291C85B1A500EE28C2 /* me_osx */;
+			targetProxy = BE6292901C85B21D00EE28C2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BE62921D1C85B05A00EE28C2 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BE62921E1C85B05A00EE28C2 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BE6292211C85B05A00EE28C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BE6292221C85B05A00EE28C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BE6292241C85B05A00EE28C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = me_app/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "hahasasa.me-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BE6292251C85B05A00EE28C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = me_app/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "hahasasa.me-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		BE6292331C85B1A500EE28C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-x",
+					"objective-c++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BE6292341C85B1A500EE28C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-x",
+					"objective-c++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BE6292051C85B05A00EE28C2 /* Build configuration list for PBXProject "me_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE6292211C85B05A00EE28C2 /* Debug */,
+				BE6292221C85B05A00EE28C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BE6292231C85B05A00EE28C2 /* Build configuration list for PBXNativeTarget "me_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE6292241C85B05A00EE28C2 /* Debug */,
+				BE6292251C85B05A00EE28C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BE6292321C85B1A500EE28C2 /* Build configuration list for PBXNativeTarget "me_osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE6292331C85B1A500EE28C2 /* Debug */,
+				BE6292341C85B1A500EE28C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BE6292021C85B05A00EE28C2 /* Project object */;
+}
