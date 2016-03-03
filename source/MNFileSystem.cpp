@@ -7,30 +7,20 @@
 //
 
 #include <stdio.h>
+#include "MNFileSystem.h"
 #include "MNPlatformDefine.h"
 #include "MNPrimaryType.h"
 
-#if defined(PLATFORM_IOS) || defined(PLATFORM_OSX)
-
-#import <Foundation/NSString.h>
-#import <Foundation/NSBundle.h>
-
-FILE* mnfopen(const char* path, const char* mode)
+#if defined(PLATFORM_IOS) || defined(PLATFORM_OSX) || defined(PLATFORM_WIN32)
+const tstring& MNResourceFolderPath(const char* path)
 {
-    NSString* nsPath = [NSString stringWithCString:path encoding:[NSString defaultCStringEncoding]];
-    NSString* filePath = [[NSBundle mainBundle] pathForResource:nsPath ofType:nil];
-
-    FILE* file = fopen([filePath UTF8String], mode);
-    return file;
+    static tstring s_basePath(tstring(path) + "/");
+    return s_basePath;
 }
 
-#elif defined(PLATFORM_WIN32)
-
-#include <string>
 FILE* mnfopen(const char* path, const char* mode)
 {
-    tstring fullPath = "./";
-    fullPath = fullPath + path;
+    tstring fullPath = MNResourceFolderPath() + path;;
     FILE* file = fopen(fullPath.c_str(), mode);
     return file;
 }

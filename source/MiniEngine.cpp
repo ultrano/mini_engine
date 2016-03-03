@@ -21,6 +21,7 @@
 #include "MNString.h"
 #include "MNTable.h"
 #include "MNUserData.h"
+#include "MNFileSystem.h"
 
 #define MNContext (_MNContext::instance())
 class _MNContext
@@ -32,8 +33,9 @@ public:
 
 
 
-void MNStart(const char* starterScript)
+void MNStart(const char* resourceFolder, const char* starterScript)
 {
+    MNResourceFolderPath(resourceFolder);
 	MNBasicLib(MNContext.main = new MNFiber());
 	if (starterScript != NULL) MNContext.main->dofile(starterScript);
 }

@@ -62,13 +62,13 @@ struct CommonLib
 		const MNObject& val = fiber->get(1);
 		switch (val.getType())
 		{
-		case TObjectType::Int      : fiber->push_string("int"); break;
-		case TObjectType::Null     : fiber->push_string("null"); break;
-		case TObjectType::Real     : fiber->push_string("float"); break;
-		case TObjectType::String   : fiber->push_string("string"); break;
-		case TObjectType::Pointer  : fiber->push_string("pointer"); break;
-		case TObjectType::Function : fiber->push_string("function"); break;
-		case TObjectType::CFunction: fiber->push_string("cfunction"); break;
+		case TObjectType::TInt      : fiber->push_string("int"); break;
+		case TObjectType::TNull     : fiber->push_string("null"); break;
+		case TObjectType::TReal     : fiber->push_string("float"); break;
+		case TObjectType::TString   : fiber->push_string("string"); break;
+		case TObjectType::TPointer  : fiber->push_string("pointer"); break;
+		case TObjectType::TFunction : fiber->push_string("function"); break;
+		case TObjectType::TCFunction: fiber->push_string("cfunction"); break;
 		default:
 			{
 				fiber->load_stack(1);
@@ -272,7 +272,7 @@ struct FiberLib
 		newFiber->push(fiber->get(1));
 		newFiber->load_stack(0);
 		newFiber->enterCall(1, true);
-		fiber->push(MNObject(TObjectType::Fiber, newFiber->getReferrer()));
+		fiber->push(MNObject(TObjectType::TFiber, newFiber->getReferrer()));
 		return true;
 	}
 

@@ -15,7 +15,7 @@ MNGlobal::MNGlobal(MNFiber* root)
 	//! global table
 	m_shared = new MNTable();
 	m_shared->link(this);
-	root->push(MNObject(TObjectType::Table, m_shared->getReferrer()));
+	root->push(MNObject(TObjectType::TTable, m_shared->getReferrer()));
 
 	//! common function
 	MNBasicLib(root);

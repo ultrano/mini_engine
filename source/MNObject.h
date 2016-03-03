@@ -19,12 +19,12 @@ class MNInstance;
 class MNObject : public MNMemory
 {
 public:
-	static const MNObject& Null() { static MNObject obj(TObjectType::Null); return obj; }
-	static MNObject Int(tinteger i) { MNObject obj(TObjectType::Int); obj.val._int = i; return obj; }
-	static MNObject Real(treal f) { MNObject obj(TObjectType::Real); obj.val._float = f; return obj; }
-	static MNObject Bool(bool b) { MNObject obj(TObjectType::Boolean); obj.val._bool = b; return obj; }
-	static MNObject Pointer(void* p) { MNObject obj(TObjectType::Pointer); obj.val._pointer = p; return obj; }
-	static MNObject CFunction(TCFunction cfunc)  { MNObject obj(TObjectType::CFunction); obj.val._func = cfunc; return obj; }
+	static const MNObject& Null() { static MNObject obj(TObjectType::TNull); return obj; }
+	static MNObject Int(tinteger i) { MNObject obj(TObjectType::TInt); obj.val._int = i; return obj; }
+	static MNObject Real(treal f) { MNObject obj(TObjectType::TReal); obj.val._float = f; return obj; }
+	static MNObject Bool(bool b) { MNObject obj(TObjectType::TBoolean); obj.val._bool = b; return obj; }
+	static MNObject Pointer(void* p) { MNObject obj(TObjectType::TPointer); obj.val._pointer = p; return obj; }
+	static MNObject CFunction(NativeFunc cfunc)  { MNObject obj(TObjectType::TCFunction); obj.val._func = cfunc; return obj;}
 	static MNObject String(const tstring& str);
 	static MNObject String(const thashstring& str);
 	static MNObject Format(const tchar* format, ...);
@@ -65,7 +65,7 @@ public:
 	tinteger    toInt(tinteger def = 0) const;
 	treal       toReal(treal def = 0.0f) const;
 	tboolean    toBool(bool def = false) const;
-	TCFunction  toCFunction() const;
+	NativeFunc  toCFunction() const;
 	MNString*   toString() const;
 	MNClosure*  toClosure() const;
 	MNCountable* toCountable() const;
@@ -86,7 +86,7 @@ private:
 		treal _float;
 		tboolean _bool;
 		void* _pointer;
-		TCFunction _func;
+		NativeFunc _func;
 		MNReferrer* _ref;
 	} val;
 

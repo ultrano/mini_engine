@@ -184,7 +184,7 @@ void	MNClosure::setUpval(tuint idx, const MNObject& v)
 
 bool MNClosure::isNative() const
 {
-	return m_func.getType() == TObjectType::CFunction;
+	return m_func.getType() == TObjectType::TCFunction;
 }
 
 void MNClosure::bindThis(const MNObject& _this)
@@ -214,7 +214,7 @@ void MNClosure::clone(MNObject& cls) const
 	closure->setMeta(getMeta());
 	tsize sz = m_uplinks.size();
 	for (tsize i = 0; i < sz; ++i) closure->addLink(m_uplinks[i]);
-	cls = MNObject(TObjectType::Closure, closure->getReferrer());
+	cls = MNObject(TObjectType::TClosure, closure->getReferrer());
 }
 
 void MNClosure::travelMark()

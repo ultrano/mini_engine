@@ -139,7 +139,7 @@ tboolean MNCompiler::build(MNObject& func)
 		_statements();
 		code() << cmd_return_void;
 
-		func = MNObject(TObjectType::Function, m_func->func->getReferrer());
+		func = MNObject(TObjectType::TFunction, m_func->func->getReferrer());
 		delete m_func;
 		return true;
 	}
@@ -436,7 +436,7 @@ void MNCompiler::_func_content()
 	code() << cmd_return_void;
 
 	m_func = func->upFunc;
-	tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, func->func->getReferrer()));
+	tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::TFunction, func->func->getReferrer()));
 	tuint16 linkIndex = tuint16(func->links.size());
 	code() << cmd_push_closure << funcIndex << linkIndex;
 	for (tsize i = 0; i < linkIndex; ++i)
@@ -508,7 +508,7 @@ void MNCompiler::_class()
 	code() << cmd_return_void;
 
 	m_func = prevFunc;
-	tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, newFunc->func->getReferrer()));
+	tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::TFunction, newFunc->func->getReferrer()));
 	code() << cmd_push_closure << funcIndex << tuint16(0);
 	code() << cmd_up1_x2 << cmd_pop1;
 	code() << cmd_call << tbyte(2);
@@ -949,7 +949,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 		code() << cmd_load_this << cmd_return;
 
 		m_func = func->upFunc;
-		tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::Function, func->func->getReferrer()));
+		tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::TFunction, func->func->getReferrer()));
 		tuint16 linkIndex = tuint16(func->links.size());
 		code() << cmd_push_closure << funcIndex << linkIndex;
 		for (tsize i = 0; i < linkIndex; ++i)

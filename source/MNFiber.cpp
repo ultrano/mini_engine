@@ -247,7 +247,7 @@ void MNFiber::push_bool(tboolean val)
 	push(MNObject::Bool(val));
 }
 
-void MNFiber::push_closure(TCFunction val)
+void MNFiber::push_closure(NativeFunc val)
 {
 	push_string("closure");
 	load_global();
@@ -256,7 +256,7 @@ void MNFiber::push_closure(TCFunction val)
 	closure->setMeta(get(-1));
 	pop(1);
 
-	MNObject obj(TObjectType::Closure, closure->link(global())->getReferrer());
+	MNObject obj(TObjectType::TClosure, closure->link(global())->getReferrer());
 	push(obj);
 }
 
@@ -269,7 +269,7 @@ void MNFiber::push_table(tsize size)
 	table->setMeta(get(-1));
 	pop(1);
 
-	MNObject obj(TObjectType::Table, table->link(global())->getReferrer());
+	MNObject obj(TObjectType::TTable, table->link(global())->getReferrer());
 	push(obj);
 }
 
@@ -282,7 +282,7 @@ void MNFiber::push_array(tsize size)
 	array->setMeta(get(-1));
 	pop(1);
 
-	MNObject obj(TObjectType::Array, array->link(global())->getReferrer());
+	MNObject obj(TObjectType::TArray, array->link(global())->getReferrer());
 	push(obj);
 }
 
@@ -296,7 +296,7 @@ void* MNFiber::push_userdata(tsize size)
 	if (size > 0)
 	{
 		MNUserData* userData = new MNUserData(size);
-		MNObject ud(TObjectType::UserData, userData->link(global())->getReferrer());
+		MNObject ud(TObjectType::TUserData, userData->link(global())->getReferrer());
 		push(ud);
 		return userData->getData();
 	}
@@ -348,10 +348,10 @@ bool MNFiber::load_raw_field()
 	MNObject val;
 	switch (obj.getType())
 	{
-	case TObjectType::Table: ret = obj.toTable()->tryGet(key, val); break;
-	case TObjectType::Array: ret = obj.toArray()->tryGet(key, val); break;
-	case TObjectType::Type:  ret = obj.toClass()->tryGet(key, val); break;
-	case TObjectType::Instance: ret = obj.toInstance()->tryGet(key, val); break;
+	case TObjectType::TTable:    ret = obj.toTable()->tryGet(key, val); break;
+	case TObjectType::TArray:    ret = obj.toArray()->tryGet(key, val); break;
+	case TObjectType::TClass:    ret = obj.toClass()->tryGet(key, val); break;
+	case TObjectType::TInstance: ret = obj.toInstance()->tryGet(key, val); break;
 	}
 	pop(2);
 	push(val);
@@ -367,12 +367,12 @@ tboolean MNFiber::store_raw_field(tboolean insert)
 	bool ret = false;
 	switch (obj.getType())
 	{
-	case TObjectType::Table: 
+	case TObjectType::TTable:
 		if (insert) ret = obj.toTable()->insert(key, val);
 		else ret = obj.toTable()->trySet(key, val); 
 		break;
-	case TObjectType::Array: ret = obj.toArray()->trySet(key, val); break;
-	case TObjectType::Instance: ret = obj.toInstance()->trySet(key, val); break;
+	case TObjectType::TArray: ret = obj.toArray()->trySet(key, val); break;
+	case TObjectType::TInstance: ret = obj.toInstance()->trySet(key, val); break;
 	}
 	pop(3);
 	return ret;
@@ -387,10 +387,10 @@ void MNFiber::load_field()
 	MNObject val;
 	switch (obj.getType())
 	{
-	case TObjectType::Table: ret = obj.toTable()->tryGet(key, val); break;
-	case TObjectType::Array: ret = obj.toArray()->tryGet(key, val); break;
-	case TObjectType::Type:  ret = true; obj.toClass()->tryGet(key, val); break;
-	case TObjectType::Instance: ret = true; obj.toInstance()->tryGet(key, val); break;
+	case TObjectType::TTable:    ret = obj.toTable()->tryGet(key, val); break;
+	case TObjectType::TArray:    ret = obj.toArray()->tryGet(key, val); break;
+	case TObjectType::TClass:    ret = true; obj.toClass()->tryGet(key, val); break;
+	case TObjectType::TInstance: ret = true; obj.toInstance()->tryGet(key, val); break;
 	}
 
 	MNCollectable* collectable = NULL;
@@ -439,12 +439,12 @@ void MNFiber::store_field(tboolean insert)
 	bool ret = false;
 	switch (obj.getType())
 	{
-	case TObjectType::Table: 
+	case TObjectType::TTable: 
 		if (insert) ret = obj.toTable()->insert(key, val); 
 		else ret = obj.toTable()->trySet(key, val); 
 		break;
-	case TObjectType::Array: ret = obj.toArray()->trySet(key, val); break;
-	case TObjectType::Instance: ret = true; obj.toInstance()->trySet(key, val); break;
+	case TObjectType::TArray: ret = obj.toArray()->trySet(key, val); break;
+	case TObjectType::TInstance: ret = true; obj.toInstance()->trySet(key, val); break;
 	}
 
 	MNCollectable* collectable = NULL;
@@ -544,24 +544,24 @@ void MNFiber::equals()
 	bool ret = false;
 	switch (left.getType())
 	{
-	case TObjectType::Null     : ret = (right.isNull()); break;
-	case TObjectType::Pointer  : ret = (left.toPointer() == right.toPointer()); break;
-	case TObjectType::Boolean  : ret = (left.toBool() == right.toBool()); break;
-	case TObjectType::CFunction: ret = (left.toCFunction() == right.toCFunction()); break;
-	case TObjectType::String   : if (right.isString()) ret = left.toString()->ss() == right.toString()->ss(); break;
-	case TObjectType::Int:
+	case TObjectType::TNull     : ret = (right.isNull()); break;
+	case TObjectType::TPointer  : ret = (left.toPointer() == right.toPointer()); break;
+	case TObjectType::TBoolean  : ret = (left.toBool() == right.toBool()); break;
+	case TObjectType::TCFunction: ret = (left.toCFunction() == right.toCFunction()); break;
+	case TObjectType::TString   : if (right.isString()) ret = left.toString()->ss() == right.toString()->ss(); break;
+	case TObjectType::TInt:
 		{
 			if (right.isInt()) ret = (left.toInt() == right.toInt());
 			else if (right.isReal()) ret = (left.toReal() == right.toReal());
 		}
 		break;
-	case TObjectType::Real:
+	case TObjectType::TReal:
 		{
 			ret = (left.toReal() == right.toReal());
 		}
 		break;
-	case TObjectType::UserData:
-	case TObjectType::Table:
+	case TObjectType::TUserData:
+	case TObjectType::TTable:
 		{
 			MNObject val;
 			binaryOp(this, "==", left, right, val);
@@ -581,15 +581,15 @@ void MNFiber::less_than()
 	MNObject ret;
 	switch (left.getType())
 	{
-	case TObjectType::Int:
-	case TObjectType::Real:
+	case TObjectType::TInt:
+	case TObjectType::TReal:
 		{
 			if (right.isInt()) ret = MNObject::Bool(left.toInt() < right.toInt());
 			else if (right.isReal()) ret = MNObject::Bool(left.toReal() < right.toReal());
 		}
 		break;
-	case TObjectType::UserData:
-	case  TObjectType::Table:
+	case TObjectType::TUserData:
+	case  TObjectType::TTable:
 		{
 			binaryOp(this, "<", left, right, ret);
 		}
@@ -623,19 +623,19 @@ void MNFiber::tostring()
 	MNObject str = MNObject::String("[null:null]");
 	switch (object.getType())
 	{
-	case TObjectType::Type     : str = MNObject::Format("[class: %p]", object.toRaw()); break;
-	case TObjectType::Instance : str = MNObject::Format("[instance: %p]", object.toRaw()); break;
-	case TObjectType::Array    : str = MNObject::Format("[array: %p]", object.toArray()); break;
-	case TObjectType::Table    : str = MNObject::Format("[table: %p]", object.toTable()); break;
-	case TObjectType::Pointer  : str = MNObject::Format("[pointer: %p]", object.toPointer()); break;
-	case TObjectType::CFunction: str = MNObject::Format("[cfunction: %p]", object.toCFunction()); break;
-	case TObjectType::Function : str = MNObject::Format("[function: %p]", object.toFunction()); break;
-	case TObjectType::Closure  : str = MNObject::Format("[closure: %p]", object.toClosure()); break;
-	case TObjectType::String   : str = object; break;
-	case TObjectType::Int      : str = MNObject::Format("%d", object.toInt()); break;
-	case TObjectType::Real     : str = MNObject::Format("%f", object.toReal()); break;
-	case TObjectType::Boolean  : str = MNObject::Format("%s", object.toBool() ? "true" : "false"); break;
-	case TObjectType::UserData : 
+	case TObjectType::TClass     : str = MNObject::Format("[class: %p]", object.toRaw()); break;
+	case TObjectType::TInstance  : str = MNObject::Format("[instance: %p]", object.toRaw()); break;
+	case TObjectType::TArray     : str = MNObject::Format("[array: %p]", object.toArray()); break;
+	case TObjectType::TTable     : str = MNObject::Format("[table: %p]", object.toTable()); break;
+	case TObjectType::TPointer   : str = MNObject::Format("[pointer: %p]", object.toPointer()); break;
+	case TObjectType::TCFunction : str = MNObject::Format("[cfunction: %p]", object.toCFunction()); break;
+	case TObjectType::TFunction  : str = MNObject::Format("[function: %p]", object.toFunction()); break;
+	case TObjectType::TClosure   : str = MNObject::Format("[closure: %p]", object.toClosure()); break;
+	case TObjectType::TString    : str = object; break;
+	case TObjectType::TInt       : str = MNObject::Format("%d", object.toInt()); break;
+	case TObjectType::TReal      : str = MNObject::Format("%f", object.toReal()); break;
+	case TObjectType::TBoolean   : str = MNObject::Format("%s", object.toBool() ? "true" : "false"); break;
+	case TObjectType::TUserData :
 		{
 			MNUserData* ud = object.toUserData();
 			str = MNObject::Format("[userdata: %p, size: %d]", ud, ud->getSize());
@@ -663,10 +663,10 @@ void MNFiber::neg()
 	MNObject ret;
 	switch (val.getType())
 	{
-	case TObjectType::Int   : ret = MNObject::Int(-val.toInt()); break;
-	case TObjectType::Real  : ret = MNObject::Real(-val.toReal());  break;
-	case TObjectType::UserData :
-	case  TObjectType::Table: unaryOp(this, "-", val, ret); break;
+	case TObjectType::TInt   : ret = MNObject::Int(-val.toInt()); break;
+	case TObjectType::TReal  : ret = MNObject::Real(-val.toReal());  break;
+	case TObjectType::TUserData :
+	case  TObjectType::TTable: unaryOp(this, "-", val, ret); break;
 	}
 	pop(1);
 	push(ret);
@@ -680,14 +680,14 @@ void MNFiber::add()
 	MNObject ret;
 	switch (left.getType())
 	{
-	case TObjectType::Int:
+	case TObjectType::TInt:
 	{
 		if (right.isInt())   ret = MNObject::Int(left.toInt() + right.toInt());
 		if (right.isReal()) ret = MNObject::Real(left.toReal() + right.toReal());
 	}
 	break;
-	case TObjectType::Real: if (right.isReal() || right.isInt()) ret = MNObject::Real(left.toReal() + right.toReal()); break;
-	case TObjectType::String:
+	case TObjectType::TReal: if (right.isReal() || right.isInt()) ret = MNObject::Real(left.toReal() + right.toReal()); break;
+	case TObjectType::TString:
 	{
 		tostring();
 		MNObject strObj1 = get(-1);
@@ -697,8 +697,8 @@ void MNFiber::add()
 		ret = MNObject::Format("%s%s", str1->ss().str().c_str(), str2->ss().str().c_str());
 	}
 	break;
-	case TObjectType::UserData :
-	case  TObjectType::Table:
+	case TObjectType::TUserData :
+	case  TObjectType::TTable:
 	{
 		binaryOp(this, "+", left, right, ret);
 	}
@@ -717,15 +717,15 @@ void MNFiber::sub()
 	MNObject ret;
 	switch (left.getType())
 	{
-	case TObjectType::Int:
+	case TObjectType::TInt:
 	{
 		if (right.isInt())   ret = MNObject::Int(left.toInt() - right.toInt());
 		if (right.isReal()) ret = MNObject::Real(left.toReal() - right.toReal());
 	}
 	break;
-	case TObjectType::Real: if (right.isReal() || right.isInt()) ret = MNObject::Real(left.toReal() - right.toReal()); break;
-	case TObjectType::UserData :
-	case TObjectType::Table:
+	case TObjectType::TReal: if (right.isReal() || right.isInt()) ret = MNObject::Real(left.toReal() - right.toReal()); break;
+	case TObjectType::TUserData :
+	case TObjectType::TTable:
 	{
 		binaryOp(this, "-", left, right, ret);
 	}
@@ -744,15 +744,15 @@ void MNFiber::mul()
 	MNObject ret;
 	switch (left.getType())
 	{
-	case TObjectType::Int:
+	case TObjectType::TInt:
 	{
 		if (right.isInt())   ret = MNObject::Int(left.toInt() * right.toInt());
 		if (right.isReal()) ret = MNObject::Real(left.toReal() * right.toReal());
 	}
 	break;
-	case TObjectType::Real: if (right.isReal() || right.isInt()) ret = MNObject::Real(left.toReal() * right.toReal()); break;
-	case TObjectType::UserData :
-	case TObjectType::Table:
+	case TObjectType::TReal: if (right.isReal() || right.isInt()) ret = MNObject::Real(left.toReal() * right.toReal()); break;
+	case TObjectType::TUserData :
+	case TObjectType::TTable:
 	{
 		binaryOp(this, "*", left, right, ret);
 	}
@@ -771,13 +771,13 @@ void MNFiber::div()
 	MNObject ret;
 	switch (left.getType())
 	{
-	case TObjectType::Int:
+	case TObjectType::TInt:
 	{
 		if (right.isInt()   && right.toInt() != 0)   ret = MNObject::Int(left.toInt() / right.toInt());
 		if (right.isReal() && right.toReal() != 0) ret = MNObject::Real(left.toReal() / right.toReal());
 	}
 	break;
-	case TObjectType::Real:
+	case TObjectType::TReal:
 	{
 		if (right.isReal() || right.isInt())
 		{
@@ -785,8 +785,8 @@ void MNFiber::div()
 		}
 	}
 	break;
-	case TObjectType::UserData :
-	case TObjectType::Table:
+	case TObjectType::TUserData :
+	case TObjectType::TTable:
 	{
 		binaryOp(this, "/", left, right, ret);
 	}
@@ -805,13 +805,13 @@ void MNFiber::mod()
 	MNObject ret;
 	switch (left.getType())
 	{
-	case TObjectType::Int:
+	case TObjectType::TInt:
 	{
 		if (right.isInt() && right.toInt() != 0)   ret = MNObject::Int(left.toInt() % right.toInt());
 		if (right.isReal() && right.toReal() != 0) ret = MNObject::Real(fmod(left.toReal(), right.toReal()));
 	}
 	break;
-	case TObjectType::Real:
+	case TObjectType::TReal:
 	{
 		if (right.isReal() || right.isInt())
 		{
@@ -819,8 +819,8 @@ void MNFiber::mod()
 		}
 	}
 	break;
-	case TObjectType::UserData :
-	case TObjectType::Table:
+	case TObjectType::TUserData :
+	case TObjectType::TTable:
 	{
 		binaryOp(this, "%", left, right, ret);
 	}
@@ -1006,7 +1006,7 @@ tint32 MNFiber::excuteCall()
 
 		if (closure->isNative())
 		{
-			TCFunction func = closure->getFunc().toCFunction();
+			NativeFunc func = closure->getFunc().toCFunction();
 			bool ret = (func) ? func(this) : false;
 			info = returnCall(ret);
 			continue;;

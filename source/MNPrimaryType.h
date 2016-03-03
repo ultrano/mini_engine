@@ -105,23 +105,23 @@ enum TObjectType : tuint8
 	Referrer = (1 << 0),
 
 	//! primitive types
-	Null      = (1<<1),
-	Pointer   = (2<<1),
-	Int       = (3<<1),
-	Real      = (4<<1),
-	Boolean   = (5<<1),
-	CFunction = (6<<1),
+	TNull      = (1<<1),
+	TPointer   = (2<<1),
+	TInt       = (3<<1),
+	TReal      = (4<<1),
+	TBoolean   = (5<<1),
+	TCFunction = (6<<1),
 
 	//! 
-	String   = (7<<1)  | Referrer,
-	Fiber    = (8<<1)  | Referrer,
-	Closure  = (9<<1)  | Referrer,
-	Table    = (10<<1) | Referrer,
-	Array    = (11<<1) | Referrer,
-	Function = (12<<1) | Referrer,
-	UserData = (13 << 1) | Referrer,
-	Type     = (14 << 1) | Referrer,
-	Instance = (15 << 1) | Referrer,
+	TString   = (7<<1)  | Referrer,
+	TFiber    = (8<<1)  | Referrer,
+	TClosure  = (9<<1)  | Referrer,
+	TTable    = (10<<1) | Referrer,
+	TArray    = (11<<1) | Referrer,
+	TFunction = (12<<1) | Referrer,
+	TUserData = (13 << 1) | Referrer,
+	TClass    = (14 << 1) | Referrer,
+	TInstance = (15 << 1) | Referrer,
 };
 
 enum TObjectProp
@@ -218,6 +218,6 @@ enum TCommand : tbyte
 };
 
 class MNFiber;
-typedef bool(*TCFunction)(MNFiber* s); // Native C Function
+typedef bool(*NativeFunc)(MNFiber* s); // Native C Function
 
 #endif

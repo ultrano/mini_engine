@@ -8,6 +8,9 @@
 
 #ifndef MNFileSystem_h
 #define MNFileSystem_h
+#include "MNPrimaryType.h"
+
+const tstring& MNResourceFolderPath(const char* path = NULL);
 
 FILE* mnfopen(const char* path, const char* mode);
 

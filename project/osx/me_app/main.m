@@ -11,6 +11,8 @@
 
 int main(int argc, const char * argv[]) {
     
-    MNStart("resource/script/test.mn");
+    NSString *resourceDir = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource"];
+    const char* resourceFolder = [resourceDir UTF8String];
+    MNStart(resourceFolder, "script/test.mn");
     return NSApplicationMain(argc, argv);
 }

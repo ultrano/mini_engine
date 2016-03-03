@@ -16,13 +16,13 @@
 MNObject MNObject::String(const tstring& str)
 {
 	MNString* strval = new MNString(str);
-	return MNObject(TObjectType::String, strval->getReferrer());
+	return MNObject(TObjectType::TString, strval->getReferrer());
 }
 
 MNObject MNObject::String(const thashstring& str)
 {
 	MNString* strval = new MNString(str);
-	return MNObject(TObjectType::String, strval->getReferrer());
+	return MNObject(TObjectType::TString, strval->getReferrer());
 }
 
 MNObject MNObject::Format(const tchar* format, ...)
@@ -42,27 +42,27 @@ MNObject MNObject::Referrer(MNReferrer* ref)
 
 	MNCountable* obj = ref->getObject();
 	const MNRtti* rtti = obj->queryRtti();
-	TObjectType type = TObjectType::Null;
-	if (rtti == MNArray::getRtti())         type = TObjectType::Array;
-	else if (rtti == MNTable::getRtti())    type = TObjectType::Table;
-	else if (rtti == MNClosure::getRtti())  type = TObjectType::Closure;
-	else if (rtti == MNFunction::getRtti()) type = TObjectType::Function;
-	else if (rtti == MNString::getRtti())   type = TObjectType::String;
-	else if (rtti == MNFiber::getRtti())    type = TObjectType::Fiber;
-	else if (rtti == MNUserData::getRtti()) type = TObjectType::UserData;
-	else if (rtti == MNClass::getRtti())    type = TObjectType::Type;
-	else if (rtti == MNInstance::getRtti()) type = TObjectType::Instance;
+	TObjectType type = TObjectType::TNull;
+	if (rtti == MNArray::getRtti())         type = TObjectType::TArray;
+	else if (rtti == MNTable::getRtti())    type = TObjectType::TTable;
+	else if (rtti == MNClosure::getRtti())  type = TObjectType::TClosure;
+	else if (rtti == MNFunction::getRtti()) type = TObjectType::TFunction;
+	else if (rtti == MNString::getRtti())   type = TObjectType::TString;
+	else if (rtti == MNFiber::getRtti())    type = TObjectType::TFiber;
+	else if (rtti == MNUserData::getRtti()) type = TObjectType::TUserData;
+	else if (rtti == MNClass::getRtti())    type = TObjectType::TClass;
+	else if (rtti == MNInstance::getRtti()) type = TObjectType::TInstance;
 
 	return MNObject(type, ref);
 }
 MNObject::MNObject()
-	: valType(TObjectType::Null)
+	: valType(TObjectType::TNull)
 {
 
 }
 
 MNObject::MNObject(const MNObject& copy)
-	: valType(TObjectType::Null)
+	: valType(TObjectType::TNull)
 {
 	assign(copy);
 }
@@ -111,7 +111,7 @@ MNObject& MNObject::assign(const MNObject& right)
 
 tint MNObject::getType() const
 {
-	if (((valType & TObjectType::Referrer) == 1) && val._ref->getHard() == 0) return TObjectType::Null;
+	if (((valType & TObjectType::Referrer) == 1) && val._ref->getHard() == 0) return TObjectType::TNull;
 	return valType;
 }
 
@@ -119,8 +119,8 @@ thashtype MNObject::getHash() const
 {
 	switch (getType())
 	{
-	case TObjectType::Null : return 0;
-	case TObjectType::String: return toString()->ss().hash();
+	case TObjectType::TNull : return 0;
+	case TObjectType::TString: return toString()->ss().hash();
 	default: return (thashtype)toRaw();
 	}
 	return 0;
@@ -128,32 +128,32 @@ thashtype MNObject::getHash() const
 
 bool MNObject::isNull() const
 {
-	return (getType() == TObjectType::Null);
+	return (getType() == TObjectType::TNull);
 }
 
 bool MNObject::isPointer() const
 {
-	return (getType() == TObjectType::Pointer);
+	return (getType() == TObjectType::TPointer);
 }
 
 bool MNObject::isInt() const
 {
-	return (getType() == TObjectType::Int);
+	return (getType() == TObjectType::TInt);
 }
 
 bool MNObject::isReal() const
 {
-	return (getType() == TObjectType::Real);
+	return (getType() == TObjectType::TReal);
 }
 
 bool MNObject::isBool() const
 {
-	return (getType() == TObjectType::Boolean);
+	return (getType() == TObjectType::TBoolean);
 }
 
 bool MNObject::isCFunction() const
 {
-	return (getType() == TObjectType::CFunction);
+	return (getType() == TObjectType::TCFunction);
 }
 
 bool MNObject::isReferrer() const
@@ -163,47 +163,47 @@ bool MNObject::isReferrer() const
 
 bool MNObject::isString() const
 {
-	return isReferrer() && (getType() == TObjectType::String);
+	return isReferrer() && (getType() == TObjectType::TString);
 }
 
 bool MNObject::isClosure() const
 {
-	return isReferrer() && (getType() == TObjectType::Closure);
+	return isReferrer() && (getType() == TObjectType::TClosure);
 }
 
 bool MNObject::isTable() const
 {
-	return isReferrer() && (getType() == TObjectType::Table);
+	return isReferrer() && (getType() == TObjectType::TTable);
 }
 
 bool MNObject::isArray() const
 {
-	return isReferrer() && (getType() == TObjectType::Array);
+	return isReferrer() && (getType() == TObjectType::TArray);
 }
 
 bool MNObject::isFunction() const
 {
-	return isReferrer() && (getType() == TObjectType::Function);
+	return isReferrer() && (getType() == TObjectType::TFunction);
 }
 
 bool MNObject::isFiber() const
 {
-	return isReferrer() && (getType() == TObjectType::Fiber);
+	return isReferrer() && (getType() == TObjectType::TFiber);
 }
 
 bool MNObject::isUserData() const
 {
-	return isReferrer() && (getType() == TObjectType::UserData);
+	return isReferrer() && (getType() == TObjectType::TUserData);
 }
 
 bool MNObject::isType() const
 {
-	return isReferrer() && (getType() == TObjectType::Type);
+	return isReferrer() && (getType() == TObjectType::TClass);
 }
 
 bool MNObject::isInstance() const
 {
-	return isReferrer() && (getType() == TObjectType::Instance);
+	return isReferrer() && (getType() == TObjectType::TInstance);
 }
 
 void*       MNObject::toRaw() const
@@ -237,7 +237,7 @@ tboolean    MNObject::toBool(bool def) const
 	return def;
 }
 
-TCFunction   MNObject::toCFunction() const
+NativeFunc   MNObject::toCFunction() const
 {
 	if (isCFunction()) return val._func;
 	return NULL;

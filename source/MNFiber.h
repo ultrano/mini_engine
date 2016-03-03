@@ -65,7 +65,7 @@ public:
 	void  push_string(const tstring& val);
 	void  push_pointer(void* val);
 	void  push_bool(tboolean val);
-	void  push_closure(TCFunction val);
+	void  push_closure(NativeFunc val);
 	void  push_table(tsize size = 0);
 	void  push_array(tsize size = 0);
 	void  push_const(tsize idx);

@@ -60,6 +60,9 @@
 		BE6292951C85B34E00EE28C2 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6292931C85B34E00EE28C2 /* libstdc++.6.0.9.tbd */; };
 		BE6292961C85B34E00EE28C2 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6292941C85B34E00EE28C2 /* libstdc++.tbd */; };
 		BE6292A31C85BB0700EE28C2 /* resource in Resources */ = {isa = PBXBuildFile; fileRef = BE6292A21C85BB0700EE28C2 /* resource */; };
+		BEC526E21C87120E00D6AA57 /* MNOpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEC526E01C87120E00D6AA57 /* MNOpenGL.cpp */; };
+		BEC526E31C87120E00D6AA57 /* MNOpenGL.h in Headers */ = {isa = PBXBuildFile; fileRef = BEC526E11C87120E00D6AA57 /* MNOpenGL.h */; };
+		BEC526E71C87156700D6AA57 /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = BEC526E51C87156700D6AA57 /* stb_image.h */; };
 		BED78AB41C85F5DA0034100E /* MNPlatformDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = BED78AB31C85F5DA0034100E /* MNPlatformDefine.h */; };
 		BED78AB61C85FA170034100E /* MNFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = BED78AB51C85FA170034100E /* MNFileSystem.h */; };
 		BED78AB81C85FB020034100E /* MNFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BED78AB71C85FB020034100E /* MNFileSystem.cpp */; };
@@ -137,6 +140,9 @@
 		BE6292931C85B34E00EE28C2 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		BE6292941C85B34E00EE28C2 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		BE6292A21C85BB0700EE28C2 /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../resource; sourceTree = "<group>"; };
+		BEC526E01C87120E00D6AA57 /* MNOpenGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNOpenGL.cpp; sourceTree = "<group>"; };
+		BEC526E11C87120E00D6AA57 /* MNOpenGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNOpenGL.h; sourceTree = "<group>"; };
+		BEC526E51C87156700D6AA57 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		BED78AB31C85F5DA0034100E /* MNPlatformDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNPlatformDefine.h; sourceTree = "<group>"; };
 		BED78AB51C85FA170034100E /* MNFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFileSystem.h; sourceTree = "<group>"; };
 		BED78AB71C85FB020034100E /* MNFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNFileSystem.cpp; sourceTree = "<group>"; };
@@ -234,6 +240,7 @@
 				BE6292401C85B1D600EE28C2 /* MNClosure.h */,
 				BE6292411C85B1D600EE28C2 /* MNCollectable.cpp */,
 				BE6292421C85B1D600EE28C2 /* MNCollectable.h */,
+				BEC526E51C87156700D6AA57 /* stb_image.h */,
 				BE6292431C85B1D600EE28C2 /* MNCommand.cpp */,
 				BE6292441C85B1D600EE28C2 /* MNCommand.h */,
 				BE6292451C85B1D600EE28C2 /* MNCompiler.cpp */,
@@ -269,6 +276,8 @@
 				BED78AB31C85F5DA0034100E /* MNPlatformDefine.h */,
 				BED78AB51C85FA170034100E /* MNFileSystem.h */,
 				BED78AB71C85FB020034100E /* MNFileSystem.cpp */,
+				BEC526E01C87120E00D6AA57 /* MNOpenGL.cpp */,
+				BEC526E11C87120E00D6AA57 /* MNOpenGL.h */,
 			);
 			name = source;
 			path = ../../../source;
@@ -297,11 +306,13 @@
 				BE6292751C85B1D600EE28C2 /* MNCountable.h in Headers */,
 				BE6292681C85B1D600EE28C2 /* MNBasicLib.h in Headers */,
 				BE6292661C85B1D600EE28C2 /* MNArray.h in Headers */,
+				BEC526E71C87156700D6AA57 /* stb_image.h in Headers */,
 				BED78AB61C85FA170034100E /* MNFileSystem.h in Headers */,
 				BE6292801C85B1D600EE28C2 /* MNList.h in Headers */,
 				BE6292711C85B1D600EE28C2 /* MNCommand.h in Headers */,
 				BE62927B1C85B1D600EE28C2 /* MNGlobal.h in Headers */,
 				BE62928B1C85B1D600EE28C2 /* MNString.h in Headers */,
+				BEC526E31C87120E00D6AA57 /* MNOpenGL.h in Headers */,
 				BE6292771C85B1D600EE28C2 /* MNFiber.h in Headers */,
 				BE62928D1C85B1D600EE28C2 /* MNTable.h in Headers */,
 				BE6292731C85B1D600EE28C2 /* MNCompiler.h in Headers */,
@@ -424,6 +435,7 @@
 				BE62928E1C85B1D600EE28C2 /* MNUserData.cpp in Sources */,
 				BE62927E1C85B1D600EE28C2 /* MNLexer.cpp in Sources */,
 				BE62926E1C85B1D600EE28C2 /* MNCollectable.cpp in Sources */,
+				BEC526E21C87120E00D6AA57 /* MNOpenGL.cpp in Sources */,
 				BE62928C1C85B1D600EE28C2 /* MNTable.cpp in Sources */,
 				BE6292781C85B1D600EE28C2 /* MNFunction.cpp in Sources */,
 				BE6292671C85B1D600EE28C2 /* MNBasicLib.cpp in Sources */,
