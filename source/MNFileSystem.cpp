@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include "MNPlatformDefine.h"
+#include "MNPrimaryType.h"
 
 #if defined(PLATFORM_IOS) || defined(PLATFORM_OSX)
 

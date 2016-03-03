@@ -1,9 +1,11 @@
 
 
-var count = 10;
+var count = 1;
 
 while ((count -= 1) > 0)
 {
     print("hello there, Mr.number " + count);
 }
 
+print(table.iterate.call(this, print));
+print(cache.iterate(print));

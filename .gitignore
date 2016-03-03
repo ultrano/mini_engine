@@ -27,3 +27,5 @@
 *.rc
 *.cache
 *.opendb
+*.ipdb
+*.iobj
