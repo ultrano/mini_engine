@@ -3,9 +3,9 @@
 
 #include "MNCollectable.h"
 
-class MNClass : public MNCollectable
+class MNClass : public MNCountable
 {
-	MN_RTTI(MNClass, MNCollectable);
+	MN_RTTI(MNClass, MNCountable);
 
 public:
 

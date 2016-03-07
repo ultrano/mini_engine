@@ -7,7 +7,7 @@ MNClass::MNClass(tsize nmembers, const MNObject& super)
 	, m_members(NULL)
 {
 	m_super = super.toClass();
-	setMeta(super);
+	//setMeta(super);
 
 	if (m_super) m_members = new MNTable(nmembers + m_super->m_members->count());
 	else m_members = new MNTable(nmembers);
@@ -25,7 +25,13 @@ MNClass::MNClass(tsize nmembers, const MNObject& super)
 
 MNClass::~MNClass()
 {
-	if (m_members) m_members->finalize();
+    if (m_super != NULL)
+        m_super->finalize();
+    
+	if (m_members != NULL)
+        m_members->finalize();
+    
+    m_super   = NULL;
 	m_members = NULL;
 
 	m_initVals.clear();
@@ -73,7 +79,15 @@ tboolean MNClass::queryMember(const MNObject& key, Member& mem) const
 {
 	MNObject obj;
 	bool ret = m_members->tryGet(key, obj);
-	mem._int = (tint32)obj.toInt();
+    if (ret)
+    {
+        mem._int = (tint32)obj.toInt();
+    }
+    else if (m_super != NULL)
+    {
+        ret = m_super->queryMember(key, mem);
+    }
+    
 	return ret;
 }
 
@@ -112,7 +126,7 @@ tboolean MNClass::tryGet(const MNObject& key, MNObject& val)
 
 void MNClass::travelMark()
 {
-	if (m_super != NULL) m_super->mark();
+	//if (m_super != NULL) m_super->mark();
 	m_members->mark();
 
 	for (tsize i = 0; i < m_initVals.size(); ++i)

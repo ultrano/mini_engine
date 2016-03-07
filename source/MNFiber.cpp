@@ -1076,7 +1076,7 @@ tint32 MNFiber::excuteCall()
 
 					MNObject _super = get(-1); pop(1);
 					MNClass* _class = new MNClass(nfield, _super);
-					MNObject classObj = MNObject::Referrer(_class->link(global())->getReferrer());
+					MNObject classObj = MNObject::Referrer(_class->getReferrer());
 					_class->addStatic(MNObject::String("->"), classObj); //! default setting
 					push(classObj);
 				}

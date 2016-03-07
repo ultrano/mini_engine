@@ -113,7 +113,7 @@ GLuint loadShader( GLenum type, const char* shaderSource )
     }
     sources.push_back( shaderSource );
     
-    glShaderSource( shaderID, sources.size(), &sources[0], NULL );
+    glShaderSource( shaderID, (tint)sources.size(), &sources[0], NULL );
     glCompileShader( shaderID );
     
     GLint compiled = false;

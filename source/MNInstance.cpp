@@ -5,7 +5,7 @@ MNInstance::MNInstance(const MNObject& _classObj)
 {
 	m_class = _classObj;
 	MNClass* _class = _classObj.toClass();
-	setMeta(_class->getMeta());
+	//setMeta(_class->getMeta());
 
 	m_fields = _class->m_initVals;
 }
@@ -57,7 +57,7 @@ tboolean MNInstance::tryGet(const MNObject& key, MNObject& val) const
 void MNInstance::travelMark()
 {
 	MNClass* _class = m_class.toClass();
-	_class->mark();
+	//_class->mark();
 
 	for (tsize i = 0; i < m_fields.size(); ++i)
 	{
