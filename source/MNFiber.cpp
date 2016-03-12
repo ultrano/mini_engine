@@ -8,8 +8,6 @@
 #include "MNFunction.h"
 #include "MNCompiler.h"
 #include "MNUserData.h"
-#include "MNClass.h"
-#include "MNInstance.h"
 
 #include <math.h>
 
@@ -350,8 +348,6 @@ bool MNFiber::load_raw_field()
 	{
 	case TObjectType::TTable:    ret = obj.toTable()->tryGet(key, val); break;
 	case TObjectType::TArray:    ret = obj.toArray()->tryGet(key, val); break;
-	case TObjectType::TClass:    ret = obj.toClass()->tryGet(key, val); break;
-	case TObjectType::TInstance: ret = obj.toInstance()->tryGet(key, val); break;
 	}
 	pop(2);
 	push(val);
@@ -372,7 +368,6 @@ tboolean MNFiber::store_raw_field(tboolean insert)
 		else ret = obj.toTable()->trySet(key, val); 
 		break;
 	case TObjectType::TArray: ret = obj.toArray()->trySet(key, val); break;
-	case TObjectType::TInstance: ret = obj.toInstance()->trySet(key, val); break;
 	}
 	pop(3);
 	return ret;
@@ -389,8 +384,6 @@ void MNFiber::load_field()
 	{
 	case TObjectType::TTable:    ret = obj.toTable()->tryGet(key, val); break;
 	case TObjectType::TArray:    ret = obj.toArray()->tryGet(key, val); break;
-	case TObjectType::TClass:    ret = true; obj.toClass()->tryGet(key, val); break;
-	case TObjectType::TInstance: ret = true; obj.toInstance()->tryGet(key, val); break;
 	}
 
 	MNCollectable* collectable = NULL;
@@ -444,7 +437,6 @@ void MNFiber::store_field(tboolean insert)
 		else ret = obj.toTable()->trySet(key, val); 
 		break;
 	case TObjectType::TArray: ret = obj.toArray()->trySet(key, val); break;
-	case TObjectType::TInstance: ret = true; obj.toInstance()->trySet(key, val); break;
 	}
 
 	MNCollectable* collectable = NULL;
@@ -623,8 +615,6 @@ void MNFiber::tostring()
 	MNObject str = MNObject::String("[null:null]");
 	switch (object.getType())
 	{
-	case TObjectType::TClass     : str = MNObject::Format("[class: %p]", object.toRaw()); break;
-	case TObjectType::TInstance  : str = MNObject::Format("[instance: %p]", object.toRaw()); break;
 	case TObjectType::TArray     : str = MNObject::Format("[array: %p]", object.toArray()); break;
 	case TObjectType::TTable     : str = MNObject::Format("[table: %p]", object.toTable()); break;
 	case TObjectType::TPointer   : str = MNObject::Format("[pointer: %p]", object.toPointer()); break;
@@ -1069,56 +1059,6 @@ tint32 MNFiber::excuteCall()
 					}
 				}
 				break;
-			case cmd_new_class :
-				{
-					tuint16 nfield = 0;
-					code >> nfield;
-
-					MNObject _super = get(-1); pop(1);
-					MNClass* _class = new MNClass(nfield, _super);
-					MNObject classObj = MNObject::Referrer(_class->getReferrer());
-					_class->addStatic(MNObject::String("->"), classObj); //! default setting
-					push(classObj);
-				}
-				break;
-			case cmd_add_class_static:
-			case cmd_add_class_field:
-				{
-					MNObject classObj = get(-3);
-					MNObject name     = get(-2);
-					MNObject val      = get(-1);
-					MNClass* _class   = classObj.toClass();
-					if (cmd == cmd_add_class_field) _class->addField(name, val);
-					else _class->addStatic(name, val);
-					pop(3);
-				}
-				break;
-			case cmd_new_inst:
-				{
-					tuint16 nargs = 0;
-					code >> nargs;
-					MNObject classObj = get(-(nargs+1));
-					if (MNClass* _class = classObj.toClass())
-					{
-						MNInstance* inst = new MNInstance(classObj);
-						inst->link(global());
-						MNObject instObj = MNObject::Referrer(inst->getReferrer());
-						push(classObj);
-						push_string("constructor");
-						load_field();
-						MNObject constructor = get(-1); pop(1);
-						set(-(nargs+1), constructor);
-						set(-nargs, instObj);
-						call(nargs, false);
-						push(instObj);
-					}
-					else
-					{
-						pop(nargs+1);
-						push_null();
-					}
-				}
-				break;
 			case cmd_pop1: pop(1); break;
 			case cmd_pop2: pop(2); break;
 			case cmd_popn:
@@ -1288,8 +1228,6 @@ tint32 MNFiber::excuteCall()
 					tbyte nargs;
 					code >> nargs;
 					tint32 selfIdx = -tint32(nargs);
-					const MNObject& self = get(selfIdx);
-					if (self.isType()) set(selfIdx, get(0));
 					if (CallInfo* newCall = enterCall(nargs, cmd_call == cmd)) info = newCall;
 				}
 				break;

@@ -120,8 +120,6 @@ enum TObjectType : tuint8
 	TArray    = (11<<1) | Referrer,
 	TFunction = (12<<1) | Referrer,
 	TUserData = (13 << 1) | Referrer,
-	TClass    = (14 << 1) | Referrer,
-	TInstance = (15 << 1) | Referrer,
 };
 
 enum TObjectProp
@@ -164,8 +162,6 @@ enum TCommand : tbyte
 	cmd_push_closure,
 	cmd_push_table,
 	cmd_push_array,
-	cmd_new_class,
-	cmd_new_inst,
 	cmd_pop1,
 	cmd_pop2,
 	cmd_popn,//! >> tbyte
@@ -179,8 +175,6 @@ enum TCommand : tbyte
 	cmd_load_field,
 	cmd_store_field,
 	cmd_insert_field,
-	cmd_add_class_field,
-	cmd_add_class_static,
 	cmd_load_global, //! >> tuint16
 	cmd_store_global, //! >> tuint16
 	cmd_set_meta,

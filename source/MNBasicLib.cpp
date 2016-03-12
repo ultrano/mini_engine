@@ -3,8 +3,6 @@
 #include "MNGlobal.h"
 #include "MNString.h"
 #include "MNClosure.h"
-#include "MNClass.h"
-#include "MNInstance.h"
 #include "MNTable.h"
 #include "MNArray.h"
 

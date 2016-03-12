@@ -17,8 +17,6 @@
 		BE6292661C85B1D600EE28C2 /* MNArray.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292391C85B1D600EE28C2 /* MNArray.h */; };
 		BE6292671C85B1D600EE28C2 /* MNBasicLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62923A1C85B1D600EE28C2 /* MNBasicLib.cpp */; };
 		BE6292681C85B1D600EE28C2 /* MNBasicLib.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62923B1C85B1D600EE28C2 /* MNBasicLib.h */; };
-		BE6292691C85B1D600EE28C2 /* MNClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62923C1C85B1D600EE28C2 /* MNClass.cpp */; };
-		BE62926A1C85B1D600EE28C2 /* MNClass.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62923D1C85B1D600EE28C2 /* MNClass.h */; };
 		BE62926B1C85B1D600EE28C2 /* MNClassBond.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62923E1C85B1D600EE28C2 /* MNClassBond.h */; };
 		BE62926C1C85B1D600EE28C2 /* MNClosure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62923F1C85B1D600EE28C2 /* MNClosure.cpp */; };
 		BE62926D1C85B1D600EE28C2 /* MNClosure.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292401C85B1D600EE28C2 /* MNClosure.h */; };
@@ -36,8 +34,6 @@
 		BE6292791C85B1D600EE28C2 /* MNFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62924C1C85B1D600EE28C2 /* MNFunction.h */; };
 		BE62927A1C85B1D600EE28C2 /* MNGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62924D1C85B1D600EE28C2 /* MNGlobal.cpp */; };
 		BE62927B1C85B1D600EE28C2 /* MNGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = BE62924E1C85B1D600EE28C2 /* MNGlobal.h */; };
-		BE62927C1C85B1D600EE28C2 /* MNInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE62924F1C85B1D600EE28C2 /* MNInstance.cpp */; };
-		BE62927D1C85B1D600EE28C2 /* MNInstance.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292501C85B1D600EE28C2 /* MNInstance.h */; };
 		BE62927E1C85B1D600EE28C2 /* MNLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292511C85B1D600EE28C2 /* MNLexer.cpp */; };
 		BE62927F1C85B1D600EE28C2 /* MNLexer.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292521C85B1D600EE28C2 /* MNLexer.h */; };
 		BE6292801C85B1D600EE28C2 /* MNList.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292531C85B1D600EE28C2 /* MNList.h */; };
@@ -87,9 +83,7 @@
 		BE6292141C85B05A00EE28C2 /* GameView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
 		BE6292161C85B05A00EE28C2 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		BE6292171C85B05A00EE28C2 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
-		BE6292191C85B05A00EE28C2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		BE62921B1C85B05A00EE28C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		BE62921E1C85B05A00EE28C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		BE6292201C85B05A00EE28C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE62922A1C85B1A500EE28C2 /* libme_osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libme_osx.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6292361C85B1D600EE28C2 /* MiniEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MiniEngine.cpp; sourceTree = "<group>"; };
@@ -98,8 +92,6 @@
 		BE6292391C85B1D600EE28C2 /* MNArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNArray.h; sourceTree = "<group>"; };
 		BE62923A1C85B1D600EE28C2 /* MNBasicLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNBasicLib.cpp; sourceTree = "<group>"; };
 		BE62923B1C85B1D600EE28C2 /* MNBasicLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNBasicLib.h; sourceTree = "<group>"; };
-		BE62923C1C85B1D600EE28C2 /* MNClass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNClass.cpp; sourceTree = "<group>"; };
-		BE62923D1C85B1D600EE28C2 /* MNClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClass.h; sourceTree = "<group>"; };
 		BE62923E1C85B1D600EE28C2 /* MNClassBond.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClassBond.h; sourceTree = "<group>"; };
 		BE62923F1C85B1D600EE28C2 /* MNClosure.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNClosure.cpp; sourceTree = "<group>"; };
 		BE6292401C85B1D600EE28C2 /* MNClosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClosure.h; sourceTree = "<group>"; };
@@ -117,8 +109,6 @@
 		BE62924C1C85B1D600EE28C2 /* MNFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFunction.h; sourceTree = "<group>"; };
 		BE62924D1C85B1D600EE28C2 /* MNGlobal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNGlobal.cpp; sourceTree = "<group>"; };
 		BE62924E1C85B1D600EE28C2 /* MNGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNGlobal.h; sourceTree = "<group>"; };
-		BE62924F1C85B1D600EE28C2 /* MNInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNInstance.cpp; sourceTree = "<group>"; };
-		BE6292501C85B1D600EE28C2 /* MNInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNInstance.h; sourceTree = "<group>"; };
 		BE6292511C85B1D600EE28C2 /* MNLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNLexer.cpp; sourceTree = "<group>"; };
 		BE6292521C85B1D600EE28C2 /* MNLexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNLexer.h; sourceTree = "<group>"; };
 		BE6292531C85B1D600EE28C2 /* MNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNList.h; sourceTree = "<group>"; };
@@ -199,9 +189,7 @@
 				BE6292141C85B05A00EE28C2 /* GameView.m */,
 				BE6292161C85B05A00EE28C2 /* GameViewController.h */,
 				BE6292171C85B05A00EE28C2 /* GameViewController.m */,
-				BE6292191C85B05A00EE28C2 /* art.scnassets */,
 				BE62921B1C85B05A00EE28C2 /* Assets.xcassets */,
-				BE62921D1C85B05A00EE28C2 /* MainMenu.xib */,
 				BE6292201C85B05A00EE28C2 /* Info.plist */,
 				BE6292101C85B05A00EE28C2 /* Supporting Files */,
 			);
@@ -233,8 +221,6 @@
 				BE6292391C85B1D600EE28C2 /* MNArray.h */,
 				BE62923A1C85B1D600EE28C2 /* MNBasicLib.cpp */,
 				BE62923B1C85B1D600EE28C2 /* MNBasicLib.h */,
-				BE62923C1C85B1D600EE28C2 /* MNClass.cpp */,
-				BE62923D1C85B1D600EE28C2 /* MNClass.h */,
 				BE62923E1C85B1D600EE28C2 /* MNClassBond.h */,
 				BE62923F1C85B1D600EE28C2 /* MNClosure.cpp */,
 				BE6292401C85B1D600EE28C2 /* MNClosure.h */,
@@ -253,8 +239,6 @@
 				BE62924C1C85B1D600EE28C2 /* MNFunction.h */,
 				BE62924D1C85B1D600EE28C2 /* MNGlobal.cpp */,
 				BE62924E1C85B1D600EE28C2 /* MNGlobal.h */,
-				BE62924F1C85B1D600EE28C2 /* MNInstance.cpp */,
-				BE6292501C85B1D600EE28C2 /* MNInstance.h */,
 				BE6292511C85B1D600EE28C2 /* MNLexer.cpp */,
 				BE6292521C85B1D600EE28C2 /* MNLexer.h */,
 				BE6292531C85B1D600EE28C2 /* MNList.h */,
@@ -300,7 +284,6 @@
 				BE62926D1C85B1D600EE28C2 /* MNClosure.h in Headers */,
 				BE6292821C85B1D600EE28C2 /* MNMemory.h in Headers */,
 				BED78AB41C85F5DA0034100E /* MNPlatformDefine.h in Headers */,
-				BE62927D1C85B1D600EE28C2 /* MNInstance.h in Headers */,
 				BE62926B1C85B1D600EE28C2 /* MNClassBond.h in Headers */,
 				BE6292791C85B1D600EE28C2 /* MNFunction.h in Headers */,
 				BE6292751C85B1D600EE28C2 /* MNCountable.h in Headers */,
@@ -316,7 +299,6 @@
 				BE6292771C85B1D600EE28C2 /* MNFiber.h in Headers */,
 				BE62928D1C85B1D600EE28C2 /* MNTable.h in Headers */,
 				BE6292731C85B1D600EE28C2 /* MNCompiler.h in Headers */,
-				BE62926A1C85B1D600EE28C2 /* MNClass.h in Headers */,
 				BE62926F1C85B1D600EE28C2 /* MNCollectable.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -439,11 +421,9 @@
 				BE62928C1C85B1D600EE28C2 /* MNTable.cpp in Sources */,
 				BE6292781C85B1D600EE28C2 /* MNFunction.cpp in Sources */,
 				BE6292671C85B1D600EE28C2 /* MNBasicLib.cpp in Sources */,
-				BE62927C1C85B1D600EE28C2 /* MNInstance.cpp in Sources */,
 				BE62928A1C85B1D600EE28C2 /* MNString.cpp in Sources */,
 				BE6292831C85B1D600EE28C2 /* MNObject.cpp in Sources */,
 				BE6292871C85B1D600EE28C2 /* MNReferrer.cpp in Sources */,
-				BE6292691C85B1D600EE28C2 /* MNClass.cpp in Sources */,
 				BE6292761C85B1D600EE28C2 /* MNFiber.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -457,17 +437,6 @@
 			targetProxy = BE6292901C85B21D00EE28C2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		BE62921D1C85B05A00EE28C2 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BE62921E1C85B05A00EE28C2 /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		BE6292211C85B05A00EE28C2 /* Debug */ = {

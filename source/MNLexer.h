@@ -56,9 +56,9 @@ enum tok_type
 	tok_false      = 146,
 	tok_return     = 147,
 	tok_yield      = 148,
-	tok_class      = 149,
-	tok_new        = 150,
-	tok_base       = 151,
+	//tok_class      = 149,
+	//tok_new        = 150,
+	//tok_base       = 151,
 	tok_add_assign = 152,
 	tok_sub_assign = 153,
 	tok_div_assign = 154,
@@ -73,8 +73,8 @@ enum tok_type
 	tok_pull       = 163,
 	tok_and        = 164,
 	tok_or         = 165,
-	tok_native     = 167,
-	tok_constructor = 166,
+	//tok_native     = 167,
+	//tok_constructor = 166,
 
 	tok_error  = 254,
 	tok_eos    = 255,
@@ -102,11 +102,6 @@ inline void reservedWords(MNLexer::Token& tok)
 	static const thashstring _false("false");
 	static const thashstring _return("return");
 	static const thashstring _yield("yield");
-	static const thashstring _class("class");
-	static const thashstring _new("new");
-	static const thashstring _base("base");
-	static const thashstring _native("native");
-	static const thashstring _constructor("constructor");
 
 	if (tok.str == _var)           tok.type = tok_var;
 	else if (tok.str == _func)     tok.type = tok_func;
@@ -124,11 +119,6 @@ inline void reservedWords(MNLexer::Token& tok)
 	else if (tok.str == _break)    tok.type = tok_break;
 	else if (tok.str == _continue) tok.type = tok_continue;
 	else if (tok.str == _yield)    tok.type = tok_yield;
-	else if (tok.str == _class)    tok.type = tok_class;
-	else if (tok.str == _new)      tok.type = tok_new;
-	else if (tok.str == _base)     tok.type = tok_base;
-	else if (tok.str == _native)     tok.type = tok_native;
-	else if (tok.str == _constructor) tok.type = tok_constructor;
 }
 
 #endif

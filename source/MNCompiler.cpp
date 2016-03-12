@@ -173,11 +173,6 @@ tboolean MNCompiler::_statement()
 	else if ((ret = check(tok_for))) _for();
 	else if ((ret = check(tok_func))) _func(false);
 	else if ((ret = check('{'))) _block();
-	else if ((ret = check(tok_class)))
-	{
-		_class();
-		if (!check(';')) compile_error("expected ';' is gone after 'class'");
-	}
 	else if ((ret = check(tok_return)))
 	{
 		_return();
@@ -458,148 +453,6 @@ void MNCompiler::_return()
 	code() << (hasRet ? cmd_return : cmd_return_void);
 }
 
-void MNCompiler::_class()
-{
-	if (!check(tok_class)) return;
-	advance();
-
-	if (!check(tok_identify)) compile_error("class needs name");
-
-	thashstring className = m_current.str;
-	advance();
-
-	tuint16 nfield = 0;
-	
-	code() << cmd_load_this;
-
-	//! expands?
-	if (check(':')) { advance(); _exp(); }
-	else code() << cmd_push_null;
-	tsize pos = (code() << cmd_new_class).cursor;
-	code() << nfield;
-
-	//! class builder
-	MNFuncBuilder* prevFunc = m_func;
-	MNFuncBuilder* newFunc = new MNFuncBuilder(NULL);
-	m_func = newFunc;
-	m_func->addLocal(className);
-	tuint16 index = m_func->addConst(MNObject::String(className));
-
-	if (!check('{')) compile_error("class needs body");
-	advance();
-
-	code() << cmd_load_stack << tuint16(1);
-	code() << cmd_load_const << m_func->addConst(MNObject::String("type"));
-	code() << cmd_load_const << index;
-	code() << cmd_add_class_static;
-
-	code() << cmd_load_stack << tuint16(1);
-	code() << cmd_load_const << m_func->addConst(MNObject::String("->"));
-	code() << cmd_load_stack << tuint16(1);
-	code() << cmd_add_class_static;
-
-	while (!check('}') && _class_field(className)) nfield += 1;
-	advance();
-
-	code() << cmd_load_this;
-	code() << cmd_load_const << index;
-	code() << cmd_load_stack << tuint16(1);
-	code() << cmd_insert_field;
-	code() << cmd_return_void;
-
-	m_func = prevFunc;
-	tuint16 funcIndex = m_func->addConst(MNObject(TObjectType::TFunction, newFunc->func->getReferrer()));
-	code() << cmd_push_closure << funcIndex << tuint16(0);
-	code() << cmd_up1_x2 << cmd_pop1;
-	code() << cmd_call << tbyte(2);
-	code().modify(pos, nfield);
-
-	delete newFunc;
-}
-
-bool MNCompiler::_class_field(const thashstring& className)
-{
-	static const thashstring _constructor = tstring("constructor");
-
-	code() << cmd_up1;
-	tboolean ret = false;
-	if ((ret = check(tok_var)))
-	{
-		advance();
-		tuint16 idx = m_func->addConst(MNObject::String(m_current.str));
-		advance();
-		code() << cmd_load_const << idx;
-		if (check('=')) { advance(); _exp(); }
-		else if (check(';')) code() << cmd_push_null;
-	}
-	else if ((ret = check(tok_func)))
-	{
-		advance();
-		tuint16 idx = m_func->addConst(MNObject::String(m_current.str));
-		advance();
-		code() << cmd_load_const << idx;
-		_func_content();
-	}
-	else if ((ret = check(tok_constructor)))
-	{
-		tuint16 idx = m_func->addConst(MNObject::String(_constructor));
-		advance();
-		code() << cmd_load_const << idx;
-		_func_content();
-	}
-	else if ((ret = check(tok_native)))
-	{
-		advance();
-		if ((ret = check(tok_func)))
-		{
-			advance();
-			const tsize bufSize = 256;
-			tchar tempBuf[bufSize] = { 0 };
-			thashstring methodName = m_current.str;
-			advance();
-			sprintf(&tempBuf[0], "Mini_%s_%s", className.c_str(), methodName.c_str());
-			tuint16 idx1 = m_func->addConst(MNObject::String(methodName));
-			tuint16 idx2 = m_func->addConst(MNObject::String(tstring(&tempBuf[0])));
-			code() << cmd_load_const << idx1;
-			code() << cmd_load_global << idx2;
-		}
-		else if ((ret = check(tok_constructor)))
-		{
-			advance();
-			const tsize bufSize = 256;
-			tchar tempBuf[bufSize] = { 0 };
-			sprintf(&tempBuf[0], "Mini_%s_%s", className.c_str(), _constructor.c_str());
-			tuint16 idx1 = m_func->addConst(MNObject::String(_constructor));
-			tuint16 idx2 = m_func->addConst(MNObject::String(tstring(&tempBuf[0])));
-			code() << cmd_load_const << idx1;
-			code() << cmd_load_global << idx2;
-		}
-		else compile_error("unknown native method type");
-
-		//! function parameter
-		{
-			if (!check('(')) compile_error("function needs arguments statement");
-			advance();
-
-			if (!check(')')) while (true)
-			{
-				if (check(tok_identify)) advance();
-				else if (check(',')) advance();
-				else if (check(')')) break;
-				else compile_error("it's wrong function parameter");
-			}
-			advance();
-		}
-	}
-	else compile_error("unknown field type");
-
-	code() << cmd_add_class_field;
-
-	if (ret && !check(';')) compile_error("class field desclaration needs ';'");
-	if (ret) while (check(';')) advance();
-	return ret;
-}
-
 void MNCompiler::_load(MNExp& e)
 {
 	switch ( e.type )
@@ -837,12 +690,6 @@ void MNCompiler::_exp_primary(MNExp& e)
 		e.type  = MNExp::exp_local;
 		e.index = 0;
 	}
-	else if (check(tok_base))
-	{
-		advance();
-		code() << cmd_load_this << cmd_get_meta;
-		e.type = MNExp::exp_loaded;
-	}
 	else if (check(tok_global))
 	{
 		advance();
@@ -901,14 +748,6 @@ void MNCompiler::_exp_primary(MNExp& e)
 		code() << cmd_push_float << num;
 		e.type = MNExp::exp_loaded;
 		advance();
-	}
-	else if (check(tok_new))
-	{
-		advance();
-		_exp_term(e);
-		if (e.type != MNExp::exp_call) compile_error("missing constructor call");
-		code() << cmd_new_inst << e.index;
-		e.type = MNExp::exp_loaded;
 	}
 	else if (check('{'))
 	{
