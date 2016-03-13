@@ -1,0 +1,28 @@
+
+::TestComponent =
+{ "->" : this,
+
+new : func(ownerGO)
+{
+    var inst =
+    {
+        gameObject : ownerGO
+    };
+
+    setMeta(inst, this);
+    return inst;
+},
+
+update : func()
+{
+print("test 1 " + gameObject.getName());
+yield;
+print("test 2 " + gameObject.getName());
+yield;
+print("test 3 " + gameObject.getName());
+yield;
+print("test 4 " + gameObject.getName());
+yield;
+print("test 5 " + gameObject.getName());
+}
+};

@@ -39,3 +39,7 @@ insert("->", this);
 , iterate : ::array_iterate
 , "->" : this
 };
+
+dofile("script/GameObject.mn");
+dofile("script/TestComponent.mn");
+

@@ -1,16 +1,12 @@
 
 
-var test =
-{ a:1
-, b:2
-};
+var go1 = GameObject.new();
 
-var itor = func(key, val)
-{
-    print(key);
-};
-
-test.iterate(itor);
-
-print(itor.iterate);
-
+go1.addComponent(TestComponent);
+go1.update();
+go1.update();
+go1.update();
+go1.update();
+go1.update();
+go1.update();
+go1.update();

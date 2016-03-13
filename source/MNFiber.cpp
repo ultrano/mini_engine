@@ -8,6 +8,7 @@
 #include "MNFunction.h"
 #include "MNCompiler.h"
 #include "MNUserData.h"
+#include "MNLog.h"
 
 #include <math.h>
 
@@ -104,18 +105,8 @@ MNGlobal* MNFiber::global() const
 
 bool MNFiber::compileFile(MNObject& func, const tstring& path)
 {
-	push_string(path); //! [path]
-	push_string("rootPath"); //! [path "rootPath"]
-	load_global();           //! [path rootPath]
-	if (get(-1).isString()) //! [path rootPath]
-	{
-		swap();//! [rootPath path]
-		add(); //! [fullPath]
-	}
-	else pop(1); //! [path]
-
+	push_string(path); //! [fullPath]
 	MNObject fullPath = get(-1);
-	if (!fullPath.isString()) return false;
 
 	push_string("cache"); //! [fullPath "cache"]
 	load_global();        //! [fullPath cache]
@@ -397,6 +388,7 @@ void MNFiber::load_field()
 			push(field);
 			load_raw_field();
 			MNObject op = get(-1); pop(1);
+            ret = true;
 			if (op.isClosure())
 			{
 				push(op);
@@ -415,10 +407,26 @@ void MNFiber::load_field()
 				val = get(-1); pop(1);
 				if (success) break;
 			}
+            ret = false;
 			meta = meta.toCollectable()->getMeta();
 		}
 	}
-
+    
+    /*
+    if (!ret)
+    {
+        push(key);
+        tostring();
+        MNObject keyStr = get(-1);
+        pop(1);
+        MNString* str = keyStr.toString();
+        if (str != NULL)
+        {
+            MNLog("failed to load field: %s", str->ss().c_str());
+        }
+    }
+    */
+    
 	pop(2);
 	push(val);
 }
@@ -450,6 +458,7 @@ void MNFiber::store_field(tboolean insert)
 			push(field);
 			load_raw_field();
 			MNObject op = get(-1); pop(1);
+            ret = true;
 			if (op.isClosure())
 			{
 				push(op);
@@ -466,9 +475,26 @@ void MNFiber::store_field(tboolean insert)
 				push(val);
 				if (store_raw_field(false)) break;
 			}
+            ret = false;
 			meta = meta.toCollectable()->getMeta();
 		}
-	}
+    }
+    
+    /*
+    if (!ret)
+    {
+        push(key);
+        tostring();
+        MNObject keyStr = get(-1);
+        pop(1);
+        MNString* str = keyStr.toString();
+        if (str != NULL)
+        {
+            MNLog("failed to store field: %s", str->ss().c_str());
+        }
+    }
+    */
+    
 	pop(3);
 }
 

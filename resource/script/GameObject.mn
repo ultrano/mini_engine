@@ -1,0 +1,46 @@
+
+
+::GameObject =
+{ "->" : this,
+
+new : func()
+{
+    var inst =
+    { name : "unnamed"
+    , active : true
+    , components : []
+    , componentUpdaters : []
+    };
+    setMeta(inst, this);
+    return inst;
+},
+
+getName : func() { return this.name; },
+setName : func(newName) { this.name = newName;},
+
+addComponent : func (componentType)
+{
+    var comp = componentType.new(this);
+    var updater = delegator(comp.update, comp);
+    this.components.add(comp);
+    if (updater != null)
+        this.componentUpdaters.add(fiber.new(updater));
+},
+
+addComponentByName : func(componentName)
+{
+    addComponent(this[componentName]);
+},
+
+update : func()
+{
+    var count = this.componentUpdaters.count();
+    while (count > 0)
+    {
+        count -= 1;
+        var updater = this.componentUpdaters[count];
+        if (updater.next() == false) updater.reset();
+    }
+}
+
+};

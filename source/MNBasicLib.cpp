@@ -11,6 +11,22 @@
 
 struct CommonLib
 {
+    static void push_closure(MNFiber* fiber, NativeFunc func)
+    {
+        MNClosure* closure = new MNClosure(MNObject::CFunction(func));
+        MNObject obj(TObjectType::TClosure, closure->link(fiber->global())->getReferrer());
+        fiber->push(obj);
+    }
+    
+    static void make_metaTable(MNFiber* fiber, const char* name)
+    {
+        MNTable* table = new MNTable(1);
+        MNObject obj(TObjectType::TTable, table->link(fiber->global())->getReferrer());
+        fiber->push_string(name);
+        fiber->push(obj);
+        fiber->store_global();
+    }
+    
 	static bool print(MNFiber* fiber)
 	{
 		tsize sz = fiber->localSize();
@@ -337,135 +353,141 @@ struct CommonLib
 	{
         //! common
         {
+            make_metaTable(fiber, "table");
+            make_metaTable(fiber, "math");
+            make_metaTable(fiber, "closure");
+            make_metaTable(fiber, "array");
+            make_metaTable(fiber, "fiber");
+            
             fiber->push_string("print");
-            fiber->push_closure(print);
+            push_closure(fiber, print);
             fiber->store_global();
             
             fiber->push_string("bind");
-            fiber->push_closure(bind);
+            push_closure(fiber, bind);
             fiber->store_global();
             
             fiber->push_string("float");
-            fiber->push_closure(castFloat);
+            push_closure(fiber, castFloat);
             fiber->store_global();
             
             fiber->push_string("int");
-            fiber->push_closure(castInt);
+            push_closure(fiber, castInt);
             fiber->store_global();
             
             fiber->push_string("allocate");
-            fiber->push_closure(allocate);
+            push_closure(fiber, allocate);
             fiber->store_global();
             
             fiber->push_string("typeof");
-            fiber->push_closure(_typeof);
+            push_closure(fiber, _typeof);
             fiber->store_global();
             
             fiber->push_string("dofile");
-            fiber->push_closure(dofile);
+            push_closure(fiber, dofile);
             fiber->store_global();
             
             fiber->push_string("garbageCollect");
-            fiber->push_closure(garbageCollect);
+            push_closure(fiber, garbageCollect);
             fiber->store_global();
             
             fiber->push_string("setMeta");
-            fiber->push_closure(setMeta);
+            push_closure(fiber, setMeta);
             fiber->store_global();
             
             fiber->push_string("getMeta");
-            fiber->push_closure(getMeta);
+            push_closure(fiber, getMeta);
             fiber->store_global();
             
             fiber->push_string("delegator");
-            fiber->push_closure(delegator);
+            push_closure(fiber, delegator);
             fiber->store_global();
         }
         
         //! math
         {
             fiber->push_string("math_sqrt");
-            fiber->push_closure(math_sqrt);
+            push_closure(fiber, math_sqrt);
             fiber->store_global();
             
             fiber->push_string("math_pow");
-            fiber->push_closure(math_pow);
+            push_closure(fiber, math_pow);
             fiber->store_global();
         }
         
         //! closure
         {
             fiber->push_string("closure_call");
-            fiber->push_closure(closure_call);
+            push_closure(fiber, closure_call);
             fiber->store_global();
             
             fiber->push_string("closure_compileFile");
-            fiber->push_closure(closure_compileFile);
+            push_closure(fiber, closure_compileFile);
             fiber->store_global();
         }
         
         //! fiber
         {
             fiber->push_string("fiber_new");
-            fiber->push_closure(fiber_new);
+            push_closure(fiber, fiber_new);
             fiber->store_global();
             
             fiber->push_string("fiber_next");
-            fiber->push_closure(fiber_next);
+            push_closure(fiber, fiber_next);
             fiber->store_global();
             
             fiber->push_string("fiber_reset");
-            fiber->push_closure(fiber_reset);
+            push_closure(fiber, fiber_reset);
             fiber->store_global();
             
             fiber->push_string("fiber_value");
-            fiber->push_closure(fiber_value);
+            push_closure(fiber, fiber_value);
             fiber->store_global();
         }
         
         //! array
         {
             fiber->push_string("array_count");
-            fiber->push_closure(array_count);
+            push_closure(fiber, array_count);
             fiber->store_global();
             
             fiber->push_string("array_add");
-            fiber->push_closure(array_add);
+            push_closure(fiber, array_add);
             fiber->store_global();
             
             fiber->push_string("array_remove");
-            fiber->push_closure(array_remove);
+            push_closure(fiber, array_remove);
             fiber->store_global();
             
             fiber->push_string("array_clear");
-            fiber->push_closure(array_clear);
+            push_closure(fiber, array_clear);
             fiber->store_global();
             
             fiber->push_string("array_iterate");
-            fiber->push_closure(array_iterate);
+            push_closure(fiber, array_iterate);
             fiber->store_global();
         }
         
         //! table
         {
             fiber->push_string("table_has");
-            fiber->push_closure(table_has);
+            push_closure(fiber, table_has);
             fiber->store_global();
             
             fiber->push_string("table_count");
-            fiber->push_closure(table_count);
+            push_closure(fiber, table_count);
             fiber->store_global();
             
             fiber->push_string("table_insert");
-            fiber->push_closure(table_insert);
+            push_closure(fiber, table_insert);
             fiber->store_global();
             
             fiber->push_string("table_iterate");
-            fiber->push_closure(table_iterate);
+            push_closure(fiber, table_iterate);
             fiber->store_global();
             
             fiber->push_string("table_capacity");
-            fiber->push_closure(table_capacity);
+            push_closure(fiber, table_capacity);
             fiber->store_global();
         }
         
