@@ -1,11 +1,16 @@
 
 
-var count = 1;
+var test =
+{ a:1
+, b:2
+};
 
-while ((count -= 1) > 0)
+var itor = func(key, val)
 {
-    print("hello there, Mr.number " + count);
-}
+    print(key);
+};
 
-print(table.iterate.call(this, print));
-print(cache.iterate(print));
+test.iterate(itor);
+
+print(itor.iterate);
+

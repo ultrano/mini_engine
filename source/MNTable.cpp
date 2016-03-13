@@ -212,7 +212,7 @@ tsize MNTable::count() const
 	return m_used;
 }
 
-tsize MNTable::total() const
+tsize MNTable::capacity() const
 {
 	return m_size;
 }

@@ -1,0 +1,41 @@
+
+
+::has = ::table_count;
+::count = ::table_count;
+::insert = ::table_insert;
+::iterate = ::table_iterate;
+::capacity = ::table_capacity;
+insert("->", this);
+
+::table =
+{ "->" : this
+};
+::setMeta(::table, this);
+
+::math =
+{ sqrt : ::math_sqrt
+, pow : ::math_pow
+};
+
+::closure =
+{ call : ::closure_call
+, compileFile : ::closure_compileFile
+, "->" : this
+};
+
+::fiber =
+{ new : ::fiber_new
+, next : ::fiber_next
+, reset : ::fiber_reset
+, value : ::fiber_value
+, "->" : this
+};
+
+::array =
+{ count : ::array_count
+, add : ::array_add
+, remove : ::array_remove
+, clear : ::array_clear
+, iterate : ::array_iterate
+, "->" : this
+};

@@ -95,7 +95,7 @@ struct CommonLib
 		return true;
 	}
 
-	static bool setmeta(MNFiber* fiber)
+	static bool setMeta(MNFiber* fiber)
 	{
 		MNCollectable* obj = fiber->get(1).toCollectable();
 		if (!obj) return false;
@@ -104,7 +104,7 @@ struct CommonLib
 		return true;
 	}
 
-	static bool getmeta(MNFiber* fiber)
+	static bool getMeta(MNFiber* fiber)
 	{
 		MNCollectable* obj = fiber->get(1).toCollectable();
 		if (!obj) return false;
@@ -121,458 +121,358 @@ struct CommonLib
 		fiber->push(delegator);
 		return true;
 	}
-
+    
+    static bool math_sqrt(MNFiber* fiber)
+    {
+        float a = sqrtf((tfloat)fiber->get(1).toReal());
+        fiber->push_real(a);
+        return true;
+    }
+    
+    static bool math_pow(MNFiber* fiber)
+    {
+        float a = powf((tfloat)fiber->get(1).toReal(), (tfloat)fiber->get(2).toReal());
+        fiber->push_real(a);
+        return true;
+    }
+    
+    static bool closure_call(MNFiber* fiber)
+    {
+        fiber->call(fiber->localSize() - 1, true);
+        return true;
+    }
+    
+    static bool closure_compileFile(MNFiber* fiber)
+    {
+        fiber->load_stack(1);
+        fiber->tostring();
+        MNString* str = fiber->get(-1).toString();
+        
+        MNObject func;
+        if (!fiber->compileFile(func, str->ss().str())) return false;
+        
+        fiber->push_closure(NULL); //! [closure]
+        MNClosure* closure = fiber->get(-1).toClosure();
+        closure->setFunc(func);
+        return true;
+    }
+    
+    static bool fiber_new(MNFiber* fiber)
+    {
+        MNFiber* newFiber = new MNFiber(fiber->global());
+        newFiber->setMeta(fiber->get(0));
+        newFiber->setStatus(MNFiber::Suspend);
+        
+        newFiber->push(fiber->get(1));
+        newFiber->push(fiber->get(1));
+        newFiber->load_stack(0);
+        newFiber->enterCall(1, true);
+        fiber->push(MNObject(TObjectType::TFiber, newFiber->getReferrer()));
+        return true;
+    }
+    
+    static bool fiber_next(MNFiber* fiber)
+    {
+        MNFiber* newFiber = fiber->get(0).toFiber();
+        if (!newFiber) return false;
+        else if (newFiber->getStatus() == MNFiber::Stop)   return false;
+        else if (newFiber->getStatus() == MNFiber::Resume) return false;
+        
+        newFiber->setStatus(MNFiber::Resume);
+        
+        newFiber->set(-1, fiber->get(1));
+        tint status = newFiber->excuteCall();
+        
+        newFiber->setStatus(status);
+        fiber->push_bool(status == MNFiber::Suspend);
+        return true;
+    }
+    
+    static bool fiber_reset(MNFiber* fiber)
+    {
+        MNFiber* newFiber = fiber->get(0).toFiber();
+        if (!newFiber) return false;
+        else if (newFiber->getStatus() != MNFiber::Stop)
+        {
+            MNFiber::CallInfo* info = NULL;
+            do
+            {
+                info = newFiber->returnCall(false);
+            } while (info->closure != NULL);
+        }
+        
+        newFiber->setStatus(MNFiber::Suspend);
+        newFiber->pop(1);
+        newFiber->push(newFiber->getAt(1));
+        newFiber->load_stack(0);
+        newFiber->enterCall(1, true);
+        return false;
+    }
+    
+    static bool fiber_value(MNFiber* fiber)
+    {
+        MNFiber* newFiber = fiber->get(0).toFiber();
+        if (!newFiber) return false;
+        fiber->push(newFiber->get(-1));
+        return true;
+    }
+    
+    static bool array_count(MNFiber* fiber)
+    {
+        const MNObject& obj = fiber->get(0);
+        MNArray* arr = obj.toArray();
+        if (!arr) return false;
+        fiber->push_integer(arr->count());
+        return true;
+    }
+    
+    static bool array_add(MNFiber* fiber)
+    {
+        const MNObject& obj = fiber->get(0);
+        MNArray* arr = obj.toArray();
+        if (!arr) return false;
+        arr->add(fiber->get(1));
+        return false;
+    }
+    
+    static bool array_remove(MNFiber* fiber)
+    {
+        const MNObject& obj = fiber->get(0);
+        MNArray* arr = obj.toArray();
+        if (!arr) return false;
+        fiber->push_bool(arr->remove(fiber->get(1)));
+        return true;
+    }
+    
+    static bool array_clear(MNFiber* fiber)
+    {
+        const MNObject& obj = fiber->get(0);
+        MNArray* arr = obj.toArray();
+        if (!arr) return false;
+        arr->clear();
+        return false;
+    }
+    
+    static bool array_iterate(MNFiber* fiber)
+    {
+        MNArray* arr = fiber->get(0).toArray();
+        if (!arr) return false;
+        
+        if (!fiber->get(1).isClosure()) return false;
+        
+        tsize itor = 0;
+        MNObject val;
+        while (arr->iterate(itor, val))
+        {
+            fiber->load_stack(1);
+            fiber->load_stack(0);
+            fiber->push_integer(itor - 1);
+            fiber->push(val);
+            fiber->call(3, true);
+            bool ret = fiber->get(-1).toBool(true);
+            fiber->pop(1);
+            if (!ret) break;
+        }
+        return false;
+    }
+    
+    static bool table_has(MNFiber* fiber)
+    {
+        const MNObject& obj = fiber->get(0);
+        MNTable* tbl = obj.toTable();
+        if (!tbl) return false;
+        fiber->push_bool(tbl->hasKey(fiber->get(1)));
+        return true;
+    }
+    
+    static bool table_count(MNFiber* fiber)
+    {
+        const MNObject& obj = fiber->get(0);
+        MNTable* tbl = obj.toTable();
+        if (!tbl) return false;
+        fiber->push_integer(tbl->count());
+        return true;
+    }
+    
+    static bool table_insert(MNFiber* fiber)
+    {
+        fiber->store_raw_field(true);
+        return false;
+    }
+    
+    static bool table_capacity(MNFiber* fiber)
+    {
+        const MNObject& obj = fiber->get(0);
+        MNTable* tbl = obj.toTable();
+        if (!tbl) return false;
+        fiber->push_integer(tbl->capacity());
+        return true;
+    }
+    
+    static bool table_iterate(MNFiber* fiber)
+    {
+        MNTable* tbl = fiber->get(0).toTable();
+        if (!tbl) return false;
+        
+        if (!fiber->get(1).isClosure()) return false;
+        
+        tsize itor = 0;
+        MNObject key, val;
+        while (tbl->iterate(itor, key, val))
+        {
+            if (key.isNull()) continue;
+            fiber->load_stack(1);
+            fiber->load_stack(0);
+            fiber->push(key);
+            fiber->push(val);
+            fiber->call(3, true);
+            bool ret = fiber->get(-1).toBool(true);
+            fiber->pop(1);
+            if (!ret) break;
+        }
+        return false;
+    }
+    
 	static void expose(MNFiber* fiber)
 	{
-		fiber->push_string("print");
-		fiber->push_closure(print);
-		fiber->store_global();
-
-		fiber->push_string("bind");
-		fiber->push_closure(bind);
-		fiber->store_global();
-
-		fiber->push_string("float");
-		fiber->push_closure(castFloat);
-		fiber->store_global();
-
-		fiber->push_string("int");
-		fiber->push_closure(castInt);
-		fiber->store_global();
-
-		fiber->push_string("allocate");
-		fiber->push_closure(allocate);
-		fiber->store_global();
-
-		fiber->push_string("typeof");
-		fiber->push_closure(_typeof);
-		fiber->store_global();
-
-		fiber->push_string("dofile");
-		fiber->push_closure(dofile);
-		fiber->store_global();
-
-		fiber->push_string("garbageCollect");
-		fiber->push_closure(garbageCollect);
-		fiber->store_global();
-
-		fiber->push_string("setmeta");
-		fiber->push_closure(setmeta);
-		fiber->store_global();
-
-		fiber->push_string("getmeta");
-		fiber->push_closure(getmeta);
-		fiber->store_global();
-
-		fiber->push_string("delegator");
-		fiber->push_closure(delegator);
-		fiber->store_global();
-	}
-};
-
-struct MathLib
-{
-	static bool sqrt(MNFiber* fiber)
-	{
-		float a = sqrtf((tfloat)fiber->get(1).toReal());
-		fiber->push_real(a);
-		return true;
-	}
-
-	static bool pow(MNFiber* fiber)
-	{
-		float a = powf((tfloat)fiber->get(1).toReal(), (tfloat)fiber->get(2).toReal());
-		fiber->push_real(a);
-		return true;
-	}
-
-	static void expose(MNFiber* fiber)
-	{
-		fiber->push_string("math");
-		fiber->push_table();
-		{
-			fiber->load_stack(-1);
-			fiber->push_string("sqrt");
-			fiber->push_closure(sqrt);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("pow");
-			fiber->push_closure(pow);
-			fiber->store_field();
-		}
-		fiber->store_global();
-	}
-};
-
-struct ClosureLib
-{
-	static bool call(MNFiber* fiber)
-	{
-		fiber->call(fiber->localSize() - 1, true);
-		return true;
-	}
-
-	static bool compileFile(MNFiber* fiber)
-	{
-		fiber->load_stack(1);
-		fiber->tostring();
-		MNString* str = fiber->get(-1).toString();
-
-		MNObject func;
-		if (!fiber->compileFile(func, str->ss().str())) return false;
-
-		fiber->push_closure(NULL); //! [closure]
-		MNClosure* closure = fiber->get(-1).toClosure();
-		closure->setFunc(func);
-		return true;
-	}
-
-	static void expose(MNFiber* fiber)
-	{
-		fiber->up(1, 0);
-		fiber->push_string("closure");
-		fiber->push_table();
-		{
-			fiber->load_stack(-1);
-			fiber->push_string("type");
-			fiber->push_string("closure");
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("call");
-			fiber->push_closure(call);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("compileFile");
-			fiber->push_closure(compileFile);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("->");
-			fiber->load_stack(-2);
-			fiber->store_field();
-		}
-		fiber->store_global();
-	}
-};
-
-struct FiberLib
-{
-	static bool _new(MNFiber* fiber)
-	{
-		MNFiber* newFiber = new MNFiber(fiber->global());
-		newFiber->setMeta(fiber->get(0));
-		newFiber->setStatus(MNFiber::Suspend);
-
-		newFiber->push(fiber->get(1));
-		newFiber->push(fiber->get(1));
-		newFiber->load_stack(0);
-		newFiber->enterCall(1, true);
-		fiber->push(MNObject(TObjectType::TFiber, newFiber->getReferrer()));
-		return true;
-	}
-
-	static bool next(MNFiber* fiber)
-	{
-		MNFiber* newFiber = fiber->get(0).toFiber();
-		if (!newFiber) return false;
-		else if (newFiber->getStatus() == MNFiber::Stop)   return false;
-		else if (newFiber->getStatus() == MNFiber::Resume) return false;
-
-		newFiber->setStatus(MNFiber::Resume);
-
-		newFiber->set(-1, fiber->get(1));
-		tint status = newFiber->excuteCall();
-
-		newFiber->setStatus(status);
-		fiber->push_bool(status == MNFiber::Suspend);
-		return true;
-	}
-
-	static bool reset(MNFiber* fiber)
-	{
-		MNFiber* newFiber = fiber->get(0).toFiber();
-		if (!newFiber) return false;
-		else if (newFiber->getStatus() != MNFiber::Stop)
-		{
-			MNFiber::CallInfo* info = NULL;
-			do 
-			{
-				info = newFiber->returnCall(false);
-			} while (info->closure != NULL);
-		}
-
-		newFiber->setStatus(MNFiber::Suspend);
-		newFiber->pop(1);
-		newFiber->push(newFiber->getAt(1));
-		newFiber->load_stack(0);
-		newFiber->enterCall(1, true);
-		return false;
-	}
-
-	static bool value(MNFiber* fiber)
-	{
-		MNFiber* newFiber = fiber->get(0).toFiber();
-		if (!newFiber) return false;
-		fiber->push(newFiber->get(-1));
-		return true;
-	}
-
-	static void expose(MNFiber* fiber)
-	{
-		fiber->up(1, 0);
-		fiber->push_string("fiber");
-		fiber->push_table();
-		{
-			fiber->load_stack(-1);
-			fiber->push_string("type");
-			fiber->push_string("fiber");
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("new");
-			fiber->push_closure(_new);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("next");
-			fiber->push_closure(next);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("reset");
-			fiber->push_closure(reset);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("value");
-			fiber->push_closure(value);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("->");
-			fiber->load_stack(-2);
-			fiber->store_field();
-		}
-		fiber->store_field();
-	}
-};
-
-struct ArrayLib
-{
-	static bool count(MNFiber* fiber)
-	{
-		const MNObject& obj = fiber->get(0);
-		MNArray* arr = obj.toArray();
-		if (!arr) return false;
-		fiber->push_integer(arr->count());
-		return true;
-	}
-
-	static bool add(MNFiber* fiber)
-	{
-		const MNObject& obj = fiber->get(0);
-		MNArray* arr = obj.toArray();
-		if (!arr) return false;
-		arr->add(fiber->get(1));
-		return false;
-	}
-
-	static bool remove(MNFiber* fiber)
-	{
-		const MNObject& obj = fiber->get(0);
-		MNArray* arr = obj.toArray();
-		if (!arr) return false;
-		fiber->push_bool(arr->remove(fiber->get(1)));
-		return true;
-	}
-
-	static bool clear(MNFiber* fiber)
-	{
-		const MNObject& obj = fiber->get(0);
-		MNArray* arr = obj.toArray();
-		if (!arr) return false;
-		arr->clear();
-		return false;
-	}
-
-	static bool iterate(MNFiber* fiber)
-	{
-		MNArray* arr = fiber->get(0).toArray();
-		if (!arr) return false;
-
-		if (!fiber->get(1).isClosure()) return false;
-
-		tsize itor = 0;
-		MNObject val;
-		while (arr->iterate(itor, val))
-		{
-			fiber->load_stack(1);
-			fiber->load_stack(0);
-			fiber->push_integer(itor - 1);
-			fiber->push(val);
-			fiber->call(3, true);
-			bool ret = fiber->get(-1).toBool(true);
-			fiber->pop(1);
-			if (!ret) break;
-		}
-		return false;
-	}
-
-	static void expose(MNFiber* fiber)
-	{
-		fiber->push_string("array");
-		fiber->push_table();
-		{
-			fiber->load_stack(-1);
-			fiber->push_string("type");
-			fiber->push_string("array");
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("add");
-			fiber->push_closure(add);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("remove");
-			fiber->push_closure(remove);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("clear");
-			fiber->push_closure(clear);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("count");
-			fiber->push_closure(count);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("iterate");
-			fiber->push_closure(iterate);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("->");
-			fiber->load_stack(-2);
-			fiber->store_field();
-		}
-		fiber->store_global();
-	}
-};
-
-struct TableLib
-{
-	static bool has(MNFiber* fiber)
-	{
-		const MNObject& obj = fiber->get(0);
-		MNTable* tbl = obj.toTable();
-		if (!tbl) return false;
-		fiber->push_bool(tbl->hasKey(fiber->get(1)));
-		return true;
-	}
-
-	static bool count(MNFiber* fiber)
-	{
-		const MNObject& obj = fiber->get(0);
-		MNTable* tbl = obj.toTable();
-		if (!tbl) return false;
-		fiber->push_integer(tbl->count());
-		return true;
-	}
-
-	static bool insert(MNFiber* fiber)
-	{
-		fiber->store_raw_field(true);
-		return false;
-	}
-
-	static bool total(MNFiber* fiber)
-	{
-		const MNObject& obj = fiber->get(0);
-		MNTable* tbl = obj.toTable();
-		if (!tbl) return false;
-		fiber->push_integer(tbl->total());
-		return true;
-	}
-
-	static bool iterate(MNFiber* fiber)
-	{
-		MNTable* tbl = fiber->get(0).toTable();
-		if (!tbl) return false;
-
-		if (!fiber->get(1).isClosure()) return false;
-
-		tsize itor = 0;
-		MNObject key, val;
-		while (tbl->iterate(itor, key, val))
-		{
-			if (key.isNull()) continue;
-			fiber->load_stack(1);
-			fiber->load_stack(0);
-			fiber->push(key);
-			fiber->push(val);
-			fiber->call(3, true);
-			bool ret = fiber->get(-1).toBool(true);
-			fiber->pop(1);
-			if (!ret) break;
-		}
-		return false;
-	}
-
-	static void expose(MNFiber* fiber)
-	{
-		fiber->push_string("table");
-		fiber->push_table();
-		{
-			fiber->load_stack(-1);
-			fiber->push_string("type");
-			fiber->push_string("table");
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("has");
-			fiber->push_closure(has);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("count");
-			fiber->push_closure(count);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("insert");
-			fiber->push_closure(insert);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("total");
-			fiber->push_closure(total);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("iterate");
-			fiber->push_closure(iterate);
-			fiber->store_field();
-
-			fiber->load_stack(-1);
-			fiber->push_string("->");
-			fiber->load_stack(-2);
-			fiber->store_field();
-		}
-		fiber->store_global();
+        //! common
+        {
+            fiber->push_string("print");
+            fiber->push_closure(print);
+            fiber->store_global();
+            
+            fiber->push_string("bind");
+            fiber->push_closure(bind);
+            fiber->store_global();
+            
+            fiber->push_string("float");
+            fiber->push_closure(castFloat);
+            fiber->store_global();
+            
+            fiber->push_string("int");
+            fiber->push_closure(castInt);
+            fiber->store_global();
+            
+            fiber->push_string("allocate");
+            fiber->push_closure(allocate);
+            fiber->store_global();
+            
+            fiber->push_string("typeof");
+            fiber->push_closure(_typeof);
+            fiber->store_global();
+            
+            fiber->push_string("dofile");
+            fiber->push_closure(dofile);
+            fiber->store_global();
+            
+            fiber->push_string("garbageCollect");
+            fiber->push_closure(garbageCollect);
+            fiber->store_global();
+            
+            fiber->push_string("setMeta");
+            fiber->push_closure(setMeta);
+            fiber->store_global();
+            
+            fiber->push_string("getMeta");
+            fiber->push_closure(getMeta);
+            fiber->store_global();
+            
+            fiber->push_string("delegator");
+            fiber->push_closure(delegator);
+            fiber->store_global();
+        }
+        
+        //! math
+        {
+            fiber->push_string("math_sqrt");
+            fiber->push_closure(math_sqrt);
+            fiber->store_global();
+            
+            fiber->push_string("math_pow");
+            fiber->push_closure(math_pow);
+            fiber->store_global();
+        }
+        
+        //! closure
+        {
+            fiber->push_string("closure_call");
+            fiber->push_closure(closure_call);
+            fiber->store_global();
+            
+            fiber->push_string("closure_compileFile");
+            fiber->push_closure(closure_compileFile);
+            fiber->store_global();
+        }
+        
+        //! fiber
+        {
+            fiber->push_string("fiber_new");
+            fiber->push_closure(fiber_new);
+            fiber->store_global();
+            
+            fiber->push_string("fiber_next");
+            fiber->push_closure(fiber_next);
+            fiber->store_global();
+            
+            fiber->push_string("fiber_reset");
+            fiber->push_closure(fiber_reset);
+            fiber->store_global();
+            
+            fiber->push_string("fiber_value");
+            fiber->push_closure(fiber_value);
+            fiber->store_global();
+        }
+        
+        //! array
+        {
+            fiber->push_string("array_count");
+            fiber->push_closure(array_count);
+            fiber->store_global();
+            
+            fiber->push_string("array_add");
+            fiber->push_closure(array_add);
+            fiber->store_global();
+            
+            fiber->push_string("array_remove");
+            fiber->push_closure(array_remove);
+            fiber->store_global();
+            
+            fiber->push_string("array_clear");
+            fiber->push_closure(array_clear);
+            fiber->store_global();
+            
+            fiber->push_string("array_iterate");
+            fiber->push_closure(array_iterate);
+            fiber->store_global();
+        }
+        
+        //! table
+        {
+            fiber->push_string("table_has");
+            fiber->push_closure(table_has);
+            fiber->store_global();
+            
+            fiber->push_string("table_count");
+            fiber->push_closure(table_count);
+            fiber->store_global();
+            
+            fiber->push_string("table_insert");
+            fiber->push_closure(table_insert);
+            fiber->store_global();
+            
+            fiber->push_string("table_iterate");
+            fiber->push_closure(table_iterate);
+            fiber->store_global();
+            
+            fiber->push_string("table_capacity");
+            fiber->push_closure(table_capacity);
+            fiber->store_global();
+        }
+        
 	}
 };
 
 void MNBasicLib(MNFiber* fiber)
 {
 	CommonLib::expose(fiber);
-	MathLib::expose(fiber);
-	ClosureLib::expose(fiber);
-	ArrayLib::expose(fiber);
-	TableLib::expose(fiber);
 }

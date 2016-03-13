@@ -35,5 +35,6 @@ void MNStart(const char* resourceFolder, const char* starterScript)
 {
     MNResourceFolderPath(resourceFolder);
 	MNBasicLib(MNContext.main = new MNFiber());
+    MNContext.main->dofile("script/system.mn");
 	if (starterScript != NULL) MNContext.main->dofile(starterScript);
 }

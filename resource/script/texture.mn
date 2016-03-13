@@ -1,7 +1,0 @@
-
-class Texture
-{
-	var id;
-	var width;
-	var height;
-};

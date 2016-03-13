@@ -18,7 +18,7 @@ public:
 	tboolean hasKey(const MNObject& key);
 	void     clear();
 	tsize    count() const;
-	tsize    total() const;
+	tsize    capacity() const;
 	tboolean iterate(tsize& itor, MNObject& key, MNObject& val) const;
 private:
 	struct Node;
