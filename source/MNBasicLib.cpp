@@ -8,6 +8,12 @@
 #include "MNOpenGL.h"
 
 
+#if defined(PLATFORM_WIN32)
+#include <Windows.h>
+#else
+#include <sys/time.h>
+#endif
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -139,6 +145,25 @@ struct CommonLib
 		fiber->push(delegator);
 		return true;
 	}
+    
+    static bool getSeconds(MNFiber* fiber)
+    {
+        treal seconds = 0;
+#if defined(PLATFORM_WIN32)
+        static tuint32 startTime = GetTickCount();
+        unsigned int count = GetTickCount() - startTime;
+        seconds = ((float)count)/1000.0f;
+#else
+        struct timeval tick;
+        gettimeofday(&tick, 0);
+        
+        static tuint32 startTime = tick.tv_sec;
+        seconds = (float)(tick.tv_sec - startTime);
+        seconds += ((float)tick.tv_usec)/1000000.0f;
+#endif
+        fiber->push_real(seconds);
+        return true;
+    }
     
     static bool math_sqrt(MNFiber* fiber)
     {
@@ -424,6 +449,10 @@ struct CommonLib
             
             fiber->push_string("delegator");
             push_closure(fiber, delegator);
+            fiber->store_global();
+            
+            fiber->push_string("getSeconds");
+            push_closure(fiber, getSeconds);
             fiber->store_global();
         }
         

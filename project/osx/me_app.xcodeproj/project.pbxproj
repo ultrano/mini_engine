@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		BE4AA54F1C95A3CD005DE4E2 /* MNLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4AA54D1C95A3CD005DE4E2 /* MNLog.cpp */; };
 		BE4AA5501C95A3CD005DE4E2 /* MNLog.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4AA54E1C95A3CD005DE4E2 /* MNLog.h */; };
-		BE62920F1C85B05A00EE28C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BE62920E1C85B05A00EE28C2 /* AppDelegate.m */; };
-		BE6292121C85B05A00EE28C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6292111C85B05A00EE28C2 /* main.m */; };
-		BE6292151C85B05A00EE28C2 /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6292141C85B05A00EE28C2 /* GameView.m */; };
-		BE6292181C85B05A00EE28C2 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6292171C85B05A00EE28C2 /* GameViewController.m */; };
+		BE4AA5A41C970D15005DE4E2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4AA5A31C970D15005DE4E2 /* AppDelegate.m */; };
+		BE4AA5A71C970D15005DE4E2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4AA5A61C970D15005DE4E2 /* main.m */; };
+		BE4AA5AA1C970D15005DE4E2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4AA5A91C970D15005DE4E2 /* ViewController.m */; };
+		BE4AA5AC1C970D15005DE4E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE4AA5AB1C970D15005DE4E2 /* Assets.xcassets */; };
+		BE4AA5AF1C970D15005DE4E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE4AA5AD1C970D15005DE4E2 /* Main.storyboard */; };
 		BE6292631C85B1D600EE28C2 /* MiniEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292361C85B1D600EE28C2 /* MiniEngine.cpp */; };
 		BE6292641C85B1D600EE28C2 /* MiniEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292371C85B1D600EE28C2 /* MiniEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE6292651C85B1D600EE28C2 /* MNArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292381C85B1D600EE28C2 /* MNArray.cpp */; };
@@ -54,10 +55,11 @@
 		BE62928D1C85B1D600EE28C2 /* MNTable.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292601C85B1D600EE28C2 /* MNTable.h */; };
 		BE62928E1C85B1D600EE28C2 /* MNUserData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE6292611C85B1D600EE28C2 /* MNUserData.cpp */; };
 		BE62928F1C85B1D600EE28C2 /* MNUserData.h in Headers */ = {isa = PBXBuildFile; fileRef = BE6292621C85B1D600EE28C2 /* MNUserData.h */; };
-		BE6292921C85B22900EE28C2 /* libme_osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE62922A1C85B1A500EE28C2 /* libme_osx.a */; };
-		BE6292951C85B34E00EE28C2 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6292931C85B34E00EE28C2 /* libstdc++.6.0.9.tbd */; };
-		BE6292961C85B34E00EE28C2 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6292941C85B34E00EE28C2 /* libstdc++.tbd */; };
-		BE6292A31C85BB0700EE28C2 /* resource in Resources */ = {isa = PBXBuildFile; fileRef = BE6292A21C85BB0700EE28C2 /* resource */; };
+		BEB006D21C970F4300FFA681 /* libme_osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE62922A1C85B1A500EE28C2 /* libme_osx.a */; };
+		BEB006D51C970F6A00FFA681 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB006D31C970F6A00FFA681 /* libstdc++.6.0.9.tbd */; };
+		BEB006D61C970F6A00FFA681 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB006D41C970F6A00FFA681 /* libstdc++.tbd */; };
+		BEB006D71C970FA100FFA681 /* resource in Resources */ = {isa = PBXBuildFile; fileRef = BE6292A21C85BB0700EE28C2 /* resource */; };
+		BEB006DA1C970FD800FFA681 /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB006D91C970FD800FFA681 /* OpenGLView.m */; };
 		BEC526E21C87120E00D6AA57 /* MNOpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEC526E01C87120E00D6AA57 /* MNOpenGL.cpp */; };
 		BEC526E31C87120E00D6AA57 /* MNOpenGL.h in Headers */ = {isa = PBXBuildFile; fileRef = BEC526E11C87120E00D6AA57 /* MNOpenGL.h */; };
 		BEC526E71C87156700D6AA57 /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = BEC526E51C87156700D6AA57 /* stb_image.h */; };
@@ -66,29 +68,18 @@
 		BED78AB81C85FB020034100E /* MNFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BED78AB71C85FB020034100E /* MNFileSystem.cpp */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		BE6292901C85B21D00EE28C2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BE6292021C85B05A00EE28C2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BE6292291C85B1A500EE28C2;
-			remoteInfo = me_osx;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		BE4AA54D1C95A3CD005DE4E2 /* MNLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNLog.cpp; sourceTree = "<group>"; };
 		BE4AA54E1C95A3CD005DE4E2 /* MNLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNLog.h; sourceTree = "<group>"; };
-		BE62920A1C85B05A00EE28C2 /* me_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = me_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BE62920D1C85B05A00EE28C2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		BE62920E1C85B05A00EE28C2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		BE6292111C85B05A00EE28C2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		BE6292131C85B05A00EE28C2 /* GameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameView.h; sourceTree = "<group>"; };
-		BE6292141C85B05A00EE28C2 /* GameView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
-		BE6292161C85B05A00EE28C2 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
-		BE6292171C85B05A00EE28C2 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
-		BE62921B1C85B05A00EE28C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		BE6292201C85B05A00EE28C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE4AA5A01C970D15005DE4E2 /* me_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = me_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE4AA5A21C970D15005DE4E2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BE4AA5A31C970D15005DE4E2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BE4AA5A61C970D15005DE4E2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BE4AA5A81C970D15005DE4E2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		BE4AA5A91C970D15005DE4E2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		BE4AA5AB1C970D15005DE4E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BE4AA5AE1C970D15005DE4E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BE4AA5B01C970D15005DE4E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE62922A1C85B1A500EE28C2 /* libme_osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libme_osx.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6292361C85B1D600EE28C2 /* MiniEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MiniEngine.cpp; sourceTree = "<group>"; };
 		BE6292371C85B1D600EE28C2 /* MiniEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiniEngine.h; sourceTree = "<group>"; };
@@ -131,9 +122,11 @@
 		BE6292601C85B1D600EE28C2 /* MNTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNTable.h; sourceTree = "<group>"; };
 		BE6292611C85B1D600EE28C2 /* MNUserData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNUserData.cpp; sourceTree = "<group>"; };
 		BE6292621C85B1D600EE28C2 /* MNUserData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNUserData.h; sourceTree = "<group>"; };
-		BE6292931C85B34E00EE28C2 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
-		BE6292941C85B34E00EE28C2 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		BE6292A21C85BB0700EE28C2 /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../resource; sourceTree = "<group>"; };
+		BEB006D31C970F6A00FFA681 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
+		BEB006D41C970F6A00FFA681 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		BEB006D81C970FC300FFA681 /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
+		BEB006D91C970FD800FFA681 /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
 		BEC526E01C87120E00D6AA57 /* MNOpenGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNOpenGL.cpp; sourceTree = "<group>"; };
 		BEC526E11C87120E00D6AA57 /* MNOpenGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNOpenGL.h; sourceTree = "<group>"; };
 		BEC526E51C87156700D6AA57 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
@@ -143,13 +136,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		BE6292071C85B05A00EE28C2 /* Frameworks */ = {
+		BE4AA59D1C970D15005DE4E2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE6292951C85B34E00EE28C2 /* libstdc++.6.0.9.tbd in Frameworks */,
-				BE6292961C85B34E00EE28C2 /* libstdc++.tbd in Frameworks */,
-				BE6292921C85B22900EE28C2 /* libme_osx.a in Frameworks */,
+				BEB006D51C970F6A00FFA681 /* libstdc++.6.0.9.tbd in Frameworks */,
+				BEB006D61C970F6A00FFA681 /* libstdc++.tbd in Frameworks */,
+				BEB006D21C970F4300FFA681 /* libme_osx.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,13 +156,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE4AA5A11C970D15005DE4E2 /* me_app */ = {
+			isa = PBXGroup;
+			children = (
+				BE4AA5A21C970D15005DE4E2 /* AppDelegate.h */,
+				BE4AA5A31C970D15005DE4E2 /* AppDelegate.m */,
+				BE4AA5A81C970D15005DE4E2 /* ViewController.h */,
+				BE4AA5A91C970D15005DE4E2 /* ViewController.m */,
+				BE4AA5AB1C970D15005DE4E2 /* Assets.xcassets */,
+				BE4AA5AD1C970D15005DE4E2 /* Main.storyboard */,
+				BE4AA5B01C970D15005DE4E2 /* Info.plist */,
+				BE4AA5A51C970D15005DE4E2 /* Supporting Files */,
+				BEB006D81C970FC300FFA681 /* OpenGLView.h */,
+				BEB006D91C970FD800FFA681 /* OpenGLView.m */,
+			);
+			path = me_app;
+			sourceTree = "<group>";
+		};
+		BE4AA5A51C970D15005DE4E2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BE4AA5A61C970D15005DE4E2 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		BE6292011C85B05A00EE28C2 = {
 			isa = PBXGroup;
 			children = (
+				BEB006D31C970F6A00FFA681 /* libstdc++.6.0.9.tbd */,
+				BEB006D41C970F6A00FFA681 /* libstdc++.tbd */,
 				BE6292A21C85BB0700EE28C2 /* resource */,
-				BE6292931C85B34E00EE28C2 /* libstdc++.6.0.9.tbd */,
-				BE6292941C85B34E00EE28C2 /* libstdc++.tbd */,
-				BE62920C1C85B05A00EE28C2 /* me_app */,
+				BE4AA5A11C970D15005DE4E2 /* me_app */,
 				BE62922B1C85B1A500EE28C2 /* me_osx */,
 				BE62920B1C85B05A00EE28C2 /* Products */,
 			);
@@ -178,34 +196,10 @@
 		BE62920B1C85B05A00EE28C2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BE62920A1C85B05A00EE28C2 /* me_app.app */,
 				BE62922A1C85B1A500EE28C2 /* libme_osx.a */,
+				BE4AA5A01C970D15005DE4E2 /* me_app.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		BE62920C1C85B05A00EE28C2 /* me_app */ = {
-			isa = PBXGroup;
-			children = (
-				BE62920D1C85B05A00EE28C2 /* AppDelegate.h */,
-				BE62920E1C85B05A00EE28C2 /* AppDelegate.m */,
-				BE6292131C85B05A00EE28C2 /* GameView.h */,
-				BE6292141C85B05A00EE28C2 /* GameView.m */,
-				BE6292161C85B05A00EE28C2 /* GameViewController.h */,
-				BE6292171C85B05A00EE28C2 /* GameViewController.m */,
-				BE62921B1C85B05A00EE28C2 /* Assets.xcassets */,
-				BE6292201C85B05A00EE28C2 /* Info.plist */,
-				BE6292101C85B05A00EE28C2 /* Supporting Files */,
-			);
-			path = me_app;
-			sourceTree = "<group>";
-		};
-		BE6292101C85B05A00EE28C2 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				BE6292111C85B05A00EE28C2 /* main.m */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		BE62922B1C85B1A500EE28C2 /* me_osx */ = {
@@ -313,22 +307,21 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		BE6292091C85B05A00EE28C2 /* me_app */ = {
+		BE4AA59F1C970D15005DE4E2 /* me_app */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BE6292231C85B05A00EE28C2 /* Build configuration list for PBXNativeTarget "me_app" */;
+			buildConfigurationList = BE4AA5B11C970D15005DE4E2 /* Build configuration list for PBXNativeTarget "me_app" */;
 			buildPhases = (
-				BE6292061C85B05A00EE28C2 /* Sources */,
-				BE6292071C85B05A00EE28C2 /* Frameworks */,
-				BE6292081C85B05A00EE28C2 /* Resources */,
+				BE4AA59C1C970D15005DE4E2 /* Sources */,
+				BE4AA59D1C970D15005DE4E2 /* Frameworks */,
+				BE4AA59E1C970D15005DE4E2 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				BE6292911C85B21D00EE28C2 /* PBXTargetDependency */,
 			);
 			name = me_app;
 			productName = me_app;
-			productReference = BE62920A1C85B05A00EE28C2 /* me_app.app */;
+			productReference = BE4AA5A01C970D15005DE4E2 /* me_app.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BE6292291C85B1A500EE28C2 /* me_osx */ = {
@@ -357,7 +350,7 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = hahasasa;
 				TargetAttributes = {
-					BE6292091C85B05A00EE28C2 = {
+					BE4AA59F1C970D15005DE4E2 = {
 						CreatedOnToolsVersion = 7.2.1;
 					};
 					BE6292291C85B1A500EE28C2 = {
@@ -378,32 +371,34 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BE6292091C85B05A00EE28C2 /* me_app */,
+				BE4AA59F1C970D15005DE4E2 /* me_app */,
 				BE6292291C85B1A500EE28C2 /* me_osx */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		BE6292081C85B05A00EE28C2 /* Resources */ = {
+		BE4AA59E1C970D15005DE4E2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE6292A31C85BB0700EE28C2 /* resource in Resources */,
+				BE4AA5AC1C970D15005DE4E2 /* Assets.xcassets in Resources */,
+				BE4AA5AF1C970D15005DE4E2 /* Main.storyboard in Resources */,
+				BEB006D71C970FA100FFA681 /* resource in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		BE6292061C85B05A00EE28C2 /* Sources */ = {
+		BE4AA59C1C970D15005DE4E2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE6292181C85B05A00EE28C2 /* GameViewController.m in Sources */,
-				BE6292151C85B05A00EE28C2 /* GameView.m in Sources */,
-				BE6292121C85B05A00EE28C2 /* main.m in Sources */,
-				BE62920F1C85B05A00EE28C2 /* AppDelegate.m in Sources */,
+				BE4AA5AA1C970D15005DE4E2 /* ViewController.m in Sources */,
+				BE4AA5A71C970D15005DE4E2 /* main.m in Sources */,
+				BE4AA5A41C970D15005DE4E2 /* AppDelegate.m in Sources */,
+				BEB006DA1C970FD800FFA681 /* OpenGLView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,15 +433,49 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		BE6292911C85B21D00EE28C2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BE6292291C85B1A500EE28C2 /* me_osx */;
-			targetProxy = BE6292901C85B21D00EE28C2 /* PBXContainerItemProxy */;
+/* Begin PBXVariantGroup section */
+		BE4AA5AD1C970D15005DE4E2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BE4AA5AE1C970D15005DE4E2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
 		};
-/* End PBXTargetDependency section */
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		BE4AA5B21C970D15005DE4E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/me_app-dxomvzynfyosfffxcgfvwxxdcwmc/Build/Products/Debug/usr/local/include\"";
+				INFOPLIST_FILE = me_app/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/me_app-dxomvzynfyosfffxcgfvwxxdcwmc/Build/Products/Debug\"";
+				OTHER_LDFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "hahasasa.me-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BE4AA5B31C970D15005DE4E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/me_app-dxomvzynfyosfffxcgfvwxxdcwmc/Build/Products/Debug/usr/local/include\"";
+				INFOPLIST_FILE = me_app/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/me_app-dxomvzynfyosfffxcgfvwxxdcwmc/Build/Products/Debug\"";
+				OTHER_LDFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "hahasasa.me-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		BE6292211C85B05A00EE28C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -526,30 +555,6 @@
 			};
 			name = Release;
 		};
-		BE6292241C85B05A00EE28C2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = me_app/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "hahasasa.me-app";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		BE6292251C85B05A00EE28C2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = me_app/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "hahasasa.me-app";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		BE6292331C85B1A500EE28C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -584,20 +589,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BE4AA5B11C970D15005DE4E2 /* Build configuration list for PBXNativeTarget "me_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE4AA5B21C970D15005DE4E2 /* Debug */,
+				BE4AA5B31C970D15005DE4E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BE6292051C85B05A00EE28C2 /* Build configuration list for PBXProject "me_app" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BE6292211C85B05A00EE28C2 /* Debug */,
 				BE6292221C85B05A00EE28C2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BE6292231C85B05A00EE28C2 /* Build configuration list for PBXNativeTarget "me_app" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BE6292241C85B05A00EE28C2 /* Debug */,
-				BE6292251C85B05A00EE28C2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

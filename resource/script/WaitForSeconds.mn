@@ -1,0 +1,22 @@
+
+
+::WaitForSeconds =
+{
+"->" : this,
+new : func(secondsForWaiting)
+{
+	var inst =
+	{
+        seconds:secondsForWaiting,
+        startTime:getSeconds()
+    };
+    setMeta(inst, this);
+    return inst;
+},
+
+isDone : func()
+{
+    var now = getSeconds() - startTime;
+    return (now >= seconds);
+}
+};

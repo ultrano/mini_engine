@@ -1,5 +1,4 @@
 
-
 ::GameObject =
 { "->" : this,
 
@@ -10,6 +9,7 @@ new : func()
     , active : true
     , components : []
     , componentUpdaters : []
+    , addedComponents : []
     };
     setMeta(inst, this);
     return inst;
@@ -21,8 +21,13 @@ setName : func(newName) { this.name = newName;},
 addComponent : func (componentType)
 {
     var comp = componentType.new(this);
-    var updater = delegator(comp.update, comp);
     this.components.add(comp);
+
+    //! awakening
+    comp.awake();
+    addedComponents.add(comp);
+
+    var updater = delegator(comp.update, comp);
     if (updater != null)
         this.componentUpdaters.add(fiber.new(updater));
 },
@@ -34,12 +39,33 @@ addComponentByName : func(componentName)
 
 update : func()
 {
-    var count = this.componentUpdaters.count();
-    while (count > 0)
+    //! starting before updating
     {
-        count -= 1;
-        var updater = this.componentUpdaters[count];
-        if (updater.next() == false) updater.reset();
+        var count = addedComponents.count();
+        var index = 0;
+        while(index < count)
+        {
+            addedComponents[index].start();
+            index += 1;
+        }
+        addedComponents.clear();
+    }
+
+    //! updating
+    {
+        var count = this.componentUpdaters.count();
+        while (count > 0)
+        {
+            count -= 1;
+            var updater = this.componentUpdaters[count];
+            var waiter = updater.value();
+
+            if (waiter != null && waiter.isDone() == false)
+            continue;
+
+            if (updater.next() == false)
+            updater.reset();
+        }
     }
 }
 
