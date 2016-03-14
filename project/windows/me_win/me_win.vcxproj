@@ -86,11 +86,19 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\USER-2\Documents\Projects\mini_engine\extern;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\USER-2\Documents\Projects\mini_engine\project\windows\opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -113,13 +121,21 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\USER-2\Documents\Projects\mini_engine\extern;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\USER-2\Documents\Projects\mini_engine\project\windows\opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -144,7 +160,6 @@
     <ClCompile Include="..\..\..\source\MiniEngine.cpp" />
     <ClCompile Include="..\..\..\source\MNArray.cpp" />
     <ClCompile Include="..\..\..\source\MNBasicLib.cpp" />
-    <ClCompile Include="..\..\..\source\MNClass.cpp" />
     <ClCompile Include="..\..\..\source\MNClosure.cpp" />
     <ClCompile Include="..\..\..\source\MNCollectable.cpp" />
     <ClCompile Include="..\..\..\source\MNCommand.cpp" />
@@ -154,8 +169,8 @@
     <ClCompile Include="..\..\..\source\MNFileSystem.cpp" />
     <ClCompile Include="..\..\..\source\MNFunction.cpp" />
     <ClCompile Include="..\..\..\source\MNGlobal.cpp" />
-    <ClCompile Include="..\..\..\source\MNInstance.cpp" />
     <ClCompile Include="..\..\..\source\MNLexer.cpp" />
+    <ClCompile Include="..\..\..\source\MNLog.cpp" />
     <ClCompile Include="..\..\..\source\MNMemory.cpp" />
     <ClCompile Include="..\..\..\source\MNObject.cpp" />
     <ClCompile Include="..\..\..\source\MNOpenGL.cpp" />
@@ -169,7 +184,6 @@
     <ClInclude Include="..\..\..\source\MiniEngine.h" />
     <ClInclude Include="..\..\..\source\MNArray.h" />
     <ClInclude Include="..\..\..\source\MNBasicLib.h" />
-    <ClInclude Include="..\..\..\source\MNClass.h" />
     <ClInclude Include="..\..\..\source\MNClassBond.h" />
     <ClInclude Include="..\..\..\source\MNClosure.h" />
     <ClInclude Include="..\..\..\source\MNCollectable.h" />
@@ -180,9 +194,9 @@
     <ClInclude Include="..\..\..\source\MNFileSystem.h" />
     <ClInclude Include="..\..\..\source\MNFunction.h" />
     <ClInclude Include="..\..\..\source\MNGlobal.h" />
-    <ClInclude Include="..\..\..\source\MNInstance.h" />
     <ClInclude Include="..\..\..\source\MNLexer.h" />
     <ClInclude Include="..\..\..\source\MNList.h" />
+    <ClInclude Include="..\..\..\source\MNLog.h" />
     <ClInclude Include="..\..\..\source\MNMemory.h" />
     <ClInclude Include="..\..\..\source\MNObject.h" />
     <ClInclude Include="..\..\..\source\MNOpenGL.h" />

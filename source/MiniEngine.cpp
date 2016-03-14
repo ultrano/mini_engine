@@ -40,3 +40,11 @@ void MNStart(const char* resourceFolder, const char* starterScript)
 
 
 }
+
+void MNUpdate()
+{
+	MNContext.main->push_string("Update");
+	MNContext.main->load_global();
+	MNContext.main->load_stack(0);
+	MNContext.main->call(1, false);
+}

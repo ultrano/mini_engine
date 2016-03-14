@@ -5,6 +5,8 @@
 #include "MNClosure.h"
 #include "MNTable.h"
 #include "MNArray.h"
+#include "MNOpenGL.h"
+
 
 #include <stdlib.h>
 #include <math.h>
@@ -348,7 +350,28 @@ struct CommonLib
         }
         return false;
     }
+
+	static bool opengl_clearColor(MNFiber* fiber)
+	{
+		float r = fiber->get(1).toReal();
+		float g = fiber->get(2).toReal();
+		float b = fiber->get(3).toReal();
+		float a = fiber->get(4).toReal();
+		glClearColor(r, g, b, a);
+		return false;
+	}
     
+	static bool opengl_clear(MNFiber* fiber)
+	{
+		GLbitfield bufferBit = 0;
+
+		if (fiber->get(1).toBool()) bufferBit |= GL_COLOR_BUFFER_BIT;
+		if (fiber->get(2).toBool()) bufferBit |= GL_DEPTH_BUFFER_BIT;
+
+		glClear(bufferBit);
+		return false;
+	}
+
 	static void expose(MNFiber* fiber)
 	{
         //! common
@@ -491,6 +514,16 @@ struct CommonLib
             fiber->store_global();
         }
         
+		//! opengl
+		{
+			fiber->push_string("opengl_clear");
+			push_closure(fiber, opengl_clear);
+			fiber->store_global();
+
+			fiber->push_string("opengl_clearColor");
+			push_closure(fiber, opengl_clearColor);
+			fiber->store_global();
+		}
 	}
 };
 

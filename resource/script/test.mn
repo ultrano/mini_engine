@@ -1,5 +1,11 @@
 
 
+var count = 0;
+::insert("Update", func()
+{
+	print("update!!!" + (count += 1));
+});
+
 var go1 = GameObject.new();
 
 go1.addComponent(TestComponent);
@@ -10,3 +16,4 @@ go1.update();
 go1.update();
 go1.update();
 go1.update();
+

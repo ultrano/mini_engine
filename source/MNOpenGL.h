@@ -12,7 +12,7 @@
 #include "MNPlatformDefine.h"
 
 #ifdef PLATFORM_WIN32
-# include "opengl/glew.h"
+# include "glew.h"
 #elif PLATFORM_IOS
 # include <OpenGLES/ES2/gl.h>
 # include <OpenGLES/ES2/glext.h>
