@@ -14,8 +14,6 @@ class MNTable;
 class MNArray;
 class MNFunction;
 class MNUserData;
-class MNClass;
-class MNInstance;
 class MNObject : public MNMemory
 {
 public:
@@ -57,8 +55,6 @@ public:
 	bool isFunction() const;
 	bool isFiber() const;
 	bool isUserData() const;
-	bool isType() const;
-	bool isInstance() const;
 
 	void*       toRaw() const;
 	void*       toPointer() const;
@@ -75,8 +71,6 @@ public:
 	MNFunction* toFunction() const;
 	MNFiber*    toFiber() const;
 	MNUserData* toUserData() const;
-	MNClass*    toClass() const;
-	MNInstance* toInstance() const;
 
 private:
 

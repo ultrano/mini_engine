@@ -103,7 +103,7 @@ tboolean MNTable::tryGet(const MNObject& key, MNObject& val) const
 	if (key.isNull()) return false;
 
 	Node* node = findNode(key);
-	if (node) val = node->val;
+    if (node) val = node->val;
 
 	return (node != NULL);
 }
@@ -212,7 +212,7 @@ tsize MNTable::count() const
 	return m_used;
 }
 
-tsize MNTable::total() const
+tsize MNTable::capacity() const
 {
 	return m_size;
 }

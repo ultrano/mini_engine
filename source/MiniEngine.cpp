@@ -1,7 +1,6 @@
 #include "MiniEngine.h"
 #include "MNArray.h"
 #include "MNBasicLib.h"
-#include "MNClass.h"
 #include "MNClosure.h"
 #include "MNCollectable.h"
 #include "MNCommand.h"
@@ -10,7 +9,6 @@
 #include "MNFiber.h"
 #include "MNFunction.h"
 #include "MNGlobal.h"
-#include "MNInstance.h"
 #include "MNLexer.h"
 #include "MNList.h"
 #include "MNMemory.h"
@@ -36,7 +34,8 @@ public:
 void MNStart(const char* resourceFolder, const char* starterScript)
 {
     MNResourceFolderPath(resourceFolder);
-	MNBasicLib(MNContext.main = new MNFiber());
+    MNContext.main = new MNFiber();
+    MNContext.main->dofile("script/system.mn");
 	if (starterScript != NULL) MNContext.main->dofile(starterScript);
 
 

@@ -1,11 +1,12 @@
 
 
-var count = 1;
+var go1 = GameObject.new();
 
-while ((count -= 1) > 0)
-{
-    print("hello there, Mr.number " + count);
-}
-
-print(table.iterate.call(this, print));
-print(cache.iterate(print));
+go1.addComponent(TestComponent);
+go1.update();
+go1.update();
+go1.update();
+go1.update();
+go1.update();
+go1.update();
+go1.update();
