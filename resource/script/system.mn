@@ -41,6 +41,7 @@ insert("->", this);
 };
 
 dofile("script/GameObject.mn");
+dofile("script/Component.mn");
 dofile("script/WaitForSeconds.mn");
 dofile("script/TestComponent.mn");
 

@@ -1,0 +1,50 @@
+
+
+::Component =
+{ "->" : this,
+new : func()
+{
+    var inst =
+    {
+        coroutines : []
+    };
+    setMeta(inst, this);
+    return inst;
+},
+
+startCoroutine : func(routine)
+{
+    var coroutine = fiber.new(routine);
+
+    if (coroutine != null)
+        coroutines.add(coroutine);
+
+    return coroutine;
+},
+
+stopCoroutine : func(coroutine)
+{
+    coroutines.remove(coroutine);
+},
+
+updateCoroutine : func()
+{
+    var count = coroutines.count();
+    var index = 0;
+    while (index < count)
+    {
+        var coroutine = coroutines[index];
+        var waiter = coroutine.value();
+
+        if (waiter == null || waiter.isDone() == true)
+        {
+            if (coroutine.next(getSeconds()) == false)
+                coroutines[index] = null;
+        }
+
+        index += 1;
+    }
+}
+
+
+};

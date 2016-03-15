@@ -8,7 +8,6 @@ new : func()
     { name : "unnamed"
     , active : true
     , components : []
-    , componentUpdaters : []
     , addedComponents : []
     };
     setMeta(inst, this);
@@ -21,15 +20,11 @@ setName : func(newName) { this.name = newName;},
 addComponent : func (componentType)
 {
     var comp = componentType.new(this);
-    this.components.add(comp);
+    components.add(comp);
 
     //! awakening
     comp.awake();
     addedComponents.add(comp);
-
-    var updater = delegator(comp.update, comp);
-    if (updater != null)
-        this.componentUpdaters.add(fiber.new(updater));
 },
 
 addComponentByName : func(componentName)
@@ -51,20 +46,25 @@ update : func()
         addedComponents.clear();
     }
 
+    //! updating coroutine
+    {
+        var count = components.count();
+        var index = 0;
+        while(index < count)
+        {
+            components[index].updateCoroutine();
+            index += 1;
+        }
+    }
+
     //! updating
     {
-        var count = this.componentUpdaters.count();
-        while (count > 0)
+        var count = components.count();
+        var index = 0;
+        while(index < count)
         {
-            count -= 1;
-            var updater = this.componentUpdaters[count];
-            var waiter = updater.value();
-
-            if (waiter != null && waiter.isDone() == false)
-            continue;
-
-            if (updater.next() == false)
-            updater.reset();
+            components[index].update();
+            index += 1;
         }
     }
 }

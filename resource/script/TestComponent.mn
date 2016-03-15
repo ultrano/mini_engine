@@ -1,35 +1,41 @@
 
 ::TestComponent =
-{ "->" : this,
+{ "->" : setMeta(this, Component),
 
 new : func(ownerGO)
 {
+
     var inst =
     {
         gameObject : ownerGO
     };
 
-    setMeta(inst, this);
+    var base = getMeta(this).new();
+
+    setMeta(inst, setMeta({"->":base, "-<":base}, this));
     return inst;
 },
 
 awake : func()
 {
-print("awaken");
 },
 
 start : func()
 {
-print("start");
+    startCoroutine(coroutine);
 },
 
 update : func()
 {
-print("before wait");
+},
+
+coroutine : func(seconds)
+{
+print("before wait"+seconds);
 yield WaitForSeconds.new(1);
-print("middle wait");
+print("middle wait"+seconds);
 yield WaitForSeconds.new(1);
-print("after wait");
+print("after wait"+seconds);
 yield WaitForSeconds.new(1);
 }
 };

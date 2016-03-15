@@ -646,7 +646,8 @@ void MNFiber::tostring()
 	case TObjectType::TPointer   : str = MNObject::Format("[pointer: %p]", object.toPointer()); break;
 	case TObjectType::TCFunction : str = MNObject::Format("[cfunction: %p]", object.toCFunction()); break;
 	case TObjectType::TFunction  : str = MNObject::Format("[function: %p]", object.toFunction()); break;
-	case TObjectType::TClosure   : str = MNObject::Format("[closure: %p]", object.toClosure()); break;
+    case TObjectType::TClosure   : str = MNObject::Format("[closure: %p]", object.toClosure()); break;
+    case TObjectType::TFiber     : str = MNObject::Format("[fiber: %p]", object.toFiber()); break;
 	case TObjectType::TString    : str = object; break;
 	case TObjectType::TInt       : str = MNObject::Format("%d", object.toInt()); break;
 	case TObjectType::TReal      : str = MNObject::Format("%f", object.toReal()); break;

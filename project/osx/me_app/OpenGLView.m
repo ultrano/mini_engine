@@ -75,8 +75,6 @@
     [[self openGLContext] makeCurrentContext];
     //Perform drawing here
     
-    printf("22");
-    
     [[self openGLContext] flushBuffer];
 }
 
