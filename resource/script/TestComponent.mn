@@ -31,11 +31,14 @@ update : func()
 
 coroutine : func(seconds)
 {
+while (true)
+{
 print("before wait"+seconds);
-yield WaitForSeconds.new(1);
+seconds = yield WaitForSeconds.new(1);
 print("middle wait"+seconds);
-yield WaitForSeconds.new(1);
+seconds = yield WaitForSeconds.new(1);
 print("after wait"+seconds);
-yield WaitForSeconds.new(1);
+seconds = yield WaitForSeconds.new(1);
+}
 }
 };

@@ -26,7 +26,7 @@ void compile_error_print(tsize row, tsize col, const tchar* format, ...)
 	throw new MNCompileException(&buf2[0]);
 }
 
-#define compile_warning(format, ...) //compile_warning_print(m_current.row, m_current.col, (format), __VA_ARGS__)
+#define compile_warning(format, ...) compile_warning_print(m_current.row, m_current.col, (format), ##__VA_ARGS__)
 void compile_warning_print(tsize row, tsize col, const tchar* format, ...)
 {
 	static const tuint bufSize = 256;

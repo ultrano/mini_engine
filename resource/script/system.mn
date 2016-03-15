@@ -5,7 +5,7 @@
 ::insert = ::table_insert;
 ::iterate = ::table_iterate;
 ::capacity = ::table_capacity;
-insert("->", this);
+this.insert("->", this);
 
 ::table =
 { "->" : this
@@ -40,8 +40,8 @@ insert("->", this);
 , "->" : this
 };
 
-dofile("script/GameObject.mn");
-dofile("script/Component.mn");
-dofile("script/WaitForSeconds.mn");
-dofile("script/TestComponent.mn");
+this.dofile("script/GameObject.mn");
+this.dofile("script/Component.mn");
+this.dofile("script/WaitForSeconds.mn");
+this.dofile("script/TestComponent.mn");
 
