@@ -2,11 +2,15 @@
 var go1 = GameObject.new();
 
 go1.addComponent(TestComponent);
+go1.addComponent(TestComponent);
 
-var count = 0;
-::Update = func()
+func onUpdate()
 {
     go1.update();
 
 };
 
+func onTouch(state, x, y)
+{
+	print("" + x + ", " + y);
+};

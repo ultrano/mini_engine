@@ -43,8 +43,19 @@ void MNStart(const char* resourceFolder, const char* starterScript)
 
 void MNUpdate()
 {
-	MNContext.main->push_string("Update");
+	MNContext.main->push_string("onUpdate");
 	MNContext.main->load_global();
 	MNContext.main->load_stack(0);
 	MNContext.main->call(1, false);
+}
+
+void MNTouch(int type, int posX, int posY)
+{
+	MNContext.main->push_string("onTouch");
+	MNContext.main->load_global();
+	MNContext.main->load_stack(0);
+	MNContext.main->push_integer(type);
+	MNContext.main->push_integer(posX);
+	MNContext.main->push_integer(posY);
+	MNContext.main->call(4, false);
 }

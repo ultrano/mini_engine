@@ -1,72 +1,84 @@
 
 ::GameObject =
-{ "->" : this,
+{	"->" : this,
 
-new : func()
-{
-    var inst =
-    { name : "unnamed"
-    , active : true
-    , components : []
-    , addedComponents : []
-    };
-    setMeta(inst, this);
-    return inst;
-},
+	new : func()
+	{
+	    var inst =
+	    { name : "unnamed"
+	    , active : true
+	    , components : []
+	    , addedComponents : []
+	    };
+	    setMeta(inst, this);
+	    return inst;
+	},
+	
+	getName : func() { return this.name; },
+	setName : func(newName) { this.name = newName;},
+	
+	addComponent : func (componentType)
+	{
+	    var count = components.count();
+	    var index = 0;
+	    while(index < count)
+	    {
+			if (components[index].typeName() == componentType.typeName())
+			{
+				print("the component: [" + componentType.typeName() + "] is already in the game object: " + name);
+				return;
+			}
+	        index += 1;
+	    }	
 
-getName : func() { return this.name; },
-setName : func(newName) { this.name = newName;},
-
-addComponent : func (componentType)
-{
-    var comp = componentType.new(this);
-    components.add(comp);
-
-    //! awakening
-    comp.awake();
-    addedComponents.add(comp);
-},
-
-addComponentByName : func(componentName)
-{
-    addComponent(this[componentName]);
-},
-
-update : func()
-{
-    //! starting before updating
-    {
-        var count = addedComponents.count();
-        var index = 0;
-        while(index < count)
-        {
-            addedComponents[index].start();
-            index += 1;
-        }
-        addedComponents.clear();
-    }
-
-    //! updating coroutine
-    {
-        var count = components.count();
-        var index = 0;
-        while(index < count)
-        {
-            components[index].updateCoroutine();
-            index += 1;
-        }
-    }
-
-    //! updating
-    {
-        var count = components.count();
-        var index = 0;
-        while(index < count)
-        {
-            components[index].update();
-            index += 1;
-        }
-    }
-}
-
+	    var comp = componentType.new(this);
+	    components.add(comp);
+	
+	    //! awakening
+	    comp.awake();
+	    addedComponents.add(comp);
+	},
+	
+	addComponentByName : func(componentName)
+	{
+	    addComponent(this[componentName]);
+	},
+	
+	update : func()
+	{
+	    //! starting before updating
+	    {
+	        var count = addedComponents.count();
+	        var index = 0;
+	        while(index < count)
+	        {
+	            addedComponents[index].start();
+	            index += 1;
+	        }
+	        addedComponents.clear();
+	    }
+	
+	    //! updating coroutine
+	    {
+	        var count = components.count();
+	        var index = 0;
+	        while(index < count)
+	        {
+	            components[index].updateCoroutine();
+	            index += 1;
+	        }
+	    }
+	
+	    //! updating
+	    {
+	        var count = components.count();
+	        var index = 0;
+	        while(index < count)
+	        {
+	            components[index].update();
+	            index += 1;
+	        }
+	    }
+	}
+	
 };

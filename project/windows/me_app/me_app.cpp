@@ -25,6 +25,16 @@ void callbackDisplay()
 	glutSwapBuffers();
 }
 
+void callbackMouse(int button, int state, int x, int y)
+{
+	MNTouch(state, x, y);
+}
+
+void callbackMouseMove(int x, int y)
+{
+	MNTouch(0, x, y);
+}
+
 int main()
 {
 	int width  = 320;
@@ -36,8 +46,8 @@ int main()
 	glutInitWindowSize(width, height);
 	glutCreateWindow("TSP");
 
-	//glutMouseFunc(callbackMouse);
-	//glutMotionFunc(callbackMouseMove);
+	glutMouseFunc(callbackMouse);
+	glutMotionFunc(callbackMouseMove);
 	glutDisplayFunc(callbackDisplay);
 	glutIdleFunc(callbackIdle);
 	//glutReshapeFunc(callbackReshape);

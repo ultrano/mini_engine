@@ -676,7 +676,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 		m_func->findLocal(m_current.str, e);
 		if (e.type == MNExp::exp_none)
 		{
-			compile_warning("no var named '%s', trying to find in field", m_current.str.c_str());
+			//compile_warning("no var named '%s', trying to find in field", m_current.str.c_str());
 			e.index = m_func->addConst(MNObject::String(m_current.str));
 			code() << cmd_load_this;
 			code() << cmd_load_const << e.index;
@@ -769,7 +769,7 @@ void MNCompiler::_exp_primary(MNExp& e)
 			}
 			else if (cmd == cmd_store_stack)
 			{
-				if (!m_func->addLocal(m_current.str)) compile_warning("overapped field name");
+				if (!m_func->addLocal(m_current.str)) compile_error("overapped field name");
 				m_func->findLocal(m_current.str, e);
 			}
 			else compile_error("delimiter ':' or '=' is missing ");

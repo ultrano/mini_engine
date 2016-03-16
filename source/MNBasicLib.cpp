@@ -209,7 +209,8 @@ struct CommonLib
         newFiber->push(fiber->get(1));
         newFiber->push(fiber->get(1));
         newFiber->load_stack(0);
-        newFiber->enterCall(1, true);
+		newFiber->push_null();
+        newFiber->enterCall(2, true);
         fiber->push(MNObject(TObjectType::TFiber, newFiber->getReferrer()));
         return true;
     }
@@ -248,7 +249,8 @@ struct CommonLib
         newFiber->pop(1);
         newFiber->push(newFiber->getAt(1));
         newFiber->load_stack(0);
-        newFiber->enterCall(1, true);
+		newFiber->push_null();
+		newFiber->enterCall(2, true);
         return false;
     }
     
