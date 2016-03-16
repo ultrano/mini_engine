@@ -2,15 +2,26 @@
 var go1 = GameObject.new();
 
 go1.addComponent(TestComponent);
-go1.addComponent(TestComponent);
+
+
+var socket = socket_connect("192.168.219.103", 8888);
+
+
+
 
 func onUpdate()
 {
-    go1.update();
+    //go1.update();
+socket_send(socket, "hello there?!");
+var recv = socket_read(socket);
+if (recv != null)
+    print(recv);
+recv = socket_read(socket);
+if (recv != null)
+print(recv);
 
 };
 
 func onTouch(state, x, y)
 {
-	print("" + x + ", " + y);
 };

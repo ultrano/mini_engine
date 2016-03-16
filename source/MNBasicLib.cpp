@@ -6,7 +6,7 @@
 #include "MNTable.h"
 #include "MNArray.h"
 #include "MNOpenGL.h"
-
+#include "MNUserData.h"
 
 #if defined(PLATFORM_WIN32)
 #include <Windows.h>
@@ -399,6 +399,83 @@ struct CommonLib
 		return false;
 	}
 
+    struct MNSocket
+    {
+        int sock;
+        bool connected;
+        MNSocket():sock(0), connected(false) {}
+    };
+    
+    static bool socket_connect(MNFiber* fiber)
+    {
+        TSocket* socket = new(fiber->push_userdata(sizeof(TSocket))) TSocket();
+        MNString* arg1 = fiber->get(1).toString();
+        
+        tstring  address = arg1? arg1->ss().str() : "";
+        tinteger port = fiber->get(2).toInt();
+        socket->connect(address, port, false);
+        
+        return true;
+    }
+    
+    static bool socket_send(MNFiber* fiber)
+    {
+        MNUserData* userData = fiber->get(1).toUserData();
+        if (userData == NULL)
+        {
+            fiber->push_bool(false);
+            return true;
+        }
+        
+        TSocket* socket = (TSocket*)userData->getData();
+        
+        fiber->load_stack(2);
+        fiber->tostring();
+        MNString* str = fiber->get(-1).toString();
+        
+        bool ret = socket->sendBuffer((tbyte*)str->ss().c_str(), str->ss().str().length());
+        fiber->push_bool(ret);
+        return true;
+    }
+    
+    static bool socket_read(MNFiber* fiber)
+    {
+        MNUserData* userData = fiber->get(1).toUserData();
+        if (userData == NULL)
+        {
+            fiber->push_null();
+            return true;
+        }
+        
+        TSocket* socket = (TSocket*)userData->getData();
+        
+        const tint32 bufSize = 256;
+        tbyte buf[bufSize] = {0};
+
+        bool ret = socket->readBuffer(buf, bufSize);
+        if (ret)
+        {
+            fiber->push_string((char*)&buf[0]);
+        }
+        else
+        {
+            fiber->push_null();
+        }
+        
+        return true;
+    }
+    
+    static bool socket_close(MNFiber* fiber)
+    {
+        MNUserData* userData = fiber->get(1).toUserData();
+        if (userData == NULL)
+            return false;
+        
+        TSocket* socket = (TSocket*)userData->getData();
+        socket->close();
+        return false;
+    }
+    
 	static void expose(MNFiber* fiber)
 	{
         //! common
@@ -555,6 +632,25 @@ struct CommonLib
 			push_closure(fiber, opengl_clearColor);
 			fiber->store_global();
 		}
+        
+        //! socket
+        {
+            fiber->push_string("socket_connect");
+            push_closure(fiber, socket_connect);
+            fiber->store_global();
+            
+            fiber->push_string("socket_close");
+            push_closure(fiber, socket_close);
+            fiber->store_global();
+            
+            fiber->push_string("socket_send");
+            push_closure(fiber, socket_send);
+            fiber->store_global();
+            
+            fiber->push_string("socket_read");
+            push_closure(fiber, socket_read);
+            fiber->store_global();
+        }
 	}
 };
 

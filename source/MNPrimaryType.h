@@ -214,4 +214,19 @@ enum TCommand : tbyte
 class MNFiber;
 typedef bool(*NativeFunc)(MNFiber* s); // Native C Function
 
+class TSocket
+{
+public:
+    
+    TSocket();
+    void connect(const tstring& ip, int port, bool blocking);
+    void close();
+    bool sendBuffer(tbyte* buf, tint32 len);
+    bool readBuffer(tbyte* buf, tint32 len);
+    bool isConnected();
+private:
+    int sock;
+    bool connected;
+};
+
 #endif

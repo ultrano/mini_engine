@@ -1,0 +1,589 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BEDBA6A61C99896E00B16877 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6A51C99896E00B16877 /* main.m */; };
+		BEDBA6A91C99896E00B16877 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6A81C99896E00B16877 /* AppDelegate.m */; };
+		BEDBA6AB1C99896E00B16877 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BEDBA6AA1C99896E00B16877 /* Shader.fsh */; };
+		BEDBA6AD1C99896E00B16877 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BEDBA6AC1C99896E00B16877 /* Shader.vsh */; };
+		BEDBA6B01C99896E00B16877 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6AF1C99896E00B16877 /* GameViewController.m */; };
+		BEDBA6B31C99896E00B16877 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BEDBA6B11C99896E00B16877 /* Main.storyboard */; };
+		BEDBA6B51C99896E00B16877 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEDBA6B41C99896E00B16877 /* Assets.xcassets */; };
+		BEDBA6B81C99896E00B16877 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BEDBA6B61C99896E00B16877 /* LaunchScreen.storyboard */; };
+		BEDBA6FF1C998A0800B16877 /* MiniEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6CE1C998A0700B16877 /* MiniEngine.cpp */; };
+		BEDBA7001C998A0800B16877 /* MNArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6D01C998A0700B16877 /* MNArray.cpp */; };
+		BEDBA7011C998A0800B16877 /* MNBasicLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6D21C998A0700B16877 /* MNBasicLib.cpp */; };
+		BEDBA7021C998A0800B16877 /* MNClosure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6D51C998A0700B16877 /* MNClosure.cpp */; };
+		BEDBA7031C998A0800B16877 /* MNCollectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6D71C998A0700B16877 /* MNCollectable.cpp */; };
+		BEDBA7041C998A0800B16877 /* MNCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6D91C998A0700B16877 /* MNCommand.cpp */; };
+		BEDBA7051C998A0800B16877 /* MNCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6DB1C998A0700B16877 /* MNCompiler.cpp */; };
+		BEDBA7061C998A0800B16877 /* MNCountable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6DD1C998A0700B16877 /* MNCountable.cpp */; };
+		BEDBA7071C998A0800B16877 /* MNFiber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6DF1C998A0700B16877 /* MNFiber.cpp */; };
+		BEDBA7081C998A0800B16877 /* MNFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6E11C998A0700B16877 /* MNFileSystem.cpp */; };
+		BEDBA7091C998A0800B16877 /* MNFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6E31C998A0700B16877 /* MNFunction.cpp */; };
+		BEDBA70A1C998A0800B16877 /* MNGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6E51C998A0700B16877 /* MNGlobal.cpp */; };
+		BEDBA70B1C998A0800B16877 /* MNLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6E71C998A0700B16877 /* MNLexer.cpp */; };
+		BEDBA70C1C998A0800B16877 /* MNLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6EA1C998A0800B16877 /* MNLog.cpp */; };
+		BEDBA70D1C998A0800B16877 /* MNMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6EC1C998A0800B16877 /* MNMemory.cpp */; };
+		BEDBA70E1C998A0800B16877 /* MNObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6EE1C998A0800B16877 /* MNObject.cpp */; };
+		BEDBA70F1C998A0800B16877 /* MNOpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6F01C998A0800B16877 /* MNOpenGL.cpp */; };
+		BEDBA7101C998A0800B16877 /* MNPrimaryType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6F31C998A0800B16877 /* MNPrimaryType.cpp */; };
+		BEDBA7111C998A0800B16877 /* MNReferrer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6F51C998A0800B16877 /* MNReferrer.cpp */; };
+		BEDBA7121C998A0800B16877 /* MNString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6F81C998A0800B16877 /* MNString.cpp */; };
+		BEDBA7131C998A0800B16877 /* MNTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6FA1C998A0800B16877 /* MNTable.cpp */; };
+		BEDBA7141C998A0800B16877 /* MNUserData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA6FC1C998A0800B16877 /* MNUserData.cpp */; };
+		BEDBA7151C998A4E00B16877 /* MiniEngine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BEDBA6CF1C998A0700B16877 /* MiniEngine.h */; };
+		BEDBA7181C998A9E00B16877 /* libme_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDBA6C31C9989C400B16877 /* libme_ios.a */; };
+		BEDBA71B1C998D3A00B16877 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDBA7191C998D3A00B16877 /* libstdc++.6.0.9.tbd */; };
+		BEDBA71C1C998D3A00B16877 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDBA71A1C998D3A00B16877 /* libstdc++.tbd */; };
+		BEDBA72C1C998DE400B16877 /* resource in Resources */ = {isa = PBXBuildFile; fileRef = BEDBA72B1C998DE400B16877 /* resource */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BEDBA7161C998A9000B16877 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BEDBA6991C99896E00B16877 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BEDBA6C21C9989C400B16877;
+			remoteInfo = me_ios;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BEDBA6C11C9989C400B16877 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				BEDBA7151C998A4E00B16877 /* MiniEngine.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		BEDBA6A11C99896E00B16877 /* me_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = me_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEDBA6A51C99896E00B16877 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BEDBA6A71C99896E00B16877 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BEDBA6A81C99896E00B16877 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BEDBA6AA1C99896E00B16877 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
+		BEDBA6AC1C99896E00B16877 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
+		BEDBA6AE1C99896E00B16877 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		BEDBA6AF1C99896E00B16877 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		BEDBA6B21C99896E00B16877 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BEDBA6B41C99896E00B16877 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BEDBA6B71C99896E00B16877 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BEDBA6B91C99896E00B16877 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BEDBA6C31C9989C400B16877 /* libme_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libme_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEDBA6CE1C998A0700B16877 /* MiniEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MiniEngine.cpp; sourceTree = "<group>"; };
+		BEDBA6CF1C998A0700B16877 /* MiniEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiniEngine.h; sourceTree = "<group>"; };
+		BEDBA6D01C998A0700B16877 /* MNArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNArray.cpp; sourceTree = "<group>"; };
+		BEDBA6D11C998A0700B16877 /* MNArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNArray.h; sourceTree = "<group>"; };
+		BEDBA6D21C998A0700B16877 /* MNBasicLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNBasicLib.cpp; sourceTree = "<group>"; };
+		BEDBA6D31C998A0700B16877 /* MNBasicLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNBasicLib.h; sourceTree = "<group>"; };
+		BEDBA6D41C998A0700B16877 /* MNClassBond.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClassBond.h; sourceTree = "<group>"; };
+		BEDBA6D51C998A0700B16877 /* MNClosure.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNClosure.cpp; sourceTree = "<group>"; };
+		BEDBA6D61C998A0700B16877 /* MNClosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNClosure.h; sourceTree = "<group>"; };
+		BEDBA6D71C998A0700B16877 /* MNCollectable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCollectable.cpp; sourceTree = "<group>"; };
+		BEDBA6D81C998A0700B16877 /* MNCollectable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCollectable.h; sourceTree = "<group>"; };
+		BEDBA6D91C998A0700B16877 /* MNCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCommand.cpp; sourceTree = "<group>"; };
+		BEDBA6DA1C998A0700B16877 /* MNCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCommand.h; sourceTree = "<group>"; };
+		BEDBA6DB1C998A0700B16877 /* MNCompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCompiler.cpp; sourceTree = "<group>"; };
+		BEDBA6DC1C998A0700B16877 /* MNCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCompiler.h; sourceTree = "<group>"; };
+		BEDBA6DD1C998A0700B16877 /* MNCountable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNCountable.cpp; sourceTree = "<group>"; };
+		BEDBA6DE1C998A0700B16877 /* MNCountable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCountable.h; sourceTree = "<group>"; };
+		BEDBA6DF1C998A0700B16877 /* MNFiber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNFiber.cpp; sourceTree = "<group>"; };
+		BEDBA6E01C998A0700B16877 /* MNFiber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFiber.h; sourceTree = "<group>"; };
+		BEDBA6E11C998A0700B16877 /* MNFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNFileSystem.cpp; sourceTree = "<group>"; };
+		BEDBA6E21C998A0700B16877 /* MNFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFileSystem.h; sourceTree = "<group>"; };
+		BEDBA6E31C998A0700B16877 /* MNFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNFunction.cpp; sourceTree = "<group>"; };
+		BEDBA6E41C998A0700B16877 /* MNFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNFunction.h; sourceTree = "<group>"; };
+		BEDBA6E51C998A0700B16877 /* MNGlobal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNGlobal.cpp; sourceTree = "<group>"; };
+		BEDBA6E61C998A0700B16877 /* MNGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNGlobal.h; sourceTree = "<group>"; };
+		BEDBA6E71C998A0700B16877 /* MNLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNLexer.cpp; sourceTree = "<group>"; };
+		BEDBA6E81C998A0700B16877 /* MNLexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNLexer.h; sourceTree = "<group>"; };
+		BEDBA6E91C998A0700B16877 /* MNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNList.h; sourceTree = "<group>"; };
+		BEDBA6EA1C998A0800B16877 /* MNLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNLog.cpp; sourceTree = "<group>"; };
+		BEDBA6EB1C998A0800B16877 /* MNLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNLog.h; sourceTree = "<group>"; };
+		BEDBA6EC1C998A0800B16877 /* MNMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNMemory.cpp; sourceTree = "<group>"; };
+		BEDBA6ED1C998A0800B16877 /* MNMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNMemory.h; sourceTree = "<group>"; };
+		BEDBA6EE1C998A0800B16877 /* MNObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNObject.cpp; sourceTree = "<group>"; };
+		BEDBA6EF1C998A0800B16877 /* MNObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNObject.h; sourceTree = "<group>"; };
+		BEDBA6F01C998A0800B16877 /* MNOpenGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNOpenGL.cpp; sourceTree = "<group>"; };
+		BEDBA6F11C998A0800B16877 /* MNOpenGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNOpenGL.h; sourceTree = "<group>"; };
+		BEDBA6F21C998A0800B16877 /* MNPlatformDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNPlatformDefine.h; sourceTree = "<group>"; };
+		BEDBA6F31C998A0800B16877 /* MNPrimaryType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNPrimaryType.cpp; sourceTree = "<group>"; };
+		BEDBA6F41C998A0800B16877 /* MNPrimaryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNPrimaryType.h; sourceTree = "<group>"; };
+		BEDBA6F51C998A0800B16877 /* MNReferrer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNReferrer.cpp; sourceTree = "<group>"; };
+		BEDBA6F61C998A0800B16877 /* MNReferrer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNReferrer.h; sourceTree = "<group>"; };
+		BEDBA6F71C998A0800B16877 /* MNRtti.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNRtti.h; sourceTree = "<group>"; };
+		BEDBA6F81C998A0800B16877 /* MNString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNString.cpp; sourceTree = "<group>"; };
+		BEDBA6F91C998A0800B16877 /* MNString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNString.h; sourceTree = "<group>"; };
+		BEDBA6FA1C998A0800B16877 /* MNTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNTable.cpp; sourceTree = "<group>"; };
+		BEDBA6FB1C998A0800B16877 /* MNTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNTable.h; sourceTree = "<group>"; };
+		BEDBA6FC1C998A0800B16877 /* MNUserData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNUserData.cpp; sourceTree = "<group>"; };
+		BEDBA6FD1C998A0800B16877 /* MNUserData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNUserData.h; sourceTree = "<group>"; };
+		BEDBA6FE1C998A0800B16877 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		BEDBA7191C998D3A00B16877 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
+		BEDBA71A1C998D3A00B16877 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		BEDBA72B1C998DE400B16877 /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../../resource; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BEDBA69E1C99896E00B16877 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEDBA71B1C998D3A00B16877 /* libstdc++.6.0.9.tbd in Frameworks */,
+				BEDBA71C1C998D3A00B16877 /* libstdc++.tbd in Frameworks */,
+				BEDBA7181C998A9E00B16877 /* libme_ios.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BEDBA6C01C9989C400B16877 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BEDBA6981C99896E00B16877 = {
+			isa = PBXGroup;
+			children = (
+				BEDBA72B1C998DE400B16877 /* resource */,
+				BEDBA7191C998D3A00B16877 /* libstdc++.6.0.9.tbd */,
+				BEDBA71A1C998D3A00B16877 /* libstdc++.tbd */,
+				BEDBA6A31C99896E00B16877 /* me_app */,
+				BEDBA6C41C9989C400B16877 /* me_ios */,
+				BEDBA6A21C99896E00B16877 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BEDBA6A21C99896E00B16877 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BEDBA6A11C99896E00B16877 /* me_app.app */,
+				BEDBA6C31C9989C400B16877 /* libme_ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BEDBA6A31C99896E00B16877 /* me_app */ = {
+			isa = PBXGroup;
+			children = (
+				BEDBA6A71C99896E00B16877 /* AppDelegate.h */,
+				BEDBA6A81C99896E00B16877 /* AppDelegate.m */,
+				BEDBA6AA1C99896E00B16877 /* Shader.fsh */,
+				BEDBA6AC1C99896E00B16877 /* Shader.vsh */,
+				BEDBA6AE1C99896E00B16877 /* GameViewController.h */,
+				BEDBA6AF1C99896E00B16877 /* GameViewController.m */,
+				BEDBA6B11C99896E00B16877 /* Main.storyboard */,
+				BEDBA6B41C99896E00B16877 /* Assets.xcassets */,
+				BEDBA6B61C99896E00B16877 /* LaunchScreen.storyboard */,
+				BEDBA6B91C99896E00B16877 /* Info.plist */,
+				BEDBA6A41C99896E00B16877 /* Supporting Files */,
+			);
+			path = me_app;
+			sourceTree = "<group>";
+		};
+		BEDBA6A41C99896E00B16877 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BEDBA6A51C99896E00B16877 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BEDBA6C41C9989C400B16877 /* me_ios */ = {
+			isa = PBXGroup;
+			children = (
+				BEDBA6CD1C998A0700B16877 /* source */,
+			);
+			path = me_ios;
+			sourceTree = "<group>";
+		};
+		BEDBA6CD1C998A0700B16877 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				BEDBA6CE1C998A0700B16877 /* MiniEngine.cpp */,
+				BEDBA6CF1C998A0700B16877 /* MiniEngine.h */,
+				BEDBA6D01C998A0700B16877 /* MNArray.cpp */,
+				BEDBA6D11C998A0700B16877 /* MNArray.h */,
+				BEDBA6D21C998A0700B16877 /* MNBasicLib.cpp */,
+				BEDBA6D31C998A0700B16877 /* MNBasicLib.h */,
+				BEDBA6D41C998A0700B16877 /* MNClassBond.h */,
+				BEDBA6D51C998A0700B16877 /* MNClosure.cpp */,
+				BEDBA6D61C998A0700B16877 /* MNClosure.h */,
+				BEDBA6D71C998A0700B16877 /* MNCollectable.cpp */,
+				BEDBA6D81C998A0700B16877 /* MNCollectable.h */,
+				BEDBA6D91C998A0700B16877 /* MNCommand.cpp */,
+				BEDBA6DA1C998A0700B16877 /* MNCommand.h */,
+				BEDBA6DB1C998A0700B16877 /* MNCompiler.cpp */,
+				BEDBA6DC1C998A0700B16877 /* MNCompiler.h */,
+				BEDBA6DD1C998A0700B16877 /* MNCountable.cpp */,
+				BEDBA6DE1C998A0700B16877 /* MNCountable.h */,
+				BEDBA6DF1C998A0700B16877 /* MNFiber.cpp */,
+				BEDBA6E01C998A0700B16877 /* MNFiber.h */,
+				BEDBA6E11C998A0700B16877 /* MNFileSystem.cpp */,
+				BEDBA6E21C998A0700B16877 /* MNFileSystem.h */,
+				BEDBA6E31C998A0700B16877 /* MNFunction.cpp */,
+				BEDBA6E41C998A0700B16877 /* MNFunction.h */,
+				BEDBA6E51C998A0700B16877 /* MNGlobal.cpp */,
+				BEDBA6E61C998A0700B16877 /* MNGlobal.h */,
+				BEDBA6E71C998A0700B16877 /* MNLexer.cpp */,
+				BEDBA6E81C998A0700B16877 /* MNLexer.h */,
+				BEDBA6E91C998A0700B16877 /* MNList.h */,
+				BEDBA6EA1C998A0800B16877 /* MNLog.cpp */,
+				BEDBA6EB1C998A0800B16877 /* MNLog.h */,
+				BEDBA6EC1C998A0800B16877 /* MNMemory.cpp */,
+				BEDBA6ED1C998A0800B16877 /* MNMemory.h */,
+				BEDBA6EE1C998A0800B16877 /* MNObject.cpp */,
+				BEDBA6EF1C998A0800B16877 /* MNObject.h */,
+				BEDBA6F01C998A0800B16877 /* MNOpenGL.cpp */,
+				BEDBA6F11C998A0800B16877 /* MNOpenGL.h */,
+				BEDBA6F21C998A0800B16877 /* MNPlatformDefine.h */,
+				BEDBA6F31C998A0800B16877 /* MNPrimaryType.cpp */,
+				BEDBA6F41C998A0800B16877 /* MNPrimaryType.h */,
+				BEDBA6F51C998A0800B16877 /* MNReferrer.cpp */,
+				BEDBA6F61C998A0800B16877 /* MNReferrer.h */,
+				BEDBA6F71C998A0800B16877 /* MNRtti.h */,
+				BEDBA6F81C998A0800B16877 /* MNString.cpp */,
+				BEDBA6F91C998A0800B16877 /* MNString.h */,
+				BEDBA6FA1C998A0800B16877 /* MNTable.cpp */,
+				BEDBA6FB1C998A0800B16877 /* MNTable.h */,
+				BEDBA6FC1C998A0800B16877 /* MNUserData.cpp */,
+				BEDBA6FD1C998A0800B16877 /* MNUserData.h */,
+				BEDBA6FE1C998A0800B16877 /* stb_image.h */,
+			);
+			name = source;
+			path = ../../../../source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BEDBA6A01C99896E00B16877 /* me_app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BEDBA6BC1C99896E00B16877 /* Build configuration list for PBXNativeTarget "me_app" */;
+			buildPhases = (
+				BEDBA69D1C99896E00B16877 /* Sources */,
+				BEDBA69E1C99896E00B16877 /* Frameworks */,
+				BEDBA69F1C99896E00B16877 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BEDBA7171C998A9000B16877 /* PBXTargetDependency */,
+			);
+			name = me_app;
+			productName = me_app;
+			productReference = BEDBA6A11C99896E00B16877 /* me_app.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BEDBA6C21C9989C400B16877 /* me_ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BEDBA6C91C9989C400B16877 /* Build configuration list for PBXNativeTarget "me_ios" */;
+			buildPhases = (
+				BEDBA6BF1C9989C400B16877 /* Sources */,
+				BEDBA6C01C9989C400B16877 /* Frameworks */,
+				BEDBA6C11C9989C400B16877 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = me_ios;
+			productName = me_ios;
+			productReference = BEDBA6C31C9989C400B16877 /* libme_ios.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BEDBA6991C99896E00B16877 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = hahasasa;
+				TargetAttributes = {
+					BEDBA6A01C99896E00B16877 = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 3L9AHJ47T4;
+					};
+					BEDBA6C21C9989C400B16877 = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 3L9AHJ47T4;
+					};
+				};
+			};
+			buildConfigurationList = BEDBA69C1C99896E00B16877 /* Build configuration list for PBXProject "me_app" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BEDBA6981C99896E00B16877;
+			productRefGroup = BEDBA6A21C99896E00B16877 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BEDBA6A01C99896E00B16877 /* me_app */,
+				BEDBA6C21C9989C400B16877 /* me_ios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BEDBA69F1C99896E00B16877 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEDBA6B31C99896E00B16877 /* Main.storyboard in Resources */,
+				BEDBA6AD1C99896E00B16877 /* Shader.vsh in Resources */,
+				BEDBA72C1C998DE400B16877 /* resource in Resources */,
+				BEDBA6B51C99896E00B16877 /* Assets.xcassets in Resources */,
+				BEDBA6B81C99896E00B16877 /* LaunchScreen.storyboard in Resources */,
+				BEDBA6AB1C99896E00B16877 /* Shader.fsh in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BEDBA69D1C99896E00B16877 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEDBA6A91C99896E00B16877 /* AppDelegate.m in Sources */,
+				BEDBA6B01C99896E00B16877 /* GameViewController.m in Sources */,
+				BEDBA6A61C99896E00B16877 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BEDBA6BF1C9989C400B16877 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEDBA7071C998A0800B16877 /* MNFiber.cpp in Sources */,
+				BEDBA70F1C998A0800B16877 /* MNOpenGL.cpp in Sources */,
+				BEDBA7061C998A0800B16877 /* MNCountable.cpp in Sources */,
+				BEDBA7101C998A0800B16877 /* MNPrimaryType.cpp in Sources */,
+				BEDBA7091C998A0800B16877 /* MNFunction.cpp in Sources */,
+				BEDBA70C1C998A0800B16877 /* MNLog.cpp in Sources */,
+				BEDBA7041C998A0800B16877 /* MNCommand.cpp in Sources */,
+				BEDBA7081C998A0800B16877 /* MNFileSystem.cpp in Sources */,
+				BEDBA7031C998A0800B16877 /* MNCollectable.cpp in Sources */,
+				BEDBA7141C998A0800B16877 /* MNUserData.cpp in Sources */,
+				BEDBA70D1C998A0800B16877 /* MNMemory.cpp in Sources */,
+				BEDBA7001C998A0800B16877 /* MNArray.cpp in Sources */,
+				BEDBA7131C998A0800B16877 /* MNTable.cpp in Sources */,
+				BEDBA7011C998A0800B16877 /* MNBasicLib.cpp in Sources */,
+				BEDBA7051C998A0800B16877 /* MNCompiler.cpp in Sources */,
+				BEDBA70B1C998A0800B16877 /* MNLexer.cpp in Sources */,
+				BEDBA70A1C998A0800B16877 /* MNGlobal.cpp in Sources */,
+				BEDBA7121C998A0800B16877 /* MNString.cpp in Sources */,
+				BEDBA7021C998A0800B16877 /* MNClosure.cpp in Sources */,
+				BEDBA7111C998A0800B16877 /* MNReferrer.cpp in Sources */,
+				BEDBA6FF1C998A0800B16877 /* MiniEngine.cpp in Sources */,
+				BEDBA70E1C998A0800B16877 /* MNObject.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BEDBA7171C998A9000B16877 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BEDBA6C21C9989C400B16877 /* me_ios */;
+			targetProxy = BEDBA7161C998A9000B16877 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BEDBA6B11C99896E00B16877 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BEDBA6B21C99896E00B16877 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		BEDBA6B61C99896E00B16877 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BEDBA6B71C99896E00B16877 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BEDBA6BA1C99896E00B16877 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BEDBA6BB1C99896E00B16877 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BEDBA6BD1C99896E00B16877 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/me_app-gmmkfafqdnnryxbrllvhpmzglnyo/Build/Products/Debug-iphoneos/include/me_ios\"";
+				INFOPLIST_FILE = me_app/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "hahasasa.me-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BEDBA6BE1C99896E00B16877 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/me_app-gmmkfafqdnnryxbrllvhpmzglnyo/Build/Products/Debug-iphoneos/include/me_ios\"";
+				INFOPLIST_FILE = me_app/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "hahasasa.me-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		BEDBA6CA1C9989C400B16877 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		BEDBA6CB1C9989C400B16877 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BEDBA69C1C99896E00B16877 /* Build configuration list for PBXProject "me_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEDBA6BA1C99896E00B16877 /* Debug */,
+				BEDBA6BB1C99896E00B16877 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BEDBA6BC1C99896E00B16877 /* Build configuration list for PBXNativeTarget "me_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEDBA6BD1C99896E00B16877 /* Debug */,
+				BEDBA6BE1C99896E00B16877 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		BEDBA6C91C9989C400B16877 /* Build configuration list for PBXNativeTarget "me_ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEDBA6CA1C9989C400B16877 /* Debug */,
+				BEDBA6CB1C9989C400B16877 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BEDBA6991C99896E00B16877 /* Project object */;
+}
