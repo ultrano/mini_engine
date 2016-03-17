@@ -11,5 +11,5 @@ func onUpdate()
 
 func onTouch(state, x, y)
 {
-print("sdfsdf");
+	opengl_clearColor(float(x)/300, float(y)/400, 0, 1);
 };
