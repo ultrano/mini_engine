@@ -1,8 +1,9 @@
 #include "MNPrimaryType.h"
+#include "MNPlatformDefine.h"
 #include "MNLog.h"
 #include <fcntl.h>
 
-#ifdef PLATFORM_WIN32
+#if defined(PLATFORM_WIN32)
 
 #pragma comment(lib, "ws2_32.lib")
 #include <WinSock2.h>
@@ -67,7 +68,6 @@ TSocket::TSocket()
 {
     WINSOCKHOLDER;
     sock = socket( AF_INET, SOCK_STREAM, 0 );
-    signal(SIGPIPE, SIG_IGN);
     connected = false;
 }
 
@@ -88,7 +88,7 @@ void TSocket::connect(const tstring& ip, int port, bool blocking)
         bool ret = false;
 #ifdef PLATFORM_WIN32
         unsigned long mode = blocking ? 0 : 1;
-        ret = (ioctlsocket(pimpl->sock, FIONBIO, &mode) == 0);
+        ret = (ioctlsocket(sock, FIONBIO, &mode) == 0);
 #else
         int flags = fcntl( sock, F_GETFL, 0);
         if (flags < 0) return ;
@@ -121,7 +121,7 @@ bool TSocket::sendBuffer(tbyte* buf, tint32 len)
     if ( len == 0 ) return false;
     if ( isConnected() == false ) return false;
     
-    len = send( sock, (const void*)buf, len, 0);
+    len = send( sock, (const char*)buf, len, 0);
     if (len < 0) connected = false;
     
     return ( len > 0 );
@@ -133,7 +133,7 @@ bool TSocket::readBuffer(tbyte* buf, tint32 len)
     if ( len == 0 ) return false;
     if ( isConnected() == false ) return false;
     
-    len = recv(sock, (void*)&buf[0], len, 0 );
+    len = recv(sock, (char*)&buf[0], len, 0 );
     if (len == 0) connected = false;
     return (len > 0);
 }
