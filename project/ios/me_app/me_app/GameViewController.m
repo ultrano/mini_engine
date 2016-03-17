@@ -103,6 +103,7 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 

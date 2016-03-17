@@ -41,6 +41,52 @@ public:
 	}
 };
 
+class TextScanner : public MNLexer::Scanner
+{
+public:
+    tstring m_text;
+    size_t m_cursor;
+    TextScanner(const tstring& text)
+    : m_text(text)
+    , m_cursor(0)
+    {
+    }
+    
+    virtual tint read(tbyte* b, unsigned len)
+    {
+        if (m_cursor >= m_text.size())
+            return -1;
+        
+        size_t remain = m_text.size() - m_cursor;
+        if (remain < len)
+            len = (unsigned)remain;
+        
+        memcpy(&b[0], &m_text[m_cursor], len);
+        m_cursor += len;
+        return len;
+    }
+    
+};
+
+tchar convertToReserved(tchar ch)
+{
+    switch (ch)
+    {
+        case 'n' : return '\n';
+        case 't' : return '\t';
+        case 'v' : return '\v';
+        case 'b' : return '\b';
+        case 'f' : return '\f';
+        case 'r' : return '\r';
+        case  92 : return '\\';
+        case  39 : return '\'';
+        case  34 : return '\"';
+        case '?' : return '\?';
+        case   0 : return '\0';
+    }
+    return ch;
+}
+
 MNLexer::MNLexer()
 	: m_scan(NULL)
 	, m_index(sizeof(m_buf))
@@ -60,6 +106,13 @@ void MNLexer::openFile(const tstring& filePath)
 	m_scan = new FileScanner(filePath);
 	m_char = read();
 	m_next = read();
+}
+
+void  MNLexer::openText(const tstring& text)
+{
+    m_scan = new TextScanner(text);
+    m_char = read();
+    m_next = read();
 }
 
 tchar MNLexer::read()
@@ -149,14 +202,31 @@ void MNLexer::scan(Token& tok)
 		tok.type = tok_string;
 		char buf[1024] = { 0 };
 		char* d = &buf[0];
-		while (m_char != '"')
-		{
-			if (m_char == -1) tok.type = tok_eos;
-			*d++ = m_char;
+		while (true)
+        {
+            bool terminaled = false;
+            if (m_char == '\\')
+            {
+                advance();
+                terminaled = true;
+            }
+            else if (m_char == '"')
+                break;
+            
+			if (m_char == -1)
+            {
+                tok.type = tok_eos;
+                break;
+            }
+            *d++ = terminaled? convertToReserved(m_char) : m_char;
 			advance();
 		}
-		advance();
-		tok.str = &buf[0];
+        
+        if (tok.type == tok_string)
+        {
+            advance();
+            tok.str = &buf[0];
+        }
 	}
 	else if (m_char == '\'')
 	{

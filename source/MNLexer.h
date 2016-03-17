@@ -26,6 +26,7 @@ public:
 	MNLexer();
 	~MNLexer();
 	void  openFile(const tstring& filePath);
+    void  openText(const tstring& text);
 	tchar read();
 	void  advance();
 	void  scan(Token& tok);

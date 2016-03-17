@@ -146,6 +146,30 @@ bool MNFiber::dofile(const tstring& path)
 	return true;
 }
 
+bool MNFiber::compileText(MNObject& func, const tstring& text)
+{
+    MNCompiler compiler;
+    compiler.m_lexer.openText(text);
+    if (!compiler.build(func))
+        return false;
+    
+    return true;
+}
+
+bool MNFiber::dotext(const tstring& text)
+{
+    MNObject func;
+    if (!compileText(func, text)) return false;
+    
+    push_closure(NULL); //! [closure]
+    MNClosure* closure = get(-1).toClosure();
+    closure->setFunc(func);
+    
+    load_stack(0);  //! [closure global]
+    call(1, false);
+    return true;
+}
+
 void MNFiber::setAt(tint32 idx, const MNObject& val)
 {
 	if (idx < 0) return;

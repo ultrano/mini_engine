@@ -33,6 +33,9 @@ public:
 
 	bool compileFile(MNObject& func, const tstring& path);
 	bool dofile(const tstring& path);
+    
+    bool compileText(MNObject& func, const tstring& text);
+    bool dotext(const tstring& text);
 
 	void            setAt(tint32 idx, const MNObject& val);
 	const MNObject& getAt(tint32 idx) const;

@@ -1,0 +1,10 @@
+*/
+
+
+print("hello there?!");
+
+func onTouch(type, x, y)
+{
+    opengl_clearColor(float(x)/300.0, float(y)/400.0, 0, 1);
+};
+

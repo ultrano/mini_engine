@@ -112,6 +112,17 @@ struct CommonLib
 
 		return true;
 	}
+    
+    static bool dotext(MNFiber* fiber)
+    {
+        MNObject arg1 = fiber->get(1);
+        if (!arg1.isString()) return false;
+        
+        MNString* text = arg1.toString();
+        fiber->push_bool(fiber->dotext(text->ss().str()));
+        
+        return true;
+    }
 
 	static bool garbageCollect(MNFiber* fiber)
 	{
@@ -449,7 +460,7 @@ struct CommonLib
         
         TSocket* socket = (TSocket*)userData->getData();
         
-        const tint32 bufSize = 256;
+        const tint32 bufSize = 1024;
         tbyte buf[bufSize] = {0};
 
         bool ret = socket->readBuffer(buf, bufSize);
@@ -474,6 +485,37 @@ struct CommonLib
         TSocket* socket = (TSocket*)userData->getData();
         socket->close();
         return false;
+    }
+    
+    static bool socket_httpRequest(MNFiber* fiber)
+    {
+        fiber->load_stack(1);
+        fiber->tostring();
+        tstring method = fiber->get(-1).toString()->ss().str();
+        
+        fiber->load_stack(2);
+        fiber->tostring();
+        tstring host = fiber->get(-1).toString()->ss().str();
+        
+        fiber->load_stack(3);
+        fiber->tostring();
+        tstring path = fiber->get(-1).toString()->ss().str();
+        
+        const char* format = "%s %s HTTP/1.1\r\n"
+        "ACCEPT_ENCODING: gzip,deflate,sdch\r\n"
+        "CONNECTION: keep-alive\r\n"
+        "ACCEPT: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
+        "ACCEPT_CHARSET: windows-949,utf-8;q=0.7,*;q=0.3\r\n"
+        "USER_AGENT: Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.24\r\n"
+        "ACCEPT_LANGUAGE: ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4\r\n"
+        "HOST: %s\r\n"
+        "\r\n";
+        
+        char request[512] = {0};
+        sprintf(&request[0], format, method.c_str(), path.c_str(), host.c_str());
+
+        fiber->push_string(&request[0]);
+        return true;
     }
     
 	static void expose(MNFiber* fiber)
@@ -512,6 +554,10 @@ struct CommonLib
             
             fiber->push_string("dofile");
             push_closure(fiber, dofile);
+            fiber->store_global();
+            
+            fiber->push_string("dotext");
+            push_closure(fiber, dotext);
             fiber->store_global();
             
             fiber->push_string("garbageCollect");
@@ -649,6 +695,10 @@ struct CommonLib
             
             fiber->push_string("socket_read");
             push_closure(fiber, socket_read);
+            fiber->store_global();
+            
+            fiber->push_string("socket_httpRequest");
+            push_closure(fiber, socket_httpRequest);
             fiber->store_global();
         }
 	}
