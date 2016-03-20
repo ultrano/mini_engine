@@ -75,7 +75,7 @@ struct CommonLib
 	{
 		const MNObject& size = fiber->get(1);
 		if (!size.isInt()) return false;
-		fiber->push_userdata((tsize)size.toInt());
+		fiber->push_userdata((tsize)size.toInt(), NULL);
 		return true;
 	}
 
@@ -417,9 +417,15 @@ struct CommonLib
         MNSocket():sock(0), connected(false) {}
     };
     
+    static void socket_finalizer(void* data, tsize size)
+    {
+        TSocket* socket = (TSocket*)data;
+        socket->~TSocket();
+    }
+    
     static bool socket_connect(MNFiber* fiber)
     {
-        TSocket* socket = new(fiber->push_userdata(sizeof(TSocket))) TSocket();
+        TSocket* socket = new(fiber->push_userdata(sizeof(TSocket), &socket_finalizer)) TSocket();
         MNString* arg1 = fiber->get(1).toString();
         
         tstring  address = arg1? arg1->ss().str() : "";
@@ -515,6 +521,14 @@ struct CommonLib
         sprintf(&request[0], format, method.c_str(), path.c_str(), host.c_str());
 
         fiber->push_string(&request[0]);
+        return true;
+    }
+    
+    static bool string_length(MNFiber* fiber)
+    {
+        MNString* str = fiber->get(1).toString();
+        fiber->push_integer((str != NULL)? str->str().length() : 0);
+        
         return true;
     }
     
@@ -699,6 +713,13 @@ struct CommonLib
             
             fiber->push_string("socket_httpRequest");
             push_closure(fiber, socket_httpRequest);
+            fiber->store_global();
+        }
+        
+        //! string
+        {
+            fiber->push_string("string_length");
+            push_closure(fiber, string_length);
             fiber->store_global();
         }
 	}

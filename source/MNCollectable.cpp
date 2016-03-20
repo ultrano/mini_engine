@@ -73,18 +73,5 @@ void MNCollectable::finalize()
 	if (m_mark == Finalized) return;
 	m_mark = Finalized;
 
-	if (m_meta.isTable())
-	{
-		MNFiber* fiber = global()->m_root;
-		if (this != fiber)
-		{
-			fiber->push(m_meta);
-			fiber->push_string("~");
-			fiber->load_raw_field();
-			fiber->push(MNObject::Referrer(getReferrer()));
-			fiber->call(1, 0);
-		}
-	}
-
 	__super::finalize();
 }

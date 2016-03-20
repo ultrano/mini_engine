@@ -71,6 +71,12 @@ TSocket::TSocket()
     connected = false;
 }
 
+TSocket::~TSocket()
+{
+    close();
+    printf("TSocket destructor");
+}
+
 void TSocket::connect(const tstring& ip, int port, bool blocking)
 {
     
@@ -112,6 +118,7 @@ void TSocket::close()
 #else
         ::close( sock );
 #endif
+        sock = 0;
     }
 }
 

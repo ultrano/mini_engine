@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../source/MNBasicLib.cpp"
-            timestampString = "479923583.155125"
+            timestampString = "480188489.917188"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "434"
-            endingLineNumber = "434">
+            startingLineNumber = "440"
+            endingLineNumber = "440">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -24,11 +24,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../source/MNPrimaryType.cpp"
-            timestampString = "479839456.027785"
+            timestampString = "480188580.940141"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
             landmarkName = "TSocket::readBuffer(tbyte* buf, tint32 len)"
             landmarkType = "5">
          </BreakpointContent>
@@ -60,6 +60,22 @@
             startingLineNumber = "211"
             endingLineNumber = "211"
             landmarkName = "MNLexer::scan(Token&amp; tok)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../source/MNPrimaryType.cpp"
+            timestampString = "480188675.234402"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "TSocket::~TSocket()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

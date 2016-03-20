@@ -13,6 +13,7 @@ public:
 	~MNString();
 
 	const thashstring& ss() const { return m_ss; }
+    const tstring& str() const { return m_ss.str(); }
 
 private:
 	const thashstring m_ss;

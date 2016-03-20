@@ -72,7 +72,7 @@ public:
 	void  push_table(tsize size = 0);
 	void  push_array(tsize size = 0);
 	void  push_const(tsize idx);
-	void* push_userdata(tsize size);
+	void* push_userdata(tsize size, UserFinalizer uf = NULL);
 	void  push(const MNObject& val);
 	void  pop(tuint32 count);
 

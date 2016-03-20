@@ -19,7 +19,6 @@ var header =
     +"HOST: www.hahasasa.woobi.co.kr\r\n"
     +"\r\n";
 
-print(header);
 socket_send(socket, header);
 func onUpdate()
 {
@@ -28,8 +27,9 @@ var recv = socket_read(socket);
 if (recv != null)
 {
 var filter = "/*" + recv;
+//print(string_length(recv));
 print(filter+"\n===============");
-dotext(filter);
+//dotext(filter);
 }
 
 };

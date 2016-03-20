@@ -25,7 +25,7 @@ MNObject MNObject::String(const thashstring& str)
 
 MNObject MNObject::Format(const tchar* format, ...)
 {
-	static const tuint bufSize = 1024;
+	static const tuint bufSize = 2048;
 	tchar buf[bufSize] = { 0 };
 	va_list args;
 	va_start(args, format);

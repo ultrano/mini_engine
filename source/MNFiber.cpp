@@ -304,11 +304,11 @@ void MNFiber::push_const(tsize idx)
 	push(getConst(idx));
 }
 
-void* MNFiber::push_userdata(tsize size)
+void* MNFiber::push_userdata(tsize size, UserFinalizer uf)
 {
 	if (size > 0)
 	{
-		MNUserData* userData = new MNUserData(size);
+		MNUserData* userData = new MNUserData(size, uf);
 		MNObject ud(TObjectType::TUserData, userData->link(global())->getReferrer());
 		push(ud);
 		return userData->getData();

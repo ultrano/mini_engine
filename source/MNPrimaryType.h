@@ -219,6 +219,7 @@ class TSocket
 public:
     
     TSocket();
+    ~TSocket();
     void connect(const tstring& ip, int port, bool blocking);
     void close();
     bool sendBuffer(tbyte* buf, tint32 len);
@@ -227,6 +228,12 @@ public:
 private:
     int sock;
     bool connected;
+};
+
+typedef void(*UserFinalizer)(void* data, tsize size); // Finalizer for user data
+enum UserDataFlag
+{
+    HasFinalizer
 };
 
 #endif
