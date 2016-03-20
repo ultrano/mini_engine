@@ -20,16 +20,16 @@ var header =
     +"\r\n";
 
 socket_send(socket, header);
+
+var recv = null;
+
+while ((recv = socket_read(socket)) != null)
+{
+print("\n==================="+recv);
+}
+
 func onUpdate()
 {
     //go1.update();
-var recv = socket_read(socket);
-if (recv != null)
-{
-var filter = "/*" + recv;
-//print(string_length(recv));
-print(filter+"\n===============");
-//dotext(filter);
-}
 
 };

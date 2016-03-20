@@ -42,6 +42,10 @@
 		BEDBA71B1C998D3A00B16877 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDBA7191C998D3A00B16877 /* libstdc++.6.0.9.tbd */; };
 		BEDBA71C1C998D3A00B16877 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDBA71A1C998D3A00B16877 /* libstdc++.tbd */; };
 		BEDBA72C1C998DE400B16877 /* resource in Resources */ = {isa = PBXBuildFile; fileRef = BEDBA72B1C998DE400B16877 /* resource */; };
+		BEDBA7501C9F257C00B16877 /* TVector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA74F1C9F257C00B16877 /* TVector2.cpp */; };
+		BEDBA7531C9F268D00B16877 /* TVector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA7521C9F268D00B16877 /* TVector3.cpp */; };
+		BEDBA7561C9F289500B16877 /* TQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA7551C9F289500B16877 /* TQuaternion.cpp */; };
+		BEDBA7591C9F292500B16877 /* TMatrix4x4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDBA7581C9F292500B16877 /* TMatrix4x4.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +137,14 @@
 		BEDBA7191C998D3A00B16877 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		BEDBA71A1C998D3A00B16877 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		BEDBA72B1C998DE400B16877 /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../../resource; sourceTree = "<group>"; };
+		BEDBA74E1C9F24FE00B16877 /* TVector2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVector2.h; sourceTree = "<group>"; };
+		BEDBA74F1C9F257C00B16877 /* TVector2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TVector2.cpp; sourceTree = "<group>"; };
+		BEDBA7511C9F261B00B16877 /* TVector3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVector3.h; sourceTree = "<group>"; };
+		BEDBA7521C9F268D00B16877 /* TVector3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TVector3.cpp; sourceTree = "<group>"; };
+		BEDBA7541C9F285F00B16877 /* TQuaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQuaternion.h; sourceTree = "<group>"; };
+		BEDBA7551C9F289500B16877 /* TQuaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TQuaternion.cpp; sourceTree = "<group>"; };
+		BEDBA7571C9F28EC00B16877 /* TMatrix4x4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMatrix4x4.h; sourceTree = "<group>"; };
+		BEDBA7581C9F292500B16877 /* TMatrix4x4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMatrix4x4.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +275,14 @@
 				BEDBA6FC1C998A0800B16877 /* MNUserData.cpp */,
 				BEDBA6FD1C998A0800B16877 /* MNUserData.h */,
 				BEDBA6FE1C998A0800B16877 /* stb_image.h */,
+				BEDBA74E1C9F24FE00B16877 /* TVector2.h */,
+				BEDBA74F1C9F257C00B16877 /* TVector2.cpp */,
+				BEDBA7511C9F261B00B16877 /* TVector3.h */,
+				BEDBA7521C9F268D00B16877 /* TVector3.cpp */,
+				BEDBA7541C9F285F00B16877 /* TQuaternion.h */,
+				BEDBA7551C9F289500B16877 /* TQuaternion.cpp */,
+				BEDBA7571C9F28EC00B16877 /* TMatrix4x4.h */,
+				BEDBA7581C9F292500B16877 /* TMatrix4x4.cpp */,
 			);
 			name = source;
 			path = ../../../../source;
@@ -377,6 +397,7 @@
 			files = (
 				BEDBA7071C998A0800B16877 /* MNFiber.cpp in Sources */,
 				BEDBA70F1C998A0800B16877 /* MNOpenGL.cpp in Sources */,
+				BEDBA7501C9F257C00B16877 /* TVector2.cpp in Sources */,
 				BEDBA7061C998A0800B16877 /* MNCountable.cpp in Sources */,
 				BEDBA7101C998A0800B16877 /* MNPrimaryType.cpp in Sources */,
 				BEDBA7091C998A0800B16877 /* MNFunction.cpp in Sources */,
@@ -388,6 +409,7 @@
 				BEDBA70D1C998A0800B16877 /* MNMemory.cpp in Sources */,
 				BEDBA7001C998A0800B16877 /* MNArray.cpp in Sources */,
 				BEDBA7131C998A0800B16877 /* MNTable.cpp in Sources */,
+				BEDBA7591C9F292500B16877 /* TMatrix4x4.cpp in Sources */,
 				BEDBA7011C998A0800B16877 /* MNBasicLib.cpp in Sources */,
 				BEDBA7051C998A0800B16877 /* MNCompiler.cpp in Sources */,
 				BEDBA70B1C998A0800B16877 /* MNLexer.cpp in Sources */,
@@ -397,6 +419,8 @@
 				BEDBA7111C998A0800B16877 /* MNReferrer.cpp in Sources */,
 				BEDBA6FF1C998A0800B16877 /* MiniEngine.cpp in Sources */,
 				BEDBA70E1C998A0800B16877 /* MNObject.cpp in Sources */,
+				BEDBA7531C9F268D00B16877 /* TVector3.cpp in Sources */,
+				BEDBA7561C9F289500B16877 /* TQuaternion.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,6 +598,7 @@
 				BEDBA6BE1C99896E00B16877 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BEDBA6C91C9989C400B16877 /* Build configuration list for PBXNativeTarget "me_ios" */ = {
 			isa = XCConfigurationList;
@@ -582,6 +607,7 @@
 				BEDBA6CB1C9989C400B16877 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

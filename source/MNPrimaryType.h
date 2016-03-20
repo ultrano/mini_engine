@@ -236,4 +236,9 @@ enum UserDataFlag
     HasFinalizer
 };
 
+#include "TVector2.h"
+#include "TVector3.h"
+#include "TQuaternion.h"
+#include "TMatrix4x4.h"
+
 #endif

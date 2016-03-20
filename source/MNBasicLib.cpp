@@ -430,7 +430,7 @@ struct CommonLib
         
         tstring  address = arg1? arg1->ss().str() : "";
         tinteger port = fiber->get(2).toInt();
-        socket->connect(address, port, false);
+        socket->connect(address, port, true);
         
         return true;
     }
