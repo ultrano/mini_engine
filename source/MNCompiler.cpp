@@ -42,6 +42,7 @@ MNFuncBuilder::MNFuncBuilder(MNFuncBuilder* up)
 	: upFunc(up)
 	, func(new MNFunction())
 	, codeMaker(func->m_codes, func->m_ncode)
+    , yieldable(false)
 {
 	addLocal(thashstring("this"));
 }
@@ -127,6 +128,11 @@ tboolean MNCompiler::check(tint type) const
 tboolean MNCompiler::peek(tint type) const
 {
 	return (m_peeking.type == type);
+}
+
+tboolean MNCompiler::yieldable() const
+{
+    return m_func->yieldable;
 }
 
 tboolean MNCompiler::build(MNObject& func)
@@ -397,15 +403,16 @@ void MNCompiler::_func(bool isLiteral)
 		advance();
 	}
 
-	_func_content();
+	_func_content(false);
 
 	if (!isLiteral) code() << cmd_insert_field;
 }
 
-void MNCompiler::_func_content()
+void MNCompiler::_func_content(bool yieldable)
 {
 	MNFuncBuilder* func = new MNFuncBuilder(m_func);
 	m_func = func;
+    m_func->yieldable = yieldable;
 
 	//! function parameter
 	{
@@ -707,7 +714,10 @@ void MNCompiler::_exp_primary(MNExp& e)
 	else if (check(tok_yield))
 	{
 		advance();
-
+        
+        if (!yieldable())
+            compile_error("func're not alloewd to yield, use fiber instead");
+        
 		bool hasRet = true;
 		if ((hasRet = !check(';'))) _exp();
 		code() << (hasRet? cmd_yield : cmd_yield_void);

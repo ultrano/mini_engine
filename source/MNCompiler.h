@@ -78,6 +78,7 @@ public:
 	tarray<tsize>		blocks;
 	tarray<tsize>		breakouts;
 	tarray<tsize>		playbacks;
+    bool                yieldable;
 	
 	MNFuncBuilder(MNFuncBuilder* up);
 	~MNFuncBuilder();
@@ -99,6 +100,7 @@ public:
 	void     advance();
 	tboolean check(tint type) const;
 	tboolean peek(tint type) const;
+    tboolean yieldable() const;
 
 	tboolean build(MNObject& func);
 
@@ -112,7 +114,7 @@ public:
 	void _break();
 	void _continue();
 	void _func(bool isLiteral);
-	void _func_content();
+	void _func_content(bool yieldable);
 	void _return();
 
 	void _load(MNExp& e);

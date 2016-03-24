@@ -57,7 +57,7 @@ enum tok_type
 	tok_false      = 146,
 	tok_return     = 147,
 	tok_yield      = 148,
-	//tok_class      = 149,
+	tok_fiber      = 149,
 	//tok_new        = 150,
 	//tok_base       = 151,
 	tok_add_assign = 152,
@@ -101,8 +101,9 @@ inline void reservedWords(MNLexer::Token& tok)
 	static const thashstring _null("null");
 	static const thashstring _true("true");
 	static const thashstring _false("false");
-	static const thashstring _return("return");
-	static const thashstring _yield("yield");
+    static const thashstring _return("return");
+    static const thashstring _yield("yield");
+    static const thashstring _fiber("fiber");
 
 	if (tok.str == _var)           tok.type = tok_var;
 	else if (tok.str == _func)     tok.type = tok_func;
@@ -119,7 +120,8 @@ inline void reservedWords(MNLexer::Token& tok)
 	else if (tok.str == _case)     tok.type = tok_case;
 	else if (tok.str == _break)    tok.type = tok_break;
 	else if (tok.str == _continue) tok.type = tok_continue;
-	else if (tok.str == _yield)    tok.type = tok_yield;
+    else if (tok.str == _yield)    tok.type = tok_yield;
+    //else if (tok.str == _fiber)    tok.type = tok_fiber;
 }
 
 #endif
