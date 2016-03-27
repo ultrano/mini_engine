@@ -121,7 +121,7 @@ inline void reservedWords(MNLexer::Token& tok)
 	else if (tok.str == _break)    tok.type = tok_break;
 	else if (tok.str == _continue) tok.type = tok_continue;
     else if (tok.str == _yield)    tok.type = tok_yield;
-    //else if (tok.str == _fiber)    tok.type = tok_fiber;
+    else if (tok.str == _fiber)    tok.type = tok_fiber;
 }
 
 #endif

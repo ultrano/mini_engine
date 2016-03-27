@@ -177,7 +177,8 @@ tboolean MNCompiler::_statement()
 	//else if (ret = check(tok_switch));
 	else if ((ret = check(tok_while))) _while();
 	else if ((ret = check(tok_for))) _for();
-	else if ((ret = check(tok_func))) _func(false);
+    else if ((ret = check(tok_func)))  _func(false, false);
+    else if ((ret = check(tok_fiber))) _func(false, true);
 	else if ((ret = check('{'))) _block();
 	else if ((ret = check(tok_return)))
 	{
@@ -387,9 +388,8 @@ void MNCompiler::_continue()
 	code().modify(jmp, step);
 }
 
-void MNCompiler::_func(bool isLiteral)
+void MNCompiler::_func(bool isLiteral, bool isFiber)
 {
-	if (!check(tok_func)) return;
 	advance();
 
 	if (isLiteral && check(tok_identify)) compile_error("literal function doesn't need name");
@@ -403,7 +403,9 @@ void MNCompiler::_func(bool isLiteral)
 		advance();
 	}
 
-	_func_content(false);
+	_func_content(isFiber);
+    if (isFiber)
+        code() << cmd_new_fiber;
 
 	if (!isLiteral) code() << cmd_insert_field;
 }
@@ -522,10 +524,10 @@ tboolean MNCompiler::_exp(tboolean leftVal)
 		_assign(e, leftVal);
 	}
 	else if (leftVal) _load(e);
-	else if (e.type == MNExp::exp_loaded) code() << cmd_pop1;
-	else if (e.type == MNExp::exp_field)  code() << cmd_pop2;
 	else if (e.type == MNExp::exp_call)   code() << cmd_call_void << tbyte(e.index);
-	else if (e.type == MNExp::exp_none) return false;
+    else if (e.type == MNExp::exp_none) return false;
+    else if (e.type == MNExp::exp_loaded) code() << cmd_pop1;
+    else if (e.type == MNExp::exp_field)  compile_error("expression wasn't completed");
 	else compile_error("expression wasn't completed");
 
 	return true;
@@ -708,9 +710,14 @@ void MNCompiler::_exp_primary(MNExp& e)
 	}
 	else if (check(tok_func))
 	{
-		_func(true);
+		_func(true, false);
 		e.type = MNExp::exp_loaded;
-	}
+    }
+    else if (check(tok_fiber))
+    {
+        _func(true, true);
+        e.type = MNExp::exp_loaded;
+    }
 	else if (check(tok_yield))
 	{
 		advance();

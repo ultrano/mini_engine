@@ -1,47 +1,14 @@
 
-
-::has = ::table_count;
-::count = ::table_count;
-::insert = ::table_insert;
-::iterate = ::table_iterate;
-::capacity = ::table_capacity;
-this.insert("->", this);
-
-::table =
-{ "->" : this
-};
-::setMeta(::table, this);
-
-::math =
-{ sqrt : ::math_sqrt
-, pow : ::math_pow
+var t =
+{
+foo : fiber()
+{
+print("hello1"); yield;
+print("hello2"); yield;
+print("hello3"); yield;
+}
 };
 
-::closure =
-{ call : ::closure_call
-, compileFile : ::closure_compileFile
-, "->" : this
-};
-
-::fiber =
-{ new : ::fiber_new
-, next : ::fiber_next
-, reset : ::fiber_reset
-, value : ::fiber_value
-, "->" : this
-};
-
-::array =
-{ count : ::array_count
-, add : ::array_add
-, remove : ::array_remove
-, clear : ::array_clear
-, iterate : ::array_iterate
-, "->" : this
-};
-
-this.dofile("script/GameObject.mn");
-this.dofile("script/Component.mn");
-this.dofile("script/WaitForSeconds.mn");
-this.dofile("script/TestComponent.mn");
-
+t.foo.next();
+t.foo.next();
+t.foo.next();

@@ -113,7 +113,7 @@ public:
 	void _for();
 	void _break();
 	void _continue();
-	void _func(bool isLiteral);
+	void _func(bool isLiteral, bool isFiber);
 	void _func_content(bool yieldable);
 	void _return();
 

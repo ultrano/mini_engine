@@ -113,7 +113,7 @@ bool MNFiber::compileFile(MNObject& func, const tstring& path)
 	MNObject cache = get(-1);
 
 	swap();               //! [cache fullPath]
-	load_field();         //! [func]
+	load_raw_field();     //! [func]
 
 	func = get(-1);
 	pop(1); //! []
@@ -262,7 +262,7 @@ void MNFiber::push_bool(tboolean val)
 
 void MNFiber::push_closure(NativeFunc val)
 {
-	push_string("closure");
+	push_string("meta_closure");
 	load_global();
 
 	MNClosure* closure = new MNClosure(MNObject::CFunction(val));
@@ -273,9 +273,25 @@ void MNFiber::push_closure(NativeFunc val)
 	push(obj);
 }
 
+void  MNFiber::new_fiber()
+{
+    push_string("meta_fiber");
+    load_global();
+    
+    MNFiber* newFiber = new MNFiber(global());
+    newFiber->setMeta(get(-1));
+    pop(1);
+    newFiber->setStatus(MNFiber::Start);
+    
+    MNObject closure = get(-1);
+    pop(1);
+    newFiber->push(closure);
+    push(MNObject(TObjectType::TFiber, newFiber->getReferrer()));
+}
+
 void MNFiber::push_table(tsize size)
 {
-	push_string("table");
+	push_string("meta_table");
 	load_global();
 
 	MNTable* table = new MNTable(size);
@@ -288,7 +304,7 @@ void MNFiber::push_table(tsize size)
 
 void MNFiber::push_array(tsize size)
 {
-	push_string("array");
+	push_string("meta_array");
 	load_global();
 
 	MNArray* array = new MNArray(size);
@@ -436,7 +452,6 @@ void MNFiber::load_field()
 		}
 	}
     
-    /*
     if (!ret)
     {
         push(key);
@@ -449,7 +464,6 @@ void MNFiber::load_field()
             MNLog("failed to load field: %s", str->ss().c_str());
         }
     }
-    */
     
 	pop(2);
 	push(val);
@@ -504,7 +518,6 @@ void MNFiber::store_field(tboolean insert)
 		}
     }
     
-    /*
     if (!ret)
     {
         push(key);
@@ -517,7 +530,6 @@ void MNFiber::store_field(tboolean insert)
             MNLog("failed to store field: %s", str->ss().c_str());
         }
     }
-    */
     
 	pop(3);
 }
@@ -526,7 +538,7 @@ void MNFiber::load_global()
 {
 	push(getAt(0));
 	swap();
-	load_field();
+	load_raw_field();
 }
 
 void MNFiber::store_global()
@@ -1110,6 +1122,11 @@ tint32 MNFiber::excuteCall()
 					}
 				}
 				break;
+                case cmd_new_fiber:
+                {
+                    new_fiber();
+                }
+                break;
 			case cmd_pop1: pop(1); break;
 			case cmd_pop2: pop(2); break;
 			case cmd_popn:

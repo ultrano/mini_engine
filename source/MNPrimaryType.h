@@ -162,6 +162,7 @@ enum TCommand : tbyte
 	cmd_push_closure,
 	cmd_push_table,
 	cmd_push_array,
+    cmd_new_fiber,
 	cmd_pop1,
 	cmd_pop2,
 	cmd_popn,//! >> tbyte

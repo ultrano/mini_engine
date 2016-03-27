@@ -11,7 +11,7 @@ class MNFiber : public MNCollectable
 
 public:
 
-	enum Status { Stop = 0, Suspend = 1, Resume = 2 };
+	enum Status { Stop = 0, Start = 1, Suspend = 2, Resume = 3 };
 
 	class CallInfo : public MNMemory
 	{
@@ -68,13 +68,14 @@ public:
 	void  push_string(const tstring& val);
 	void  push_pointer(void* val);
 	void  push_bool(tboolean val);
-	void  push_closure(NativeFunc val);
+    void  push_closure(NativeFunc val);
 	void  push_table(tsize size = 0);
 	void  push_array(tsize size = 0);
 	void  push_const(tsize idx);
 	void* push_userdata(tsize size, UserFinalizer uf = NULL);
 	void  push(const MNObject& val);
-	void  pop(tuint32 count);
+    void  pop(tuint32 count);
+    void  new_fiber();
 
 	void load_stack(tint32 idx);
 	void store_stack(tint32 idx);

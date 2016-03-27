@@ -26,6 +26,19 @@ struct CommonLib
         fiber->push(obj);
     }
     
+    static MNObject make_raw_closure(MNFiber* fiber, NativeFunc func)
+    {
+        MNClosure* closure = new MNClosure(MNObject::CFunction(func));
+        return MNObject(TObjectType::TClosure, closure->link(fiber->global())->getReferrer());
+    }
+    
+    static MNTable* make_raw_table(MNFiber* fiber, MNObject& result)
+    {
+        MNTable* table = new MNTable(1);
+        result = MNObject(TObjectType::TTable, table->link(fiber->global())->getReferrer());
+        return table;
+    }
+    
     static void make_metaTable(MNFiber* fiber, const char* name)
     {
         MNTable* table = new MNTable(1);
@@ -215,13 +228,9 @@ struct CommonLib
     {
         MNFiber* newFiber = new MNFiber(fiber->global());
         newFiber->setMeta(fiber->get(0));
-        newFiber->setStatus(MNFiber::Suspend);
+        newFiber->setStatus(MNFiber::Start);
         
         newFiber->push(fiber->get(1));
-        newFiber->push(fiber->get(1));
-        newFiber->load_stack(0);
-		newFiber->push_null();
-        newFiber->enterCall(2, true);
         fiber->push(MNObject(TObjectType::TFiber, newFiber->getReferrer()));
         return true;
     }
@@ -230,16 +239,22 @@ struct CommonLib
     {
         MNFiber* newFiber = fiber->get(0).toFiber();
         if (!newFiber) return false;
-        else if (newFiber->getStatus() == MNFiber::Stop)   return false;
-        else if (newFiber->getStatus() == MNFiber::Resume) return false;
+        else if (newFiber->getStatus() == MNFiber::Start)
+        {
+            newFiber->load_stack(1);
+            newFiber->load_stack(0);
+            newFiber->push_null();
+            newFiber->enterCall(2, true);
+            newFiber->setStatus(newFiber->excuteCall());
+        }
+        else if (newFiber->getStatus() == MNFiber::Suspend)
+        {
+            newFiber->setStatus(MNFiber::Resume);
+            newFiber->set(-1, fiber->get(1));
+            newFiber->setStatus(newFiber->excuteCall());
+        }
         
-        newFiber->setStatus(MNFiber::Resume);
-        
-        newFiber->set(-1, fiber->get(1));
-        tint status = newFiber->excuteCall();
-        
-        newFiber->setStatus(status);
-        fiber->push_bool(status == MNFiber::Suspend);
+        fiber->push_bool(newFiber->getStatus() == MNFiber::Suspend);
         return true;
     }
     
@@ -256,12 +271,8 @@ struct CommonLib
             } while (info->closure != NULL);
         }
         
-        newFiber->setStatus(MNFiber::Suspend);
+        newFiber->setStatus(MNFiber::Start);
         newFiber->pop(1);
-        newFiber->push(newFiber->getAt(1));
-        newFiber->load_stack(0);
-		newFiber->push_null();
-		newFiber->enterCall(2, true);
         return false;
     }
     
@@ -536,11 +547,6 @@ struct CommonLib
 	{
         //! common
         {
-            make_metaTable(fiber, "table");
-            make_metaTable(fiber, "math");
-            make_metaTable(fiber, "closure");
-            make_metaTable(fiber, "array");
-            make_metaTable(fiber, "fiber");
             
             fiber->push_string("print");
             push_closure(fiber, print);
@@ -606,82 +612,6 @@ struct CommonLib
             fiber->store_global();
         }
         
-        //! closure
-        {
-            fiber->push_string("closure_call");
-            push_closure(fiber, closure_call);
-            fiber->store_global();
-            
-            fiber->push_string("closure_compileFile");
-            push_closure(fiber, closure_compileFile);
-            fiber->store_global();
-        }
-        
-        //! fiber
-        {
-            fiber->push_string("fiber_new");
-            push_closure(fiber, fiber_new);
-            fiber->store_global();
-            
-            fiber->push_string("fiber_next");
-            push_closure(fiber, fiber_next);
-            fiber->store_global();
-            
-            fiber->push_string("fiber_reset");
-            push_closure(fiber, fiber_reset);
-            fiber->store_global();
-            
-            fiber->push_string("fiber_value");
-            push_closure(fiber, fiber_value);
-            fiber->store_global();
-        }
-        
-        //! array
-        {
-            fiber->push_string("array_count");
-            push_closure(fiber, array_count);
-            fiber->store_global();
-            
-            fiber->push_string("array_add");
-            push_closure(fiber, array_add);
-            fiber->store_global();
-            
-            fiber->push_string("array_remove");
-            push_closure(fiber, array_remove);
-            fiber->store_global();
-            
-            fiber->push_string("array_clear");
-            push_closure(fiber, array_clear);
-            fiber->store_global();
-            
-            fiber->push_string("array_iterate");
-            push_closure(fiber, array_iterate);
-            fiber->store_global();
-        }
-        
-        //! table
-        {
-            fiber->push_string("table_has");
-            push_closure(fiber, table_has);
-            fiber->store_global();
-            
-            fiber->push_string("table_count");
-            push_closure(fiber, table_count);
-            fiber->store_global();
-            
-            fiber->push_string("table_insert");
-            push_closure(fiber, table_insert);
-            fiber->store_global();
-            
-            fiber->push_string("table_iterate");
-            push_closure(fiber, table_iterate);
-            fiber->store_global();
-            
-            fiber->push_string("table_capacity");
-            push_closure(fiber, table_capacity);
-            fiber->store_global();
-        }
-        
 		//! opengl
 		{
 			fiber->push_string("opengl_clear");
@@ -722,6 +652,60 @@ struct CommonLib
             push_closure(fiber, string_length);
             fiber->store_global();
         }
+        
+        MNObject meta_global;
+        MNTable* mgTable = make_raw_table(fiber, meta_global);
+        mgTable->insert(MNObject::String("->"), fiber->getAt(0));
+        mgTable->insert(MNObject::String("-<"), fiber->getAt(0));
+        
+#define BASIC_LIB_BEGIN(LIB_NAME) {\
+        MNObject libName = MNObject::String(#LIB_NAME);\
+        MNObject result;\
+        MNTable* table = make_raw_table(fiber, result);\
+        table->setMeta(meta_global);
+        
+#define LIB_METHOD(METHOD_NAME, CFUNC)\
+        table->insert(MNObject::String(METHOD_NAME), make_raw_closure(fiber, CFUNC));
+        
+#define LIB_MAKE_IT_META\
+        table->insert(MNObject::String("->"), result);
+        
+#define BASIC_LIB_END\
+        fiber->push(libName);\
+        fiber->push(result);\
+        fiber->store_global();}
+        
+        
+        BASIC_LIB_BEGIN(meta_table)
+        LIB_MAKE_IT_META
+        LIB_METHOD("insert", table_insert)
+        LIB_METHOD("has", table_has)
+        LIB_METHOD("count", table_count)
+        LIB_METHOD("iterate", table_iterate)
+        LIB_METHOD("capacity", table_capacity)
+        BASIC_LIB_END
+        
+        BASIC_LIB_BEGIN(meta_array)
+        LIB_MAKE_IT_META
+        LIB_METHOD("count", array_count)
+        LIB_METHOD("add", array_add)
+        LIB_METHOD("remove", array_remove)
+        LIB_METHOD("clear", array_clear)
+        LIB_METHOD("iterate", array_iterate)
+        BASIC_LIB_END
+        
+        BASIC_LIB_BEGIN(meta_fiber)
+        LIB_MAKE_IT_META
+        LIB_METHOD("next", fiber_next)
+        LIB_METHOD("reset", fiber_reset)
+        LIB_METHOD("value", fiber_value)
+        BASIC_LIB_END
+        
+        BASIC_LIB_BEGIN(meta_closure)
+        LIB_MAKE_IT_META
+        LIB_METHOD("call", closure_call)
+        BASIC_LIB_END
+        
 	}
 };
 
