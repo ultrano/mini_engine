@@ -12,3 +12,8 @@ print("hello3"); yield;
 t.foo.next();
 t.foo.next();
 t.foo.next();
+
+while (true)
+{
+    if (t.foo.next()==false) t.foo.reset();
+}

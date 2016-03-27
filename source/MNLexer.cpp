@@ -270,19 +270,24 @@ void MNLexer::scan(Token& tok)
 		advance();
 		if (m_char == '=')
 		{
-			switch (tok.type)
+            tbyte tokType = tok.type;
+			switch (tokType)
 			{
-			case '=': tok.type = tok_eq;    break;
-			case '!': tok.type = tok_neq;   break;
-			case '>': tok.type = tok_geq;   break;
-			case '<': tok.type = tok_leq;   break;
-			case '+': tok.type = tok_add_assign; break;
-			case '-': tok.type = tok_sub_assign; break;
-			case '/': tok.type = tok_div_assign; break;
-			case '*': tok.type = tok_mul_assign; break;
-			default:  tok.type = tok_error; return;
+			case '=': tokType = tok_eq;    break;
+			case '!': tokType = tok_neq;   break;
+			case '>': tokType = tok_geq;   break;
+			case '<': tokType = tok_leq;   break;
+			case '+': tokType = tok_add_assign; break;
+			case '-': tokType = tok_sub_assign; break;
+			case '/': tokType = tok_div_assign; break;
+			case '*': tokType = tok_mul_assign; break;
 			}
-			advance();
+            
+            if (tokType != tok.type)
+            {
+                tok.type = tokType;
+                advance();
+            }
 		}
 		else if ((m_char == '-' || m_char == '+') && m_char == tok.type)
 		{
