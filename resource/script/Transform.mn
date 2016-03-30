@@ -1,0 +1,11 @@
+
+::Transform =
+{
+"->" : this,
+new : func()
+    {
+        var inst = {x : 0.0, y : 0.0, r : 0.0};
+        return setMeta(inst, this);
+    }
+
+};

@@ -1,0 +1,17 @@
+
+dofile("script/Transform.mn");
+
+::GameObject =
+{
+"->" : this,
+new : func ()
+    {
+        var inst =
+        {
+            transform : Transform.new(),
+            renderer  : Renderer.new()
+        };
+        return setMeta(inst, this);
+    }
+
+};

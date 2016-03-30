@@ -1,0 +1,6 @@
+
+dofile("script/GameObject.mn");
+
+
+var go = GameObject.new();
+print(go.transform.x);
