@@ -32,6 +32,4 @@ unsigned int glLoadTexture( const char* fileName, int& width, int& height );
 unsigned int glLoadTextureFromMemory( const unsigned char* buf, int len, int& width, int& height );
 unsigned int glLoadProgram( const char* source );
 
-
-
 #endif /* __MNOpenGL_h__ */

@@ -46,7 +46,24 @@
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+    [EAGLContext setCurrentContext:self.context];
     
+    /*
+    GLuint defaultFBOName, _colorRenderbuffer;
+    glGenFramebuffers(1, &defaultFBOName);
+    
+    glGenRenderbuffers(1, &_colorRenderbuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFBOName);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
+    
+    // This call associates the storage for the current render buffer with the
+    // EAGLDrawable (our CAEAGLLayer) allowing us to draw into a buffer that
+    // will later be rendered to the screen wherever the layer is (which
+    // corresponds with our view).
+    //[self.context renderbufferStorage:GL_RENDERBUFFER fromDrawable:drawable];
+    
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderbuffer);
+     */
     [self setupGL];
 }
 
@@ -104,6 +121,7 @@
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    MNRender();
 }
 
 

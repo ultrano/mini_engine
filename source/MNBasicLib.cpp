@@ -8,6 +8,8 @@
 #include "MNOpenGL.h"
 #include "MNUserData.h"
 
+#include "TMatrix4x4.h"
+
 #if defined(PLATFORM_WIN32)
 #include <Windows.h>
 #else
@@ -16,6 +18,9 @@
 
 #include <stdlib.h>
 #include <math.h>
+
+
+
 
 struct CommonLib
 {
