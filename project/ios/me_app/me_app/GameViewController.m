@@ -103,8 +103,13 @@
 {
     NSString *resourceDir = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource"];
     const char* resourceFolder = [resourceDir UTF8String];
-
-    MNStart(resourceFolder, "script/test.mn");
+    
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    CGFloat screenWidth = screenSize.width;
+    CGFloat screenHeight = screenSize.height;
+    
+    MNStart(resourceFolder);
 }
 
 - (void)tearDownGL

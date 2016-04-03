@@ -8,6 +8,8 @@
 #include "MNOpenGL.h"
 #include "MNUserData.h"
 
+#include "MNFileSystem.h"
+
 #include "TMatrix4x4.h"
 
 #if defined(PLATFORM_WIN32)
@@ -21,6 +23,130 @@
 
 
 
+tuint32& glProgramID()
+{
+    static tuint32 programID;
+    return programID;
+}
+
+TMatrix4x4& glVPMatrix()
+{
+    static TMatrix4x4 vp;
+    return vp;
+}
+
+TMatrix4x4& glInvVPMatrix()
+{
+    static TMatrix4x4 vp;
+    return vp;
+}
+
+const TVector2& glScreenSize()
+{
+    static TVector2 size(375, 667);
+    return size;
+}
+
+void glConvertScreenToWorld(TVector3& screenToWorld)
+{
+    screenToWorld.x = (screenToWorld.x/glScreenSize().x)*2 - 1;
+    screenToWorld.y = (screenToWorld.y/-glScreenSize().y)*2 + 1;
+    screenToWorld = screenToWorld * glInvVPMatrix();
+}
+
+void glCompileProgram(const char* source)
+{
+    glProgramID() = glLoadProgram(source);
+    glBindAttribLocation(glProgramID(), 0, "aPos");
+    glBindAttribLocation(glProgramID(), 1, "aTex");
+    
+    glUseProgram(glProgramID());
+    glEnableVertexAttribArray( 0 );
+    glEnableVertexAttribArray( 1 );
+}
+
+void glInitialize()
+{
+    
+    glClearColor(0,0,1,1);
+
+    glEnable(GL_BLEND);
+    
+    //glEnable(GL_ALPHA_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glAlphaFunc(GL_GREATER, 0);
+    
+    glViewport(0,0,glScreenSize().x,glScreenSize().y);
+    
+    glActiveTexture( GL_TEXTURE0 );
+    
+    glVPMatrix().ortho(0, 600, 0, 800, -1000, 1000);
+    glVPMatrix().inverse(glInvVPMatrix());
+    
+    tstring shader;
+    shader +=
+    "uniform   mat4 MVP;\n"
+    "uniform sampler2D TEX0;\n"
+    "varying   vec2 vTex;\n"
+    "#ifdef VERTEX_SHADER\n"
+    "attribute vec4 aPos;\n"
+    "attribute vec2 aTex;\n"
+    "void main()\n"
+    "{\n"
+    "    gl_Position = MVP * aPos;\n"
+    "    vTex = aTex;\n"
+    "}\n"
+    "#endif\n"
+    "#ifdef FRAGMENT_SHADER\n"
+    "void main()\n"
+    "{\n"
+    "    gl_FragColor = texture2D( TEX0, vTex.st, 0.0 );\n"
+    "}\n"
+    "#endif";
+    glCompileProgram(shader.c_str());
+}
+void glDrawImage(tuint32 textureID, float x, float y, float width, float height)
+{
+    static float vertices[][3] =
+    {
+        {0.5f, 0.5f, 0.0f},
+        {0.5f, -0.5f, 0.0f},
+        {-0.5f, 0.5f, 0.0f},
+        {-0.5f, -0.5f, 0.0f},
+    };
+    static float texCoords[][2] =
+    {
+        {1, 0},
+        {1, 1},
+        {0, 0},
+        {0, 1},
+    };
+    static tushort triangles[][3] =
+    {
+        {0,1,2},
+        {3,2,1},
+    };
+    
+    ;
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, (float*)&vertices[0][0] );
+    glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 0, (float*)&texCoords[0][0] );
+    
+    TMatrix4x4 mvp;
+    TQuaternion quat;
+    mvp.transform(TVector3(width, height, 1.0f), quat, TVector3(x, y, 0.0f));
+    mvp *= glVPMatrix();
+    
+    static tuint32 mvpLoc = glGetUniformLocation(glProgramID(), "MVP");
+    static tuint32 tex0Loc = glGetUniformLocation(glProgramID(), "TEX0");
+    
+    glUniformMatrix4fv( mvpLoc, 1, GL_FALSE, (float*)&mvp );
+    
+    glBindTexture( GL_TEXTURE_2D, textureID );
+    glUniform1i( tex0Loc, 0 );
+    
+    glDrawElements( GL_TRIANGLES, 2*3, GL_UNSIGNED_SHORT, (tushort*)&triangles[0][0] );
+    
+}
 
 struct CommonLib
 {
@@ -191,6 +317,42 @@ struct CommonLib
         seconds += ((float)tick.tv_usec)/1000000.0f;
 #endif
         fiber->push_real(seconds);
+        return true;
+    }
+    
+    static bool loadTexture(MNFiber* fiber)
+    {
+        int width, height;
+        fiber->load_stack(1);
+        fiber->tostring();
+        tstring fullPath = MNResourceFolderPath() + fiber->get(-1).toString()->str();
+        int id = glLoadTexture(fullPath.c_str(), width, height);
+        fiber->push_integer(id);
+        return true;
+    }
+    
+    static bool drawImage(MNFiber* fiber)
+    {
+        int texID = fiber->get(1).toInt();
+        float x = fiber->get(2).toReal();
+        float y = fiber->get(3).toReal();
+        float w = fiber->get(4).toReal();
+        float h = fiber->get(5).toReal();
+        glDrawImage(texID, x, y, w, h);
+        return false;
+    }
+    
+    static bool screenToWorld(MNFiber* fiber)
+    {
+        TVector3 screenToWorld;
+        screenToWorld.x = fiber->get(1).toReal();
+        screenToWorld.y = fiber->get(2).toReal();
+        screenToWorld.z = 0;
+        glConvertScreenToWorld(screenToWorld);
+        fiber->push_array();
+        MNArray* arr = fiber->get(-1).toArray();
+        arr->add(MNObject::Real(screenToWorld.x));
+        arr->add(MNObject::Real(screenToWorld.y));
         return true;
     }
     
@@ -604,6 +766,18 @@ struct CommonLib
             fiber->push_string("getSeconds");
             push_closure(fiber, getSeconds);
             fiber->store_global();
+            
+            fiber->push_string("loadTexture");
+            push_closure(fiber, loadTexture);
+            fiber->store_global();
+            
+            fiber->push_string("drawImage");
+            push_closure(fiber, drawImage);
+            fiber->store_global();
+            
+            fiber->push_string("screenToWorld");
+            push_closure(fiber, screenToWorld);
+            fiber->store_global();
         }
         
         //! math
@@ -717,4 +891,5 @@ struct CommonLib
 void MNBasicLib(MNFiber* fiber)
 {
 	CommonLib::expose(fiber);
+    glInitialize();
 }

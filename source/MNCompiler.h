@@ -118,8 +118,8 @@ public:
 	void _return();
 
 	void _load(MNExp& e);
-	void _assign(MNExp& e, tboolean leftVal);
-	tboolean _exp(tboolean leftVal = true);
+	void _assign(MNExp& e, tboolean loadToStack);
+	tboolean _exp(tboolean loadToStack = true);
 	void     _exp_or(MNExp& e);
 	void     _exp_and(MNExp& e);
 	void     _exp_logical(MNExp& e);

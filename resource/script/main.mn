@@ -1,6 +1,20 @@
 
 dofile("script/GameObject.mn");
 
+var texID = loadTexture("texture/ball.png");
 
-var go = GameObject.new();
-print(go.transform.x);
+var pos = {x:600, y:0};
+
+func onRender()
+{
+drawImage(texID, pos.x, pos.y, 600, 800);
+};
+
+func onTouch(state, x, y)
+{
+print(x);
+var arr = screenToWorld(x, y);
+pos.x = arr[0];
+pos.y = arr[1];
+
+};
