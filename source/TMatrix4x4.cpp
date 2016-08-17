@@ -9,6 +9,7 @@
 #include "TMatrix4x4.h"
 #include <string.h>
 #include <math.h>
+#include <float.h>
 
 const TMatrix4x4 TMatrix4x4::unit;
 
@@ -68,7 +69,7 @@ const TMatrix4x4 operator*( const TMatrix4x4& a, const TMatrix4x4& b )
 const TVector3 operator*( const TVector3& v, const TMatrix4x4& m )
 {
     float w = (v.x*m.m14 + v.y*m.m24 + v.z*m.m34) + m.m44;
-    if ( w == 0 ) w = __FLT_EPSILON__;
+    if ( w == 0 ) w = FLT_EPSILON;
     return TVector3
     ( (v.x*m.m11 + v.y*m.m21 + v.z*m.m31 + m.m41)/w
      , (v.x*m.m12 + v.y*m.m22 + v.z*m.m32 + m.m42)/w
