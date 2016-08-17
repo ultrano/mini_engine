@@ -277,10 +277,6 @@ void MNLexer::scan(Token& tok)
 			case '!': tokType = tok_neq;   break;
 			case '>': tokType = tok_geq;   break;
 			case '<': tokType = tok_leq;   break;
-			case '+': tokType = tok_add_assign; break;
-			case '-': tokType = tok_sub_assign; break;
-			case '/': tokType = tok_div_assign; break;
-			case '*': tokType = tok_mul_assign; break;
 			}
             
             if (tokType != tok.type)

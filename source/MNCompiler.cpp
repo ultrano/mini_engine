@@ -477,9 +477,9 @@ void MNCompiler::_load(MNExp& e)
 	e.type = MNExp::exp_loaded;
 }
 
-void MNCompiler::_assign(MNExp& e, tboolean leftVal)
+void MNCompiler::_assign(MNExp& e, tboolean loadToStack)
 {
-	if ( leftVal ) switch ( e.type )
+	if ( loadToStack ) switch ( e.type )
 	{
 	case MNExp::exp_local :
 	case MNExp::exp_upval :
@@ -496,34 +496,21 @@ void MNCompiler::_assign(MNExp& e, tboolean leftVal)
 	case MNExp::exp_field : code() << cmd_store_field; break;
 	default: compile_error("unassignable l-expression"); break;
 	}
-	e.type = leftVal? MNExp::exp_loaded : MNExp::exp_none;
+	e.type = loadToStack? MNExp::exp_loaded : MNExp::exp_none;
 }
 
-tboolean MNCompiler::_exp(tboolean leftVal)
+tboolean MNCompiler::_exp(tboolean loadToStack)
 {
 	MNExp e;
 	_exp_or(e);
-	tbyte cmd = check(tok_add_assign)? cmd_add:
-		        check(tok_sub_assign)? cmd_sub:
-		        check(tok_mul_assign)? cmd_mul:
-		        check(tok_div_assign)? cmd_div: cmd_none;
-	if (cmd != cmd_none)
-	{
-		advance();
-		MNExp e1 = e;
-		if (e1.type == MNExp::exp_field) code() << cmd_up2;
-		_load(e1);
-		_exp();
-		code() << cmd;
-		_assign(e, leftVal);
-	}
-	else if (check('='))
+    
+    if (check('='))
 	{
 		advance();
 		_exp();
-		_assign(e, leftVal);
+		_assign(e, loadToStack);
 	}
-	else if (leftVal) _load(e);
+	else if (loadToStack) _load(e);
 	else if (e.type == MNExp::exp_call)   code() << cmd_call_void << tbyte(e.index);
     else if (e.type == MNExp::exp_none) return false;
     else if (e.type == MNExp::exp_loaded) code() << cmd_pop1;
